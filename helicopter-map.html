@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helicopter Tracking - Rescue Agency Coordination System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        #map {
+            width: 100%;
+            height: calc(100vh - 4rem);
+        }
+        .helicopter-marker {
+            background-image: url('assets/icons/helicopter.svg');
+            background-size: cover;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        .status-available {
+            border: 3px solid #10B981;
+        }
+        .status-responding {
+            border: 3px solid #F59E0B;
+            animation: pulse 1.5s infinite;
+        }
+        .status-busy {
+            border: 3px solid #EF4444;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-purple-900 to-indigo-900">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <img class="h-8 w-8" src="assets/images/logo.png" alt="Logo">
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="dashboard.html" class="text-gray-300 hover:bg-purple-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                            <a href="ambulance-map.html" class="text-gray-300 hover:bg-purple-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Ambulance Tracking</a>
+                            <a href="helicopter-map.html" class="bg-purple-800 text-white px-3 py-2 rounded-md text-sm font-medium">Helicopter Tracking</a>
+                            <a href="fire-truck-map.html" class="text-gray-300 hover:bg-purple-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Fire Truck Tracking</a>
+                            <a href="incidents.html" class="text-gray-300 hover:bg-purple-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Incidents</a>
+                            <a href="analytics.html" class="text-gray-300 hover:bg-purple-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Analytics</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <button class="bg-purple-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-800 focus:ring-white">
+                            <span class="sr-only">View notifications</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Profile dropdown -->
+                        <div class="ml-3 relative">
+                            <div>
+                                <button class="max-w-xs bg-purple-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-800 focus:ring-white">
+                                    <span class="sr-only">Open user menu</span>
+                                    <img class="h-8 w-8 rounded-full" src="assets/images/profile.png" alt="">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1">
+        <div class="py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Helicopter Map Filters -->
+                <div class="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-lg shadow-lg p-4 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Helicopter Type</label>
+                            <select id="helicopter-type" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Filter by helicopter type">
+                                <option value="all">All Types</option>
+                                <option value="medical">Medical</option>
+                                <option value="rescue">Search & Rescue</option>
+                                <option value="firefighting">Firefighting</option>
+                                <option value="transport">Transport</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Status</label>
+                            <select id="helicopter-status" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Filter by helicopter status">
+                                <option value="all">All Statuses</option>
+                                <option value="available">Available</option>
+                                <option value="responding">Responding</option>
+                                <option value="busy">Busy</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Range (km)</label>
+                            <select id="helicopter-range" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Filter by helicopter range">
+                                <option value="all">Any Range</option>
+                                <option value="100">Under 100km</option>
+                                <option value="200">Under 200km</option>
+                                <option value="500">Under 500km</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Weather Conditions</label>
+                            <select id="weather-conditions" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Filter by weather conditions">
+                                <option value="all">All Conditions</option>
+                                <option value="clear">Clear</option>
+                                <option value="rain">Rain</option>
+                                <option value="wind">High Wind</option>
+                                <option value="fog">Fog/Low Visibility</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Actions</label>
+                            <div class="mt-1 flex space-x-2">
+                                <button id="deploy-btn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md">
+                                    Deploy
+                                </button>
+                                <button id="emergency-btn" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">
+                                    Emergency
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Bar -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div class="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-lg shadow-lg p-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-400">Total Helicopters</div>
+                                <div class="text-lg font-semibold text-white">18</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-lg shadow-lg p-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-400">Available</div>
+                                <div class="text-lg font-semibold text-white">12</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-lg shadow-lg p-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-400">Responding</div>
+                                <div class="text-lg font-semibold text-white">4</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-lg shadow-lg p-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-400">Busy</div>
+                                <div class="text-lg font-semibold text-white">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Container with Weather Layer Toggle -->
+                <div class="bg-gradient-to-r from-purple-800 to-indigo-800 rounded-lg shadow-lg overflow-hidden">
+                    <div class="p-2 flex justify-end space-x-2">
+                        <button id="toggle-weather" class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-3 rounded-md text-sm">
+                            Show Weather
+                        </button>
+                        <button id="toggle-terrain" class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-3 rounded-md text-sm">
+                            Show Terrain
+                        </button>
+                        <button id="toggle-3d" class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-3 rounded-md text-sm">
+                            3D View
+                        </button>
+                    </div>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Deploy Modal -->
+    <div id="deploy-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+        <div class="glass-effect bg-gradient-to-r from-purple-900 to-indigo-900 rounded-lg shadow-lg p-6 max-w-md w-full">
+            <h2 class="text-xl font-bold text-white mb-4">Deploy Helicopter</h2>
+            <form id="deploy-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Select Helicopter</label>
+                    <select id="deploy-helicopter" class="w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Select helicopter for deployment">
+                        <!-- Will be populated from database -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Mission Location</label>
+                    <input type="text" id="deploy-location" class="w-full rounded-md border-gray-600 bg-gray-700 text-white" placeholder="Enter coordinates or click on map">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Mission Type</label>
+                    <select id="deploy-mission" class="w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Select mission type">
+                        <option value="medical">Medical Evacuation</option>
+                        <option value="search">Search & Rescue</option>
+                        <option value="firefighting">Firefighting</option>
+                        <option value="transport">Transport</option>
+                        <option value="surveillance">Surveillance</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Weather Check</label>
+                    <div class="p-3 bg-gray-800 rounded-md">
+                        <div class="flex justify-between items-center">
+                            <span>Wind Speed: 15 km/h</span>
+                            <span class="text-green-500">Safe</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>Visibility: 8 km</span>
+                            <span class="text-green-500">Safe</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>Precipitation: None</span>
+                            <span class="text-green-500">Safe</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="deploy-cancel" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md">Cancel</button>
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md">Deploy Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the map
+        mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v10',
+            center: [78.9629, 20.5937], // Center of India
+            zoom: 4
+        });
+
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+
+        // Sample helicopter data
+        const helicopters = [
+            { id: 1, type: 'medical', agency: 'Air Ambulance', status: 'available', lat: 28.7041, lng: 77.1025, range: 300, weather_capability: ['clear', 'rain'] },
+            { id: 2, type: 'rescue', agency: 'Coast Guard', status: 'responding', lat: 19.0760, lng: 72.8777, range: 450, weather_capability: ['clear', 'rain', 'wind'] },
+            { id: 3, type: 'firefighting', agency: 'Forest Service', status: 'busy', lat: 12.9716, lng: 77.5946, range: 200, weather_capability: ['clear'] },
+            { id: 4, type: 'transport', agency: 'Military', status: 'available', lat: 22.5726, lng: 88.3639, range: 600, weather_capability: ['clear', 'rain', 'wind', 'fog'] },
+            { id: 5, type: 'rescue', agency: 'Mountain Rescue', status: 'available', lat: 34.0837, lng: 74.7973, range: 350, weather_capability: ['clear', 'rain'] }
+        ];
+
+        // Add helicopter markers to the map
+        function addHelicopterMarkers() {
+            helicopters.forEach(helicopter => {
+                const el = document.createElement('div');
+                el.className = `helicopter-marker status-${helicopter.status} rounded-full`;
+                
+                const marker = new mapboxgl.Marker(el)
+                    .setLngLat([helicopter.lng, helicopter.lat])
+                    .setPopup(new mapboxgl.Popup({ offset: 25 })
+                        .setHTML(`
+                            <div class="p-3">
+                                <h3 class="text-lg font-bold">${helicopter.agency} Helicopter</h3>
+                                <p>Type: ${helicopter.type.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
+                                <p>Status: <span class="font-semibold ${helicopter.status === 'available' ? 'text-green-500' : helicopter.status === 'responding' ? 'text-yellow-500' : 'text-red-500'}">${helicopter.status}</span></p>
+                                <p>Range: ${helicopter.range} km</p>
+                                <p>Weather Capability: ${helicopter.weather_capability.join(', ')}</p>
+                                <button onclick="deployHelicopter(${helicopter.id})" class="mt-2 bg-purple-500 hover:bg-purple-600 text-white px-4 py-1 rounded">Deploy</button>
+                            </div>
+                        `))
+                    .addTo(map);
+            });
+        }
+
+        // Deploy helicopter function
+        function deployHelicopter(id) {
+            const helicopter = helicopters.find(h => h.id === id);
+            if (helicopter) {
+                document.getElementById('deploy-modal').classList.remove('hidden');
+                // Populate deploy form with helicopter details
+            }
+        }
+
+        // Initialize map and event listeners
+        map.on('load', () => {
+            addHelicopterMarkers();
+            
+            // Add event listeners for filters
+            document.getElementById('helicopter-type').addEventListener('change', filterHelicopters);
+            document.getElementById('helicopter-status').addEventListener('change', filterHelicopters);
+            document.getElementById('helicopter-range').addEventListener('change', filterHelicopters);
+            document.getElementById('weather-conditions').addEventListener('change', filterHelicopters);
+            
+            // Deploy button
+            document.getElementById('deploy-btn').addEventListener('click', () => {
+                document.getElementById('deploy-modal').classList.remove('hidden');
+            });
+            
+            // Cancel deploy
+            document.getElementById('deploy-cancel').addEventListener('click', () => {
+                document.getElementById('deploy-modal').classList.add('hidden');
+            });
+            
+            // Toggle weather layer
+            document.getElementById('toggle-weather').addEventListener('click', () => {
+                // Toggle weather layer on map
+                alert('Weather layer toggled');
+            });
+            
+            // Toggle terrain layer
+            document.getElementById('toggle-terrain').addEventListener('click', () => {
+                // Toggle terrain layer on map
+                map.setStyle('mapbox://styles/mapbox/satellite-streets-v11');
+            });
+            
+            // Toggle 3D view
+            document.getElementById('toggle-3d').addEventListener('click', () => {
+                // Toggle 3D view
+                map.setPitch(60);
+            });
+        });
+
+        // Filter helicopters based on selected criteria
+        function filterHelicopters() {
+            // Implementation similar to ambulance filtering
+        }
+    </script>
+</body>
+</html>

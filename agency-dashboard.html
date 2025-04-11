@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agency Dashboard - RESCUE</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/dashboard.css" rel="stylesheet">
+    <style>
+        @keyframes spin-slow {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+        }
+
+        .animate-spin-hover:hover {
+            animation: spin-slow 1s linear infinite;
+        }
+
+        .resource-card {
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .animate-pulse-slow {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <!-- Navigation -->
+    <nav class="nav-backdrop sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-200">
+                        RESCUE
+                    </h1>
+                    <div class="ml-8 space-x-4">
+                        <a href="agency-dashboard.html" class="text-blue-400 font-semibold border-b-2 border-blue-400 pb-1">Dashboard</a>
+                        <a href="agency-network.html" class="text-gray-300 hover:text-blue-400 transition-colors">Agency Network</a>
+                        <a href="emergency-coordination.html" class="text-gray-300 hover:text-blue-400 transition-colors">Emergency Coordination</a>
+                        <a href="profile.html" class="text-gray-300 hover:text-blue-400 transition-colors">Profile</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-active"></span>
+                        <span class="text-sm font-medium">Active</span>
+                    </div>
+                    <button onclick="updateStatus()" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg transition-colors" title="Update Status" aria-label="Update Status">
+                        Update Status
+                    </button>
+                    <button onclick="declareEmergency()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition-colors" title="Declare Emergency" aria-label="Declare Emergency">
+                        Declare Emergency
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-8">
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-400">Available Resources</h3>
+                        <p class="text-3xl font-bold mt-2" id="resourceCount">156</p>
+                        <p class="text-sm text-gray-400 mt-1">Active equipment & personnel</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                        <i class="fas fa-truck-medical text-blue-400 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-green-400">Response Time</h3>
+                        <p class="text-3xl font-bold mt-2" id="responseTime">4.5</p>
+                        <p class="text-sm text-gray-400 mt-1">Minutes (average)</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                        <i class="fas fa-clock text-green-400 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-purple-400">Active Missions</h3>
+                        <p class="text-3xl font-bold mt-2" id="activeMissions">3</p>
+                        <p class="text-sm text-gray-400 mt-1">Ongoing operations</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                        <i class="fas fa-tasks text-purple-400 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Agency Information -->
+            <div class="glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold">Agency Information</h2>
+                    <button onclick="editProfile()" class="text-blue-400 hover:text-blue-300" title="Edit Profile" aria-label="Edit Profile">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm text-gray-400">Agency Name</label>
+                        <p class="text-lg font-semibold" id="agencyName">LPU Disaster Management</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Type</label>
+                        <p class="text-lg font-semibold" id="agencyType">Agencies Management</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Contact</label>
+                        <p class="text-lg font-semibold" id="agencyContact">6296441903</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Location</label>
+                        <p class="text-lg font-semibold" id="agencyLocation">Phagwara Punjab</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Management Section with Enhanced Animation -->
+            <div class="glass-card rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold">Resource Management</h2>
+                    <div class="flex space-x-2">
+                        <button onclick="refreshResources()" class="text-blue-400 hover:text-blue-300 transition-all duration-300" title="Refresh Resources">
+                            <i class="fas fa-sync-alt animate-spin-hover"></i>
+                        </button>
+                        <button onclick="window.location.href='resources.html'" class="text-blue-400 hover:text-blue-300" title="View All Resources">
+                            <i class="fas fa-external-link-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Emergency Vehicles -->
+                    <div class="resource-card bg-gradient-to-r from-red-500/10 to-red-700/10 p-4 rounded-lg hover:from-red-500/20 hover:to-red-700/20">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="p-2 rounded-full bg-gradient-to-r from-red-500 to-red-600">
+                                    <i class="fas fa-ambulance text-white"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="font-medium">Emergency Vehicles</h3>
+                                    <p class="text-sm text-gray-400">Active fleet</p>
+                                </div>
+                            </div>
+                            <span class="text-2xl font-bold text-red-400" id="vehicleCount">12</span>
+                        </div>
+                        <div class="mt-4">
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-red-500 to-red-600 rounded-full animate-pulse-slow" style="width: 75%"></div>
+                            </div>
+                            <p class="text-sm text-gray-400 mt-2">75% Operational</p>
+                        </div>
+                    </div>
+
+                    <!-- Medical Teams -->
+                    <div class="resource-card bg-gradient-to-r from-blue-500/10 to-blue-700/10 p-4 rounded-lg hover:from-blue-500/20 hover:to-blue-700/20">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="p-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600">
+                                    <i class="fas fa-user-md text-white"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="font-medium">Medical Teams</h3>
+                                    <p class="text-sm text-gray-400">Available teams</p>
+                                </div>
+                            </div>
+                            <span class="text-2xl font-bold text-blue-400" id="teamCount">8</span>
+                        </div>
+                        <div class="mt-4">
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full animate-pulse-slow" style="width: 60%"></div>
+                            </div>
+                            <p class="text-sm text-gray-400 mt-2">60% Available</p>
+                        </div>
+                    </div>
+
+                    <!-- Aerial Units -->
+                    <div class="resource-card bg-gradient-to-r from-purple-500/10 to-purple-700/10 p-4 rounded-lg hover:from-purple-500/20 hover:to-purple-700/20">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="p-2 rounded-full bg-gradient-to-r from-purple-500 to-purple-600">
+                                    <i class="fas fa-helicopter text-white"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="font-medium">Aerial Units</h3>
+                                    <p class="text-sm text-gray-400">Ready for dispatch</p>
+                                </div>
+                            </div>
+                            <span class="text-2xl font-bold text-purple-400" id="aerialCount">2</span>
+                        </div>
+                        <div class="mt-4">
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full animate-pulse-slow" style="width: 40%"></div>
+                            </div>
+                            <p class="text-sm text-gray-400 mt-2">40% Ready</p>
+                        </div>
+                    </div>
+
+                    <button onclick="window.location.href='resources.html'" class="w-full mt-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2">
+                        <i class="fas fa-cog animate-spin-slow"></i>
+                        <span>Manage Resources</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="glass-card rounded-xl p-6">
+                <h2 class="text-xl font-semibold mb-6">Recent Activity</h2>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-check text-green-400"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium">Mission Completed</p>
+                            <p class="text-sm text-gray-400">Successfully evacuated 23 civilians from flood zone</p>
+                            <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-sync text-blue-400"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium">Status Update</p>
+                            <p class="text-sm text-gray-400">Resources reallocated to northern sector</p>
+                            <p class="text-xs text-gray-500 mt-1">4 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-exclamation text-yellow-400"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium">Alert Received</p>
+                            <p class="text-sm text-gray-400">Weather warning: Heavy rainfall expected</p>
+                            <p class="text-xs text-gray-500 mt-1">6 hours ago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Sections -->
+    <div class="container mx-auto px-6 pb-12 space-y-6">
+        <!-- Performance Metrics -->
+        <div class="glass-card rounded-xl p-6">
+            <h2 class="text-xl font-semibold mb-4">Performance Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-400 mb-2">Response Time Trend</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-85"></div>
+                    </div>
+                    <p class="text-sm mt-2">15% faster than last month</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-400 mb-2">Resource Utilization</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-70"></div>
+                    </div>
+                    <p class="text-sm mt-2">70% resources actively deployed</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-400 mb-2">Mission Success Rate</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-95"></div>
+                    </div>
+                    <p class="text-sm mt-2">95% successful missions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training & Certifications -->
+        <div class="glass-card rounded-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold">Training & Certifications</h2>
+                <button onclick="viewAllTraining()" class="text-blue-400 hover:text-blue-300" title="View All Training">
+                    View All
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-certificate text-yellow-500 mr-2"></i>
+                        <h3 class="font-medium">Emergency Response</h3>
+                    </div>
+                    <p class="text-sm text-gray-400">12 team members certified</p>
+                    <div class="mt-2 progress-bar">
+                        <div class="progress-fill progress-80"></div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-heartbeat text-red-500 mr-2"></i>
+                        <h3 class="font-medium">First Aid Advanced</h3>
+                    </div>
+                    <p class="text-sm text-gray-400">8 team members certified</p>
+                    <div class="mt-2 progress-bar">
+                        <div class="progress-fill progress-60"></div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-helicopter text-blue-500 mr-2"></i>
+                        <h3 class="font-medium">Aerial Operations</h3>
+                    </div>
+                    <p class="text-sm text-gray-400">4 team members certified</p>
+                    <div class="mt-2 progress-bar">
+                        <div class="progress-fill progress-40"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather Alerts -->
+        <div class="glass-card rounded-xl p-6">
+            <h2 class="text-xl font-semibold mb-4">Weather Alerts</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="weather-alert warning p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-cloud-rain text-yellow-500 mr-2"></i>
+                            <span>Heavy Rainfall</span>
+                        </div>
+                        <span class="text-sm">Next 24h</span>
+                    </div>
+                    <p class="text-sm mt-2">Northern Sector</p>
+                </div>
+                <div class="weather-alert danger p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-temperature-high text-red-500 mr-2"></i>
+                            <span>Heat Wave</span>
+                        </div>
+                        <span class="text-sm">3 Days</span>
+                    </div>
+                    <p class="text-sm mt-2">Southern Region</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load agency information
+        async function loadAgencyInfo() {
+            try {
+                const response = await fetch('php/get_agency_info.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const agency = data.data;
+                    document.getElementById('agencyName').textContent = agency.name;
+                    document.getElementById('agencyType').textContent = agency.type;
+                    document.getElementById('agencyContact').textContent = agency.contact;
+                    document.getElementById('agencyLocation').textContent = agency.location;
+                    
+                    // Update resource counts
+                    if (agency.resources) {
+                        document.getElementById('resourceCount').textContent = 
+                            Object.values(agency.resources).reduce((sum, count) => sum + count, 0);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading agency info:', error);
+            }
+        }
+
+        // Function to update agency status
+        async function updateStatus() {
+            const statuses = ['Active', 'Standby', 'Emergency'];
+            const currentStatus = prompt('Update status to: ' + statuses.join(', '));
+            if (currentStatus && statuses.includes(currentStatus)) {
+                try {
+                    const response = await fetch('php/update_status.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ status: currentStatus })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('Status updated successfully');
+                        loadAgencyInfo(); // Refresh agency info
+                    } else {
+                        alert('Failed to update status: ' + data.error);
+                    }
+                } catch (error) {
+                    console.error('Error updating status:', error);
+                    alert('Failed to update status');
+                }
+            }
+        }
+
+        // Function to declare emergency
+        async function declareEmergency() {
+            const confirmed = confirm('Are you sure you want to declare an emergency? This will alert all connected agencies.');
+            if (confirmed) {
+                try {
+                    const response = await fetch('php/declare_emergency.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            type: 'emergency',
+                            location: document.getElementById('agencyLocation').textContent
+                        })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('Emergency declared. Notifying all connected agencies...');
+                        window.location.href = 'emergency-coordination.html';
+                    } else {
+                        alert('Failed to declare emergency: ' + data.error);
+                    }
+                } catch (error) {
+                    console.error('Error declaring emergency:', error);
+                    alert('Failed to declare emergency');
+                }
+            }
+        }
+
+        // Function to edit profile
+        function editProfile() {
+            window.location.href = 'profile.html';
+        }
+
+        // Function to manage resources
+        async function manageResources() {
+            try {
+                const response = await fetch('php/get_agency_info.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const resources = data.data.resources;
+                    // Redirect to resource management page with current resources
+                    window.location.href = `resource-management.html?resources=${encodeURIComponent(JSON.stringify(resources))}`;
+                }
+            } catch (error) {
+                console.error('Error loading resources:', error);
+                alert('Failed to load resources');
+            }
+        }
+
+        // Function to view all training
+        function viewAllTraining() {
+            window.location.href = 'training.html';
+        }
+
+        // Load weather alerts
+        async function loadWeatherAlerts() {
+            try {
+                const response = await fetch('php/get_weather_alerts.php');
+                const data = await response.json();
+                // Update weather alerts UI
+                if (data.success) {
+                    // Implementation here
+                }
+            } catch (error) {
+                console.error('Error loading weather alerts:', error);
+            }
+        }
+
+        // Initialize weather alerts
+        loadWeatherAlerts();
+
+        // Load initial data
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAgencyInfo();
+            
+            // Add ARIA labels and titles to buttons for accessibility
+            document.querySelectorAll('button').forEach(button => {
+                if (!button.getAttribute('title')) {
+                    const text = button.textContent.trim();
+                    if (text) {
+                        button.setAttribute('title', text);
+                        button.setAttribute('aria-label', text);
+                    }
+                }
+            });
+        });
+
+        // Simulated real-time updates
+        setInterval(() => {
+            loadAgencyInfo(); // Refresh agency info periodically
+        }, 30000); // Every 30 seconds
+
+        // Function to refresh resources
+        async function refreshResources() {
+            try {
+                const response = await fetch('php/get_agency_info.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update resource counts with animation
+                    animateCount('vehicleCount', data.data.resources.emergency_vehicles || 0);
+                    animateCount('teamCount', data.data.resources.medical_teams || 0);
+                    animateCount('aerialCount', data.data.resources.aerial_units || 0);
+                }
+            } catch (error) {
+                console.error('Error refreshing resources:', error);
+            }
+        }
+
+        // Animate count up
+        function animateCount(elementId, target) {
+            const element = document.getElementById(elementId);
+            const start = parseInt(element.textContent);
+            const duration = 1000;
+            const steps = 20;
+            const increment = (target - start) / steps;
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = Math.round(current);
+                
+                if ((increment > 0 && current >= target) || 
+                    (increment < 0 && current <= target)) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                }
+            }, duration / steps);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Coordination Center - Rescue Agency System</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #0f172a;
+            font-family: 'Poppins', sans-serif;
+            background-image: 
+                linear-gradient(135deg, rgba(30, 64, 175, 0.15) 0%, rgba(17, 24, 39, 0.15) 100%),
+                url('assets/images/disaster-response-software-compressed.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .morphic-button {
+            background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+            border-radius: 30px;
+            box-shadow: 
+                5px 5px 15px rgba(0, 0, 0, 0.3),
+                -5px -5px 15px rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .morphic-button:hover {
+            box-shadow: 
+                inset 4px 4px 8px rgba(0, 0, 0, 0.3),
+                inset -4px -4px 8px rgba(255, 255, 255, 0.05);
+            transform: scale(0.98);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .danger-button {
+            background: linear-gradient(145deg, #dc2626, #991b1b);
+        }
+        #map {
+            height: calc(100vh - 64px - 16rem);
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 
+                0 10px 30px -5px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .agency-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .agency-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 10px 30px -5px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .nav-link:hover:after {
+            width: 80%;
+        }
+        .nav-backdrop {
+            background: rgba(15, 23, 42, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+            position: relative;
+        }
+        .pulse::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            padding: 2px;
+            background: linear-gradient(45deg, #ef4444, #dc2626, #991b1b);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px currentColor;
+        }
+        .status-available { color: #22c55e; }
+        .status-busy { color: #eab308; }
+        .status-emergency { color: #ef4444; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen text-white">
+    <!-- Navigation -->
+    <nav class="nav-backdrop sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg transform hover:scale-105 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-blue-400">
+                            Emergency Coordination Center
+                        </h1>
+                        <p class="text-blue-200 text-sm opacity-80">Real-time Response Management</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="dashboard.html" class="nav-link text-blue-100 hover:text-white flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="agency-network.html" class="nav-link text-blue-100 hover:text-white flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span>Network</span>
+                    </a>
+                    <button onclick="showBroadcastModal()" class="morphic-button px-6 py-2 text-white font-medium flex items-center space-x-2 hover:text-blue-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                        </svg>
+                        <span>Broadcast</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-4">
+        <!-- Emergency Status Section -->
+        <div class="glass-card p-8 mb-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-1/3 h-full opacity-10">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-red-500">
+                    <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z" />
+                </svg>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                <div class="glass-card bg-opacity-20 p-6 rounded-xl border border-red-500/30 pulse">
+                    <h3 class="text-lg font-semibold text-red-400 mb-2">Active Emergencies</h3>
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl font-bold text-white">3</span>
+                        <span class="text-red-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="glass-card bg-opacity-20 p-6 rounded-xl border border-blue-500/30">
+                    <h3 class="text-lg font-semibold text-blue-400 mb-2">Available Resources</h3>
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl font-bold text-white">24</span>
+                        <span class="text-blue-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="glass-card bg-opacity-20 p-6 rounded-xl border border-green-500/30">
+                    <h3 class="text-lg font-semibold text-green-400 mb-2">Available Workers</h3>
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl font-bold text-white">156</span>
+                        <span class="text-green-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            <a href="agency-network.html" class="glass-card p-6 flex flex-col items-center justify-center text-center hover:bg-blue-800/20 transition-all group">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mb-4 transform group-hover:scale-110 transition-all shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Agency Network</h3>
+                <p class="text-sm text-blue-200 opacity-80">Connect and coordinate with other agencies</p>
+            </a>
+
+            <a href="ambulance-map.html" class="glass-card p-6 flex flex-col items-center justify-center text-center hover:bg-red-800/20 transition-all group">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center mb-4 transform group-hover:scale-110 transition-all shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Ambulance Map</h3>
+                <p class="text-sm text-red-200 opacity-80">Track and dispatch medical units</p>
+            </a>
+
+            <a href="fire-truck-map.html" class="glass-card p-6 flex flex-col items-center justify-center text-center hover:bg-orange-800/20 transition-all group">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center mb-4 transform group-hover:scale-110 transition-all shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Fire Response</h3>
+                <p class="text-sm text-orange-200 opacity-80">Monitor fire department resources</p>
+            </a>
+
+            <button onclick="showBroadcastModal()" class="glass-card p-6 flex flex-col items-center justify-center text-center hover:bg-purple-800/20 transition-all group">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mb-4 transform group-hover:scale-110 transition-all shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Broadcast Alert</h3>
+                <p class="text-sm text-purple-200 opacity-80">Send emergency broadcasts</p>
+            </button>
+        </div>
+
+        <!-- Map and Agencies Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Map -->
+            <div class="md:col-span-2">
+                <div class="glass-card p-2">
+                    <div id="map" class="rounded-lg"></div>
+                </div>
+            </div>
+
+            <!-- Agency List -->
+            <div class="glass-card p-4 max-h-[600px] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold">Available Agencies</h2>
+                    <div class="relative">
+                        <input type="text" id="agency-search" placeholder="Search..." class="pl-8 pr-4 py-1 rounded-full bg-blue-800 bg-opacity-50 border-blue-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute left-2 top-2 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="space-y-3" id="agency-list">
+                    <!-- Agency cards will be inserted here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Broadcast Modal -->
+    <div id="broadcast-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 nav-backdrop flex items-center justify-center z-50">
+        <div class="glass-card p-6 w-full max-w-lg">
+            <h3 class="text-lg font-semibold mb-4">Broadcast Emergency Alert</h3>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Alert Type</label>
+                <select id="alert-type" class="w-full rounded-lg bg-blue-800 bg-opacity-50 border-blue-600 text-white px-3 py-2" title="Alert type selection">
+                    <option value="emergency">Emergency Alert</option>
+                    <option value="evacuation">Evacuation Order</option>
+                    <option value="warning">Warning</option>
+                    <option value="info">Information</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Message</label>
+                <textarea id="broadcast-message" rows="4" 
+                        class="w-full rounded-lg bg-blue-800 bg-opacity-50 border-blue-600 text-white px-3 py-2"
+                        placeholder="Enter your alert message..."></textarea>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeBroadcastModal()" class="px-4 py-2 rounded-lg bg-blue-800 bg-opacity-50 hover:bg-opacity-70 transition-all">
+                    Cancel
+                </button>
+                <button onclick="sendBroadcast()" class="morphic-button danger-button px-4 py-2 rounded-lg text-white">
+                    Send Alert
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([20.5937, 78.9629], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: ' OpenStreetMap contributors'
+        }).addTo(map);
+
+        let markers = {};
+        let activeEmergency = null;
+
+        // Function to declare emergency
+        async function declareEmergency() {
+            const type = document.getElementById('emergency-type').value;
+            if (!type) return;
+
+            try {
+                const response = await fetch('php/declare_emergency.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ type })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    activeEmergency = data.emergency;
+                    document.getElementById('active-emergency').innerHTML = `
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-red-500 rounded-full mr-2 pulse"></div>
+                            <div>
+                                <div class="text-red-400 font-semibold">${type.replace('-', ' ').toUpperCase()}</div>
+                                <div class="text-sm">Declared at: ${new Date().toLocaleTimeString()}</div>
+                            </div>
+                        </div>
+                    `;
+                    loadAgencies();
+                }
+            } catch (error) {
+                console.error('Error declaring emergency:', error);
+            }
+        }
+
+        // Function to load agencies
+        function loadAgencies() {
+            fetch('php/get_agencies.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateAgencyList(data.data);
+                        updateMap(data.data);
+                        updateResourceCount(data.data);
+                    } else {
+                        console.error('Error loading agencies:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Function to update agency list
+        function updateAgencyList(agencies) {
+            const list = document.getElementById('agency-list');
+            list.innerHTML = agencies.length ? agencies.map(agency => `
+                <div class="agency-card glass-card p-4 hover:bg-blue-800 hover:bg-opacity-20 transition-all">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="font-semibold">${agency.name}</div>
+                            <div class="text-sm text-blue-200">Type: ${agency.type}</div>
+                            <div class="text-sm text-blue-200">Phone: ${agency.phone}</div>
+                        </div>
+                        <div class="flex flex-col space-y-1">
+                            <button onclick="contactAgency(${agency.id})" class="text-xs bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded-full transition-all">
+                                Contact
+                            </button>
+                            <button onclick="assignToEmergency(${agency.id})" class="text-xs bg-green-600 hover:bg-green-700 px-2 py-1 rounded-full transition-all">
+                                Assign
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') : '<div class="text-center text-gray-400 py-4">No agencies available</div>';
+        }
+
+        // Function to update map
+        function updateMap(agencies) {
+            // Clear existing markers
+            Object.values(markers).forEach(marker => map.removeLayer(marker));
+            markers = {};
+
+            // Add new markers
+            agencies.forEach(agency => {
+                if (agency.latitude && agency.longitude) {
+                    const markerIcon = L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div class="w-4 h-4 rounded-full bg-${getAgencyColor(agency.type)}-500 border-2 border-white"></div>`,
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+                    
+                    const marker = L.marker([agency.latitude, agency.longitude], {icon: markerIcon})
+                        .bindPopup(`
+                            <div class="p-2">
+                                <strong>${agency.name}</strong><br>
+                                Type: ${agency.type}<br>
+                                Phone: ${agency.phone}
+                            </div>
+                        `)
+                        .addTo(map);
+                    markers[agency.id] = marker;
+                }
+            });
+        }
+
+        // Function to get color based on agency type
+        function getAgencyColor(type) {
+            const colors = {
+                'ambulance': 'red',
+                'fire': 'orange',
+                'police': 'blue',
+                'medical': 'green',
+                'rescue': 'yellow'
+            };
+            return colors[type] || 'gray';
+        }
+
+        // Function to update resource count
+        function updateResourceCount(agencies) {
+            const resources = {
+                ambulance: 0,
+                'fire-truck': 0,
+                'medical-team': 0,
+                'rescue-team': 0
+            };
+
+            agencies.forEach(agency => {
+                if (agency.resources) {
+                    const agencyResources = typeof agency.resources === 'string' 
+                        ? JSON.parse(agency.resources) 
+                        : agency.resources;
+                    
+                    if (Array.isArray(agencyResources)) {
+                        agencyResources.forEach(resource => {
+                            if (resources[resource] !== undefined) {
+                                resources[resource]++;
+                            }
+                        });
+                    }
+                }
+            });
+
+            document.getElementById('resource-count').innerHTML = `
+                <div class="bg-blue-800 bg-opacity-30 p-2 rounded-lg">Ambulances: <span class="font-semibold">${resources.ambulance}</span></div>
+                <div class="bg-blue-800 bg-opacity-30 p-2 rounded-lg">Fire Trucks: <span class="font-semibold">${resources['fire-truck']}</span></div>
+                <div class="bg-blue-800 bg-opacity-30 p-2 rounded-lg">Medical Teams: <span class="font-semibold">${resources['medical-team']}</span></div>
+                <div class="bg-blue-800 bg-opacity-30 p-2 rounded-lg">Rescue Teams: <span class="font-semibold">${resources['rescue-team']}</span></div>
+            `;
+        }
+
+        // Function to contact agency
+        function contactAgency(agencyId) {
+            alert(`Contacting agency #${agencyId}. This functionality will be implemented in the next phase.`);
+        }
+
+        // Function to assign agency to emergency
+        function assignToEmergency(agencyId) {
+            if (!activeEmergency) {
+                alert('No active emergency to assign to.');
+                return;
+            }
+            alert(`Assigning agency #${agencyId} to the active emergency. This functionality will be implemented in the next phase.`);
+        }
+
+        // Function to show broadcast modal
+        function showBroadcastModal() {
+            document.getElementById('broadcast-modal').classList.remove('hidden');
+        }
+
+        // Function to close broadcast modal
+        function closeBroadcastModal() {
+            document.getElementById('broadcast-modal').classList.add('hidden');
+        }
+
+        // Function to send broadcast
+        function sendBroadcast() {
+            const type = document.getElementById('alert-type').value;
+            const message = document.getElementById('broadcast-message').value;
+            if (!message) return;
+
+            alert(`Broadcasting ${type} alert: ${message}. This functionality will be implemented in the next phase.`);
+            closeBroadcastModal();
+        }
+
+        // Function to show resource allocation
+        function showResourceAllocation() {
+            alert('Resource allocation functionality will be implemented in the next phase.');
+        }
+
+        // Function to show emergency history
+        function showEmergencyHistory() {
+            alert('Emergency history functionality will be implemented in the next phase.');
+        }
+
+        // Set up search functionality
+        document.getElementById('agency-search').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const agencies = document.querySelectorAll('#agency-list .agency-card');
+            agencies.forEach(agency => {
+                const name = agency.querySelector('.font-semibold').textContent.toLowerCase();
+                const type = agency.querySelector('.text-blue-200').textContent.toLowerCase();
+                agency.style.display = name.includes(searchTerm) || type.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Load agencies when the page loads
+        loadAgencies();
+
+        // Refresh data every 30 seconds
+        setInterval(loadAgencies, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance Tracking - Rescue Agency Coordination System</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        #map {
+            height: calc(100vh - 4rem);
+            width: 100%;
+        }
+        .ambulance-marker {
+            background-image: url('assets/icons/ambulance.svg');
+            background-size: cover;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        .status-available {
+            border: 3px solid #10B981;
+        }
+        .status-responding {
+            border: 3px solid #F59E0B;
+            animation: pulse 1.5s infinite;
+        }
+        .status-busy {
+            border: 3px solid #EF4444;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-blue-900 to-indigo-900">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <img class="h-8 w-8" src="assets/images/logo.png" alt="Logo">
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="dashboard.html" class="text-gray-300 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                            <a href="ambulance-map.html" class="bg-blue-800 text-white px-3 py-2 rounded-md text-sm font-medium">Ambulance Tracking</a>
+                            <a href="helicopter-map.html" class="text-gray-300 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Helicopter Tracking</a>
+                            <a href="fire-truck-map.html" class="text-gray-300 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Fire Truck Tracking</a>
+                            <a href="incidents.html" class="text-gray-300 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Incidents</a>
+                            <a href="analytics.html" class="text-gray-300 hover:bg-blue-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Analytics</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <button class="bg-blue-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white">
+                            <span class="sr-only">View notifications</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Profile dropdown -->
+                        <div class="ml-3 relative">
+                            <div>
+                                <button class="max-w-xs bg-blue-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white">
+                                    <span class="sr-only">Open user menu</span>
+                                    <img class="h-8 w-8 rounded-full" src="assets/images/profile.png" alt="">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1">
+        <div class="py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Ambulance Map Filters -->
+                <div class="bg-gradient-to-r from-blue-800 to-indigo-800 rounded-lg shadow-lg p-4 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Ambulance Type</label>
+                            <select id="ambulance-type" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Filter by ambulance type">
+                                <option value="all">All Types</option>
+                                <option value="basic">Basic Life Support</option>
+                                <option value="advanced">Advanced Life Support</option>
+                                <option value="mobile-icu">Mobile ICU</option>
+                                <option value="neonatal">Neonatal</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Status</label>
+                            <select id="ambulance-status" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Filter by ambulance status">
+                                <option value="all">All Statuses</option>
+                                <option value="available">Available</option>
+                                <option value="responding">Responding</option>
+                                <option value="busy">Busy</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Agency</label>
+                            <select id="ambulance-agency" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Filter by agency">
+                                <option value="all">All Agencies</option>
+                                <!-- Will be populated from database -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Response Time</label>
+                            <select id="ambulance-response" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Filter by response time">
+                                <option value="all">Any Response Time</option>
+                                <option value="5">Under 5 minutes</option>
+                                <option value="10">Under 10 minutes</option>
+                                <option value="15">Under 15 minutes</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300">Actions</label>
+                            <div class="mt-1 flex space-x-2">
+                                <button id="dispatch-btn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md">
+                                    Dispatch
+                                </button>
+                                <button id="emergency-btn" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">
+                                    Emergency
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Bar -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div class="bg-gradient-to-r from-blue-800 to-indigo-800 rounded-lg shadow-lg p-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-400">Total Ambulances</div>
+                                <div class="text-lg font-semibold text-white">48</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-800 to-indigo-800 rounded-lg shadow-lg p-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-400">Available</div>
+                                <div class="text-lg font-semibold text-white">32</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-800 to-indigo-800 rounded-lg shadow-lg p-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-400">Responding</div>
+                                <div class="text-lg font-semibold text-white">10</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-800 to-indigo-800 rounded-lg shadow-lg p-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-400">Busy</div>
+                                <div class="text-lg font-semibold text-white">6</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div class="bg-gradient-to-r from-blue-800 to-indigo-800 rounded-lg shadow-lg overflow-hidden">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Dispatch Modal -->
+    <div id="dispatch-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+        <div class="glass-effect bg-gradient-to-r from-blue-900 to-indigo-900 rounded-lg shadow-lg p-6 max-w-md w-full">
+            <h2 class="text-xl font-bold text-white mb-4">Dispatch Ambulance</h2>
+            <form id="dispatch-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Select Ambulance</label>
+                    <select id="dispatch-ambulance" class="w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Select ambulance for dispatch">
+                        <!-- Will be populated from database -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Incident Location</label>
+                    <input type="text" id="dispatch-location" class="w-full rounded-md border-gray-600 bg-gray-700 text-white" placeholder="Enter address or click on map">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Emergency Type</label>
+                    <select id="dispatch-emergency" class="w-full rounded-md border-gray-600 bg-gray-700 text-white" title="Select emergency type">
+                        <option value="medical">Medical Emergency</option>
+                        <option value="trauma">Trauma</option>
+                        <option value="cardiac">Cardiac Arrest</option>
+                        <option value="respiratory">Respiratory Distress</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Priority</label>
+                    <div class="flex space-x-2">
+                        <button type="button" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md">Low</button>
+                        <button type="button" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md">Medium</button>
+                        <button type="button" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">High</button>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="dispatch-cancel" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md">Cancel</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">Dispatch Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([20.5937, 78.9629], 5); // Default center on India
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Function to fetch and display ambulance locations
+        async function loadAmbulanceLocations() {
+            try {
+                const response = await fetch('php/get_agencies.php?type=ambulance');
+                const data = await response.json();
+                
+                if (data.agencies) {
+                    data.agencies.forEach(agency => {
+                        if (agency.latitude && agency.longitude) {
+                            const marker = L.marker([agency.latitude, agency.longitude])
+                                .bindPopup(`
+                                    <strong>${agency.name}</strong><br>
+                                    Phone: ${agency.phone}<br>
+                                    Address: ${agency.address}
+                                `)
+                                .addTo(map);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading ambulance locations:', error);
+            }
+        }
+
+        // Load ambulance locations when the page loads
+        loadAmbulanceLocations();
+
+        // Refresh locations every 30 seconds
+        setInterval(loadAmbulanceLocations, 30000);
+
+        // Sample ambulance data
+        const ambulances = [
+            { id: 1, type: 'basic', agency: 'Red Cross', status: 'available', lat: 28.6139, lng: 77.2090, response_time: 8 },
+            { id: 2, type: 'advanced', agency: 'City Hospital', status: 'responding', lat: 19.0760, lng: 72.8777, response_time: 5 },
+            { id: 3, type: 'mobile-icu', agency: 'Emergency Services', status: 'busy', lat: 12.9716, lng: 77.5946, response_time: 12 },
+            { id: 4, type: 'basic', agency: 'Red Cross', status: 'available', lat: 22.5726, lng: 88.3639, response_time: 7 },
+            { id: 5, type: 'neonatal', agency: 'Children\'s Hospital', status: 'available', lat: 17.3850, lng: 78.4867, response_time: 10 }
+        ];
+
+        // Add ambulance markers to the map
+        function addAmbulanceMarkers() {
+            ambulances.forEach(ambulance => {
+                const el = document.createElement('div');
+                el.className = `ambulance-marker status-${ambulance.status} rounded-full`;
+                
+                const marker = L.marker([ambulance.lat, ambulance.lng])
+                    .bindPopup(`
+                        <div class="p-3">
+                            <h3 class="text-lg font-bold">${ambulance.agency} Ambulance</h3>
+                            <p>Type: ${ambulance.type.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
+                            <p>Status: <span class="font-semibold ${ambulance.status === 'available' ? 'text-green-500' : ambulance.status === 'responding' ? 'text-yellow-500' : 'text-red-500'}">${ambulance.status}</span></p>
+                            <p>Response Time: ${ambulance.response_time} minutes</p>
+                            <button onclick="dispatchAmbulance(${ambulance.id})" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded">Dispatch</button>
+                        </div>
+                    `)
+                    .addTo(map);
+            });
+        }
+
+        // Filter ambulances based on selected criteria
+        function filterAmbulances() {
+            const typeFilter = document.getElementById('ambulance-type').value;
+            const statusFilter = document.getElementById('ambulance-status').value;
+            const agencyFilter = document.getElementById('ambulance-agency').value;
+            const responseFilter = document.getElementById('ambulance-response').value;
+            
+            // Remove existing markers
+            document.querySelectorAll('.ambulance-marker').forEach(marker => marker.remove());
+            
+            // Filter ambulances
+            const filteredAmbulances = ambulances.filter(ambulance => {
+                return (typeFilter === 'all' || ambulance.type === typeFilter) &&
+                       (statusFilter === 'all' || ambulance.status === statusFilter) &&
+                       (agencyFilter === 'all' || ambulance.agency === agencyFilter) &&
+                       (responseFilter === 'all' || ambulance.response_time <= parseInt(responseFilter));
+            });
+            
+            // Add filtered markers
+            filteredAmbulances.forEach(ambulance => {
+                // Add markers for filtered ambulances
+            });
+        }
+
+        // Dispatch ambulance function
+        function dispatchAmbulance(id) {
+            const ambulance = ambulances.find(a => a.id === id);
+            if (ambulance) {
+                document.getElementById('dispatch-modal').classList.remove('hidden');
+                // Populate dispatch form with ambulance details
+            }
+        }
+
+        // Initialize map and event listeners
+        map.on('load', () => {
+            addAmbulanceMarkers();
+            
+            // Add event listeners for filters
+            document.getElementById('ambulance-type').addEventListener('change', filterAmbulances);
+            document.getElementById('ambulance-status').addEventListener('change', filterAmbulances);
+            document.getElementById('ambulance-agency').addEventListener('change', filterAmbulances);
+            document.getElementById('ambulance-response').addEventListener('change', filterAmbulances);
+            
+            // Dispatch button
+            document.getElementById('dispatch-btn').addEventListener('click', () => {
+                document.getElementById('dispatch-modal').classList.remove('hidden');
+            });
+            
+            // Cancel dispatch
+            document.getElementById('dispatch-cancel').addEventListener('click', () => {
+                document.getElementById('dispatch-modal').classList.add('hidden');
+            });
+            
+            // Emergency button
+            document.getElementById('emergency-btn').addEventListener('click', () => {
+                alert('Emergency broadcast sent to all available ambulances!');
+            });
+        });
+    </script>
+</body>
+</html>

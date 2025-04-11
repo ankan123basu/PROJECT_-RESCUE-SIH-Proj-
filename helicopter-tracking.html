@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helicopter Tracking - Rescue Agency Coordination System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+    <style>
+        .marker-pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-dot.available { background-color: #10B981; }
+        .status-dot.responding { background-color: #F59E0B; }
+        .status-dot.on.call { background-color: #3B82F6; }
+        .status-dot.busy { background-color: #EF4444; }
+        
+        .map-container {
+            height: 60vh;
+            border-radius: 0.5rem;
+            z-index: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .map-container {
+                height: 50vh;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .map-container {
+                height: 40vh;
+            }
+        }
+        
+        .glass-card {
+            background: rgba(91, 33, 182, 0.2);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glossy-btn {
+            background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .glossy-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        .glossy-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 text-white min-h-screen">
+    <nav class="glass-card p-4 mb-4 rounded-none">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+                <a href="dashboard.html" class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Rescue Coordination</a>
+                <a href="ambulance-tracking.html" class="hover:text-purple-200 transition-colors">Ambulance Tracking</a>
+                <a href="helicopter-tracking.html" class="text-purple-200 font-semibold border-b-2 border-purple-400">Helicopter Tracking</a>
+                <a href="fire-truck-tracking.html" class="hover:text-purple-200 transition-colors">Fire Truck Tracking</a>
+                <a href="incidents.html" class="hover:text-purple-200 transition-colors">Incidents</a>
+                <a href="analytics.html" class="hover:text-purple-200 transition-colors">Analytics</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="notification-btn p-2 rounded-full bg-purple-800 hover:bg-purple-700 transition-colors" title="Notifications" aria-label="View notifications">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="profile-btn p-2 rounded-full bg-purple-800 hover:bg-purple-700 transition-colors" title="Profile" aria-label="View profile">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4">
+        <div class="glass-card p-6 mb-6 rounded-xl">
+            <h1 class="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Helicopter Tracking System</h1>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="col-span-1">
+                    <label for="helicopterType" class="block text-sm mb-2">Helicopter Type</label>
+                    <select id="helicopterType" class="custom-select w-full bg-purple-700 text-white rounded-lg p-2 border border-purple-500/30" title="Select helicopter type">
+                        <option class="bg-purple-600">All Types</option>
+                        <option class="bg-purple-300 text-purple-900">Medical</option>
+                        <option class="bg-purple-300 text-purple-900">Search & Rescue</option>
+                        <option class="bg-purple-300 text-purple-900">Fire Fighting</option>
+                        <option class="bg-purple-300 text-purple-900">Transport</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="status" class="block text-sm mb-2">Status</label>
+                    <select id="status" class="custom-select w-full bg-purple-700 text-white rounded-lg p-2 border border-purple-500/30" title="Select helicopter status">
+                        <option class="bg-purple-600">All Statuses</option>
+                        <option class="bg-purple-300 text-purple-900">Available</option>
+                        <option class="bg-purple-300 text-purple-900">On Mission</option>
+                        <option class="bg-purple-300 text-purple-900">En Route</option>
+                        <option class="bg-purple-300 text-purple-900">Maintenance</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="base" class="block text-sm mb-2">Base</label>
+                    <select id="base" class="custom-select w-full bg-purple-700 text-white rounded-lg p-2 border border-purple-500/30" title="Select base">
+                        <option class="bg-purple-600">All Bases</option>
+                        <option class="bg-purple-300 text-purple-900">City Heliport</option>
+                        <option class="bg-purple-300 text-purple-900">Regional Airport</option>
+                        <option class="bg-purple-300 text-purple-900">Mountain Base</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="response" class="block text-sm mb-2">Response Time</label>
+                    <select id="response" class="custom-select w-full bg-purple-700 text-white rounded-lg p-2 border border-purple-500/30" title="Select response time">
+                        <option class="bg-purple-600">Any Time</option>
+                        <option class="bg-purple-300 text-purple-900">Under 10 min</option>
+                        <option class="bg-purple-300 text-purple-900">10-20 min</option>
+                        <option class="bg-purple-300 text-purple-900">20-30 min</option>
+                        <option class="bg-purple-300 text-purple-900">Over 30 min</option>
+                    </select>
+                </div>
+                <div class="col-span-1 flex items-end space-x-2">
+                    <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 px-4 py-2 rounded-lg flex-1" title="Deploy helicopter">
+                        Deploy
+                    </button>
+                    <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-2 rounded-lg flex-1" title="Report emergency">
+                        Emergency
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="glass-card p-4 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-purple-200">Total Helicopters</p>
+                        <h3 class="text-2xl font-bold">18</h3>
+                    </div>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-700/50">
+                        <i class="fas fa-helicopter text-2xl" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-green-200">Available</p>
+                        <h3 class="text-2xl font-bold">12</h3>
+                    </div>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-green-600/50">
+                        <i class="fas fa-check-circle text-2xl" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-yellow-200">Responding</p>
+                        <h3 class="text-2xl font-bold">4</h3>
+                    </div>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/50">
+                        <i class="fas fa-clock text-2xl" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-red-200">Busy</p>
+                        <h3 class="text-2xl font-bold">2</h3>
+                    </div>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-red-600/50">
+                        <i class="fas fa-exclamation-circle text-2xl" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 rounded-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Live Helicopter Tracking</h2>
+                <div class="flex space-x-2">
+                    <button class="glossy-btn bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 px-4 py-2 rounded-lg text-sm" title="Show weather">
+                        <i class="fas fa-cloud-sun mr-1"></i> Weather
+                    </button>
+                    <button class="glossy-btn bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 px-4 py-2 rounded-lg text-sm" title="Show terrain">
+                        <i class="fas fa-mountain mr-1"></i> Terrain
+                    </button>
+                    <button class="glossy-btn bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 px-4 py-2 rounded-lg text-sm" title="Show 3D view">
+                        <i class="fas fa-cube mr-1"></i> 3D View
+                    </button>
+                </div>
+            </div>
+            <div id="map" class="map-container shadow-lg" role="application" aria-label="Helicopter locations map"></div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        // Initialize map
+        const map = initMap('map');
+
+        // Load and display helicopters
+        async function initializeHelicopterTracking() {
+            try {
+                // Load helicopter data
+                const helicopters = await loadAgencies('helicopter');
+                
+                // Display helicopters on the map
+                displayAgencies(map, helicopters, 'helicopter');
+                
+                // Set up button event listeners
+                document.querySelector('button[title="Show weather"]').addEventListener('click', function() {
+                    // In a real app, this would load weather data from an API
+                    alert('Weather data would be loaded from a real-time weather API in a production environment');
+                });
+                
+                document.querySelector('button[title="Show terrain"]').addEventListener('click', function() {
+                    // In a real app, this would switch to a terrain map layer
+                    alert('Terrain view would be loaded from a mapping API in a production environment');
+                });
+                
+                document.querySelector('button[title="Show 3D view"]').addEventListener('click', function() {
+                    // In a real app, this would switch to a 3D view
+                    alert('3D view would be enabled in a production environment');
+                });
+                
+                // Set up filter listeners
+                const statusFilter = document.getElementById('status-filter');
+                if (statusFilter) {
+                    statusFilter.addEventListener('change', function() {
+                        const selectedStatus = this.value;
+                        if (selectedStatus === 'all') {
+                            displayAgencies(map, helicopters, 'helicopter');
+                        } else {
+                            const filteredHelicopters = helicopters.filter(heli => 
+                                heli.status.toLowerCase() === selectedStatus.toLowerCase());
+                            displayAgencies(map, filteredHelicopters, 'helicopter');
+                        }
+                    });
+                }
+                
+                const responseTimeFilter = document.getElementById('response-time-filter');
+                if (responseTimeFilter) {
+                    responseTimeFilter.addEventListener('change', function() {
+                        // In a real app, this would filter based on estimated response times
+                        alert('Response time filtering would be implemented in a production environment');
+                    });
+                }
+                
+                // Set up deploy button
+                document.querySelector('button[title="Deploy helicopter"]').addEventListener('click', function() {
+                    // In a real app, this would open a deployment interface
+                    alert('Helicopter deployment interface would open in a production environment');
+                });
+                
+                // Set up emergency button
+                document.querySelector('button[title="Report emergency"]').addEventListener('click', function() {
+                    // In a real app, this would open an emergency reporting interface
+                    alert('Emergency reporting interface would open in a production environment');
+                });
+                
+                // Add helipads to the map
+                addFacilities(map, 'helipads');
+            } catch (error) {
+                console.error('Error initializing helicopter tracking:', error);
+            }
+        }
+
+        // Initialize the helicopter tracking system
+        initializeHelicopterTracking();
+        
+        // Refresh data every 30 seconds
+        setInterval(async function() {
+            const helicopters = await loadAgencies('helicopter');
+            displayAgencies(map, helicopters, 'helicopter');
+        }, 30000);
+    </script>
+</body>
+</html>

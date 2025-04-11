@@ -1,0 +1,97 @@
+body {
+    background-image: url('../images/disaster-response-software-compressed.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #0f172a;
+    color: #e2e8f0;
+    min-height: 100vh;
+}
+
+.glass-card {
+    background: rgba(15, 23, 42, 0.7);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-backdrop {
+    background: rgba(15, 23, 42, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-active {
+    background-color: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+/* Resource card hover effects */
+.resource-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Activity feed animations */
+.activity-item {
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Progress bars */
+.progress-bar {
+    height: 4px;
+    background: rgba(59, 130, 246, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #3b82f6;
+    animation: fillProgress 1s ease;
+    width: var(--progress);
+}
+
+@keyframes fillProgress {
+    from { width: 0; }
+    to { width: var(--progress); }
+}
+
+/* Weather alert styles */
+.weather-alert {
+    transition: transform 0.3s ease;
+}
+
+.weather-alert:hover {
+    transform: translateY(-2px);
+}
+
+.weather-alert.warning {
+    background: rgba(245, 158, 11, 0.2);
+}
+
+.weather-alert.danger {
+    background: rgba(239, 68, 68, 0.2);
+}

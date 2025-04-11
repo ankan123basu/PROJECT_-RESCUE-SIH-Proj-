@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incidents - Rescue Agency Coordination System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Glass morphism effects */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .glass-effect-dark {
+            background: rgba(0, 0, 0, 0.4);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        /* Glossy button effects */
+        .glossy-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .glossy-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: all 0.6s ease;
+        }
+        
+        .glossy-btn:hover::before {
+            left: 100%;
+        }
+        
+        #map {
+            width: 100%;
+            height: 400px;
+            z-index: 1;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-white font-sans min-h-screen">
+    <!-- Navigation -->
+    <nav class="glass-effect-dark sticky top-0 z-50">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                            <i class="fas fa-map-marked-alt text-white text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4 flex items-baseline space-x-4">
+                        <a href="dashboard.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Dashboard</a>
+                        <a href="incidents.html" class="px-3 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white">Incidents</a>
+                        <a href="resources.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Resources</a>
+                        <a href="analytics.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Analytics</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="glossy-btn rounded-full p-1 text-gray-300 hover:text-white focus:outline-none">
+                            <span class="sr-only">View notifications</span>
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <button class="glossy-btn flex items-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 p-1 text-white focus:outline-none">
+                            <span class="sr-only">Open user menu</span>
+                            <i class="fas fa-user-circle text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1">
+        <div class="py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Page Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-white">Incident Management</h1>
+                    <div class="flex space-x-3">
+                        <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> Report Incident
+                        </button>
+                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Incident Map -->
+                <div class="glass-effect rounded-xl overflow-hidden shadow-2xl mb-6">
+                    <div class="flex justify-between items-center p-4 glass-effect-dark">
+                        <h2 class="text-xl font-semibold">Active Incidents</h2>
+                        <div class="flex space-x-2">
+                            <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-sm">
+                                <i class="fas fa-filter mr-1"></i> Filter
+                            </button>
+                            <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-sm">
+                                <i class="fas fa-layer-group mr-1"></i> Layers
+                            </button>
+                        </div>
+                    </div>
+                    <div id="map"></div>
+                </div>
+
+                <!-- Incident List -->
+                <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
+                    <div class="p-4 glass-effect-dark">
+                        <h2 class="text-xl font-semibold">Recent Incidents</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-800 bg-opacity-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ID</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Type</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Location</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Reported</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Resources</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <!-- High Priority Incident -->
+                                <tr class="bg-red-900 bg-opacity-20">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#INC-2023-001</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            Fire
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Delhi, Connaught Place</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            Critical
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">10 mins ago</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <div class="flex -space-x-1">
+                                            <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-xs">A</div>
+                                            <div class="h-6 w-6 rounded-full bg-red-500 flex items-center justify-center text-xs">F</div>
+                                            <div class="h-6 w-6 rounded-full bg-purple-500 flex items-center justify-center text-xs">H</div>
+                                            <div class="h-6 w-6 rounded-full bg-gray-500 flex items-center justify-center text-xs">+2</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs">View</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2">Respond</button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Medium Priority Incident -->
+                                <tr class="bg-yellow-900 bg-opacity-20">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#INC-2023-002</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            Flood
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Mumbai, Dadar</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            Moderate
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">1 hour ago</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <div class="flex -space-x-1">
+                                            <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-xs">A</div>
+                                            <div class="h-6 w-6 rounded-full bg-red-500 flex items-center justify-center text-xs">F</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs">View</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2">Respond</button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Low Priority Incident -->
+                                <tr class="bg-blue-900 bg-opacity-20">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#INC-2023-003</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            Medical
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Bangalore, Indiranagar</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            Minor
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">3 hours ago</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        <div class="flex -space-x-1">
+                                            <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-xs">A</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs">View</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2">Respond</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-4 flex justify-between items-center">
+                        <div class="text-sm text-gray-400">Showing 3 of 24 incidents</div>
+                        <div class="flex space-x-2">
+                            <button class="glossy-btn bg-gray-700 text-white px-3 py-1 rounded-lg text-sm">Previous</button>
+                            <button class="glossy-btn bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">1</button>
+                            <button class="glossy-btn bg-gray-700 text-white px-3 py-1 rounded-lg text-sm">2</button>
+                            <button class="glossy-btn bg-gray-700 text-white px-3 py-1 rounded-lg text-sm">3</button>
+                            <button class="glossy-btn bg-gray-700 text-white px-3 py-1 rounded-lg text-sm">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([20.5937, 78.9629], 4);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+            subdomains: ['a', 'b', 'c']
+        }).addTo(map);
+
+        // Sample data for demonstration
+        const incidents = [
+            { id: "INC-2023-001", type: "fire", severity: "critical", latitude: 28.6139, longitude: 77.2090, location: "Delhi, Connaught Place" },
+            { id: "INC-2023-002", type: "flood", severity: "moderate", latitude: 19.0760, longitude: 72.8777, location: "Mumbai, Dadar" },
+            { id: "INC-2023-003", type: "medical", severity: "minor", latitude: 12.9716, longitude: 77.5946, location: "Bangalore, Indiranagar" },
+            { id: "INC-2023-004", type: "earthquake", severity: "critical", latitude: 22.5726, longitude: 88.3639, location: "Kolkata, Park Street" },
+            { id: "INC-2023-005", type: "traffic", severity: "moderate", latitude: 17.3850, longitude: 78.4867, location: "Hyderabad, Banjara Hills" }
+        ];
+
+        // Create custom icons
+        const icons = {
+            fire: L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div style="background-color: rgba(239, 68, 68, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);"><i class="fas fa-fire text-white text-xs"></i></div>`,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            }),
+            flood: L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div style="background-color: rgba(59, 130, 246, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);"><i class="fas fa-water text-white text-xs"></i></div>`,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            }),
+            medical: L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div style="background-color: rgba(16, 185, 129, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(16, 185, 129, 0.8);"><i class="fas fa-heartbeat text-white text-xs"></i></div>`,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            }),
+            earthquake: L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div style="background-color: rgba(124, 58, 237, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(124, 58, 237, 0.8);"><i class="fas fa-house-damage text-white text-xs"></i></div>`,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            }),
+            traffic: L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div style="background-color: rgba(245, 158, 11, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);"><i class="fas fa-car-crash text-white text-xs"></i></div>`,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            })
+        };
+
+        // Function to add incident markers to the map
+        function addIncidentMarkers(incidents) {
+            incidents.forEach(incident => {
+                const marker = L.marker([incident.latitude, incident.longitude], {
+                    icon: icons[incident.type]
+                }).addTo(map);
+                
+                const severityColor = incident.severity === 'critical' ? 'red' : 
+                                    incident.severity === 'moderate' ? 'yellow' : 'blue';
+                
+                marker.bindPopup(`
+                    <div class="p-2">
+                        <h3 class="text-lg font-bold">${incident.id}</h3>
+                        <p class="mb-1">Type: ${incident.type}</p>
+                        <p class="mb-1">Severity: <span class="text-${severityColor}-500 font-medium">${incident.severity}</span></p>
+                        <p class="mb-2">Location: ${incident.location}</p>
+                        <div class="flex space-x-2">
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Details</button>
+                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">Respond</button>
+                        </div>
+                    </div>
+                `);
+            });
+        }
+
+        // Add incident markers to the map
+        addIncidentMarkers(incidents);
+    </script>
+</body>
+</html>

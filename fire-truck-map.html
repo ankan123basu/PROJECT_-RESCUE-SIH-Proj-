@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Truck Tracking - Rescue Agency Coordination System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        /* Map container responsive styles */
+        .map-container {
+            width: 100%;
+            height: calc(100vh - 16rem);
+            min-height: 400px;
+            border-radius: 0.5rem;
+            z-index: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .map-container {
+                height: calc(100vh - 20rem);
+                min-height: 300px;
+            }
+        }
+        
+        /* Marker animation */
+        .marker-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-red-900 to-gray-900 text-white font-sans min-h-screen">
+    <!-- Navigation -->
+    <nav class="glass-effect-dark sticky top-0 z-50">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                            <i class="fas fa-fire-truck text-white text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4 flex items-baseline space-x-4">
+                        <a href="dashboard.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Dashboard</a>
+                        <a href="ambulance-tracking.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Ambulance</a>
+                        <a href="helicopter-tracking.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Helicopter</a>
+                        <a href="fire-truck-map.html" class="px-3 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-red-600 to-red-700 text-white">Fire Trucks</a>
+                        <a href="incidents.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Incidents</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="notification-btn" title="Notifications" aria-label="View notifications">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="profile-btn" title="Profile" aria-label="View profile">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4">
+        <div class="glass-card p-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="col-span-1">
+                    <label for="fireTruckType" class="block text-sm mb-2">Fire Truck Type</label>
+                    <select id="fireTruckType" class="custom-select w-full bg-red-700 text-white rounded-lg p-2 border border-red-500/30" title="Select fire truck type">
+                        <option class="bg-blue-600">All Types</option>
+                        <option class="bg-red-600 text-white">Pumper</option>
+                        <option class="bg-red-600 text-white">Ladder</option>
+                        <option class="bg-red-600 text-white">Rescue</option>
+                        <option class="bg-red-600 text-white">Tanker</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="status" class="block text-sm mb-2">Status</label>
+                    <select id="status" class="custom-select w-full bg-red-700 text-white rounded-lg p-2 border border-red-500/30" title="Select fire truck status">
+                        <option class="bg-blue-600">All Statuses</option>
+                        <option class="bg-red-600 text-white">Available</option>
+                        <option class="bg-red-600 text-white">On Call</option>
+                        <option class="bg-red-600 text-white">Responding</option>
+                        <option class="bg-red-600 text-white">At Scene</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="waterCapacity" class="block text-sm mb-2">Water Capacity</label>
+                    <select id="waterCapacity" class="custom-select w-full bg-red-700 text-white rounded-lg p-2 border border-red-500/30" title="Select water capacity">
+                        <option class="bg-blue-600">Any Capacity</option>
+                        <option class="bg-red-600 text-white">1000+ Gallons</option>
+                        <option class="bg-red-600 text-white">2000+ Gallons</option>
+                        <option class="bg-red-600 text-white">5000+ Gallons</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="fireZone" class="block text-sm mb-2">Fire Zone</label>
+                    <select id="fireZone" class="custom-select w-full bg-red-700 text-white rounded-lg p-2 border border-red-500/30" title="Select fire zone">
+                        <option class="bg-blue-600">All Zones</option>
+                        <option class="bg-red-600 text-white">Urban</option>
+                        <option class="bg-red-600 text-white">Rural</option>
+                        <option class="bg-red-600 text-white">Forest</option>
+                        <option class="bg-red-600 text-white">Industrial</option>
+                    </select>
+                </div>
+                <div class="col-span-1 flex items-end space-x-2">
+                    <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-lg flex-1" title="Dispatch fire truck">
+                        Dispatch
+                    </button>
+                    <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg flex-1" title="Report emergency">
+                        Emergency
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            <div class="glass-card dark p-4 rounded-lg hover-scale">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-300">Total Fire Trucks</p>
+                        <h3 class="text-2xl font-bold">36</h3>
+                    </div>
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-truck-moving text-white text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill success w-90"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card dark p-4 rounded-lg hover-scale">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-300">Available</p>
+                        <h3 class="text-2xl font-bold">24</h3>
+                    </div>
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-check-circle text-white text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill success w-65"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card dark p-4 rounded-lg hover-scale">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-300">Responding</p>
+                        <h3 class="text-2xl font-bold">8</h3>
+                    </div>
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-clock text-white text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill warning w-25"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card dark p-4 rounded-lg hover-scale">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-300">Busy</p>
+                        <h3 class="text-2xl font-bold">4</h3>
+                    </div>
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-exclamation-circle text-white text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill danger w-10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card dark p-4 rounded-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Fire Truck Locations</h2>
+                <div class="flex space-x-2">
+                    <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded-lg" title="Show hydrants">
+                        <i class="fas fa-fire-hydrant mr-1"></i> Hydrants
+                    </button>
+                    <button class="glossy-btn bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 rounded-lg" title="Show fire zones">
+                        <i class="fas fa-map-marked-alt mr-1"></i> Zones
+                    </button>
+                    <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg" title="Show heat map">
+                        <i class="fas fa-fire mr-1"></i> Heat Map
+                    </button>
+                </div>
+            </div>
+            <div id="map" class="map-container" role="application" aria-label="Fire truck locations map"></div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        // Initialize map
+        const map = initMap('map');
+        
+        // Load and display fire trucks
+        async function initializeFireTruckTracking() {
+            try {
+                // Load fire truck data
+                const fireTrucks = await loadAgencies('fire_truck');
+                
+                // Display fire trucks on the map
+                displayAgencies(map, fireTrucks, 'fire_truck');
+                
+                // Set up button event listeners
+                document.querySelector('button[title="Show hydrants"]').addEventListener('click', function() {
+                    addFacilities(map, 'hydrants');
+                });
+                
+                document.querySelector('button[title="Show fire zones"]').addEventListener('click', function() {
+                    // In a real app, this would load fire zone data from an API
+                    alert('Fire zone data would be loaded from a GIS API in a production environment');
+                });
+                
+                document.querySelector('button[title="Show heat map"]').addEventListener('click', function() {
+                    // In a real app, this would load heat map data
+                    alert('Heat map data would be loaded from a fire monitoring API in a production environment');
+                });
+                
+                // Set up filter listeners
+                const fireTruckType = document.getElementById('fireTruckType');
+                if (fireTruckType) {
+                    fireTruckType.addEventListener('change', function() {
+                        // In a real app, this would filter based on truck types
+                        alert('Fire truck type filtering would be implemented in a production environment');
+                    });
+                }
+                
+                const fireZone = document.getElementById('fireZone');
+                if (fireZone) {
+                    fireZone.addEventListener('change', function() {
+                        const selectedZone = this.value;
+                        if (selectedZone === 'All Zones') {
+                            displayAgencies(map, fireTrucks, 'fire_truck');
+                        } else {
+                            // In a real app, this would filter based on zones
+                            alert(`Fire trucks in ${selectedZone} zone would be displayed in a production environment`);
+                        }
+                    });
+                }
+                
+                // Set up dispatch button
+                document.querySelector('button[title="Dispatch fire truck"]').addEventListener('click', function() {
+                    // In a real app, this would open a dispatch interface
+                    alert('Fire truck dispatch interface would open in a production environment');
+                });
+                
+                // Set up emergency button
+                document.querySelector('button[title="Report emergency"]').addEventListener('click', function() {
+                    // In a real app, this would open an emergency reporting interface
+                    alert('Emergency reporting interface would open in a production environment');
+                });
+                
+                // Add fire stations to the map
+                addFacilities(map, 'fire_stations');
+            } catch (error) {
+                console.error('Error initializing fire truck tracking:', error);
+            }
+        }
+
+        // Initialize the fire truck tracking system
+        initializeFireTruckTracking();
+        
+        // Refresh data every 30 seconds
+        setInterval(async function() {
+            const fireTrucks = await loadAgencies('fire_truck');
+            displayAgencies(map, fireTrucks, 'fire_truck');
+        }, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Rescue Agency Coordination System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        /* Glass morphism effects */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .glass-effect-dark {
+            background: rgba(0, 0, 0, 0.4);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        /* Glossy button effects */
+        .glossy-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .glossy-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: all 0.6s ease;
+        }
+        
+        .glossy-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Map container */
+        #map {
+            width: 100%;
+            height: calc(100vh - 4rem);
+            z-index: 1;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Glass card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .glass-card.dark {
+            background: rgba(0, 0, 0, 0.4);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        /* Status dot */
+        .status-dot {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+        }
+        
+        .responding {
+            background-color: orange;
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background-color: #ccc;
+            border-radius: 0.25rem;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 0.25rem;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-bar-fill.success {
+            background-color: #34c759;
+        }
+        
+        .progress-bar-fill.danger {
+            background-color: #f44336;
+        }
+        
+        .progress-bar-fill.warning {
+            background-color: #ffc107;
+        }
+        
+        /* Map container */
+        .map-container {
+            width: 100%;
+            height: 20rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-white font-sans min-h-screen">
+    <!-- Navigation -->
+    <nav class="glass-effect-dark sticky top-0 z-50">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                            <i class="fas fa-map-marked-alt text-white text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4 flex items-baseline space-x-4">
+                        <a href="dashboard.html" class="px-3 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white">Dashboard</a>
+                        <a href="incidents.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Incidents</a>
+                        <a href="resources.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Resources</a>
+                        <a href="analytics.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Analytics</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="glossy-btn rounded-full p-1 text-gray-300 hover:text-white focus:outline-none">
+                            <span class="sr-only">View notifications</span>
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <button class="glossy-btn flex items-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 p-1 text-white focus:outline-none">
+                            <span class="sr-only">Open user menu</span>
+                            <i class="fas fa-user-circle text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1">
+        <div class="py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Dashboard Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-white">Emergency Response Dashboard</h1>
+                    <div class="flex space-x-3">
+                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
+                            <i class="fas fa-plus mr-2"></i> New Incident
+                        </button>
+                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resource Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <!-- Total Resources -->
+                    <div class="glass-card bg-gradient-to-br from-blue-500 to-blue-700 p-4 rounded-lg hover:scale-105 transition-all duration-300">
+                        <h3 class="text-lg font-semibold mb-2">Total Resources</h3>
+                        <div class="text-3xl font-bold">124</div>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-sm opacity-75">Deployment Rate</span>
+                            <i class="fas fa-ambulance text-2xl" aria-hidden="true"></i>
+                            <span class="text-sm font-medium text-green-400">+5.2%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill success w-75"></div>
+                        </div>
+                    </div>
+
+                    <!-- Active Incidents -->
+                    <div class="glass-card bg-gradient-to-br from-red-500 to-red-700 p-4 rounded-lg hover:scale-105 transition-all duration-300">
+                        <h3 class="text-lg font-semibold mb-2">Active Incidents</h3>
+                        <div class="text-3xl font-bold">18</div>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-sm opacity-75">Response Rate</span>
+                            <i class="fas fa-exclamation-triangle text-2xl" aria-hidden="true"></i>
+                            <span class="text-sm font-medium text-red-400">-2.3%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill danger w-65"></div>
+                        </div>
+                    </div>
+
+                    <!-- Response Time -->
+                    <div class="glass-card bg-gradient-to-br from-yellow-500 to-yellow-700 p-4 rounded-lg hover:scale-105 transition-all duration-300">
+                        <h3 class="text-lg font-semibold mb-2">Avg. Response Time</h3>
+                        <div class="text-3xl font-bold">8.5 min</div>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-sm opacity-75">Improvement</span>
+                            <i class="fas fa-clock text-2xl" aria-hidden="true"></i>
+                            <span class="text-sm font-medium text-green-400">+12.4%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill warning w-82"></div>
+                        </div>
+                    </div>
+
+                    <!-- Agencies -->
+                    <div class="glass-card bg-gradient-to-br from-purple-500 to-purple-700 p-4 rounded-lg hover:scale-105 transition-all duration-300">
+                        <h3 class="text-lg font-semibold mb-2">Active Agencies</h3>
+                        <div class="text-3xl font-bold">32</div>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-sm opacity-75">Coordination</span>
+                            <i class="fas fa-building text-2xl" aria-hidden="true"></i>
+                            <span class="text-sm font-medium text-green-400">+8.7%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill success w-90"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Filters -->
+                <div class="glass-card p-4 rounded-lg mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div>
+                            <label for="resource-type" class="block text-sm font-medium text-gray-300 mb-1">Resource Type</label>
+                            <select id="resource-type" title="Select resource type" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="all">All Resources</option>
+                                <option value="ambulance">Ambulances</option>
+                                <option value="fire-truck">Fire Trucks</option>
+                                <option value="helicopter">Helicopters</option>
+                                <option value="police">Police</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="emergency-type" class="block text-sm font-medium text-gray-300 mb-1">Emergency Type</label>
+                            <select id="emergency-type" title="Select emergency type" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="all">All Emergencies</option>
+                                <option value="fire">Fire</option>
+                                <option value="medical">Medical</option>
+                                <option value="accident">Accident</option>
+                                <option value="natural">Natural Disaster</option>
+                                <option value="security">Security</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="agency-status" class="block text-sm font-medium text-gray-300 mb-1">Agency Status</label>
+                            <select id="agency-status" title="Select agency status" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="all">All Statuses</option>
+                                <option value="available">Available</option>
+                                <option value="responding">Responding</option>
+                                <option value="busy">Busy</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="time-range" class="block text-sm font-medium text-gray-300 mb-1">Time Range</label>
+                            <select id="time-range" title="Select time range" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="24h">Last 24 Hours</option>
+                                <option value="7d">Last 7 Days</option>
+                                <option value="30d">Last 30 Days</option>
+                                <option value="all">All Time</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button class="glossy-btn w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div class="glass-card dark rounded-xl overflow-hidden shadow-2xl mb-6">
+                    <div class="flex justify-end space-x-2 p-2">
+                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-sm">
+                            <i class="fas fa-cloud-sun mr-1"></i> Weather
+                        </button>
+                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-sm">
+                            <i class="fas fa-road mr-1"></i> Traffic
+                        </button>
+                        <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-700 text-white px-3 py-1 rounded-lg text-sm">
+                            <i class="fas fa-fire mr-1"></i> Hazards
+                        </button>
+                        <button class="glossy-btn bg-gradient-to-r from-purple-500 to-purple-700 text-white px-3 py-1 rounded-lg text-sm">
+                            <i class="fas fa-cube mr-1"></i> 3D View
+                        </button>
+                    </div>
+                    <div id="map" class="map-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([20.5937, 78.9629], 4);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+            subdomains: ['a', 'b', 'c']
+        }).addTo(map);
+
+        // Sample data for demonstration
+        const resources = [
+            { name: "Ambulance A1", type: "ambulance", status: "available", latitude: 28.6139, longitude: 77.2090 },
+            { name: "Fire Truck F3", type: "fire-truck", status: "responding", latitude: 19.0760, longitude: 72.8777 },
+            { name: "Helicopter H2", type: "helicopter", status: "available", latitude: 12.9716, longitude: 77.5946 },
+            { name: "Ambulance A5", type: "ambulance", status: "busy", latitude: 17.3850, longitude: 78.4867 },
+            { name: "Fire Truck F7", type: "fire-truck", status: "available", latitude: 13.0827, longitude: 80.2707 },
+            { name: "Helicopter H1", type: "helicopter", status: "responding", latitude: 22.5726, longitude: 88.3639 }
+        ];
+
+        // Create custom icons
+        const icons = {
+            ambulance: L.icon({
+                iconUrl: 'assets/icons/ambulance.svg',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, -16]
+            }),
+            'fire-truck': L.icon({
+                iconUrl: 'assets/icons/fire-truck.svg',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, -16]
+            }),
+            helicopter: L.icon({
+                iconUrl: 'assets/icons/helicopter.svg',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, -16]
+            })
+        };
+
+        // Function to add markers to the map
+        function addMarkers(resources) {
+            resources.forEach(resource => {
+                const marker = L.marker([resource.latitude, resource.longitude], {
+                    icon: icons[resource.type]
+                }).addTo(map);
+                
+                const statusColor = resource.status === 'available' ? 'green' : 
+                                    resource.status === 'responding' ? 'orange' : 'red';
+                
+                marker.bindPopup(`
+                    <div class="p-2">
+                        <h3 class="text-lg font-bold">${resource.name}</h3>
+                        <p class="mb-1">Status: <span class="text-${statusColor}-500 font-medium">${resource.status}</span></p>
+                        <p class="mb-2">Type: ${resource.type}</p>
+                        <div class="flex space-x-2">
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Contact</button>
+                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">Dispatch</button>
+                        </div>
+                    </div>
+                `);
+            });
+        }
+
+        // Add markers to the map
+        addMarkers(resources);
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // In a real application, you would fetch updated data from your server
+            console.log("Updating map data...");
+        }, 30000);
+    </script>
+</body>
+</html>

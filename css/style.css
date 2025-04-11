@@ -1,0 +1,247 @@
+/* Fire Risk Level Bar */
+.fire-risk-bar {
+    width: 75%;
+    height: 100%;
+    background: linear-gradient(to right, #10B981, #F59E0B, #EF4444);
+}
+
+/* Map Container */
+.map-container {
+    width: 100%;
+    height: 600px;
+    border-radius: 0.5rem;
+}
+
+/* Notification and Profile Buttons */
+.notification-btn, .profile-btn {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+}
+
+.notification-btn:hover, .profile-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Glass Morphism Effects */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.glass-card.dark {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Custom Select Styles */
+.custom-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    transition: all 0.2s ease;
+}
+
+.custom-select:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Button Gradients */
+.btn-gradient-primary {
+    background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+}
+
+.btn-gradient-success {
+    background: linear-gradient(135deg, #10B981, #059669);
+}
+
+.btn-gradient-danger {
+    background: linear-gradient(135deg, #EF4444, #B91C1C);
+}
+
+.btn-gradient-warning {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+}
+
+/* Hover Effects */
+.hover-scale {
+    transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Status Indicators */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.status-dot.available {
+    background-color: #10B981;
+    box-shadow: 0 0 8px #10B981;
+}
+
+.status-dot.busy {
+    background-color: #EF4444;
+    box-shadow: 0 0 8px #EF4444;
+}
+
+.status-dot.responding {
+    background-color: #F59E0B;
+    box-shadow: 0 0 8px #F59E0B;
+}
+
+/* Map Markers */
+.leaflet-div-icon {
+    background: transparent;
+    border: none;
+}
+
+.marker-pulse {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Progress Bars */
+.progress-bar {
+    width: 100%;
+    height: 0.5rem;
+    background-color: rgba(75, 85, 99, 1);
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.3s ease;
+}
+
+.progress-bar-fill.success {
+    background: linear-gradient(to right, #10B981, #059669);
+}
+
+.progress-bar-fill.warning {
+    background: linear-gradient(to right, #F59E0B, #D97706);
+}
+
+.progress-bar-fill.danger {
+    background: linear-gradient(to right, #EF4444, #B91C1C);
+}
+
+/* Progress Bar Widths */
+.w-75 {
+    width: 75%;
+}
+
+.w-65 {
+    width: 65%;
+}
+
+.w-82 {
+    width: 82%;
+}
+
+.w-90 {
+    width: 90%;
+}
+
+/* Resource Stats */
+.resource-stat {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.resource-stat:hover {
+    transform: scale(1.05);
+}
+
+.resource-stat-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Glossy Button */
+.glossy-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.glossy-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transition: all 0.6s ease;
+}
+
+.glossy-btn:hover:before {
+    left: 100%;
+}

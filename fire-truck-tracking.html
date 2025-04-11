@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Truck Tracking - Rescue Agency Coordination System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-900 text-white">
+    <nav class="bg-red-900 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+                <a href="dashboard.html" class="text-xl font-bold">Dashboard</a>
+                <a href="ambulance-tracking.html" class="hover:text-red-200">Ambulance Tracking</a>
+                <a href="helicopter-tracking.html" class="hover:text-red-200">Helicopter Tracking</a>
+                <a href="fire-truck-tracking.html" class="text-red-200 font-semibold">Fire Truck Tracking</a>
+                <a href="incidents.html" class="hover:text-red-200">Incidents</a>
+                <a href="analytics.html" class="hover:text-red-200">Analytics</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="notification-btn" title="Notifications" aria-label="View notifications">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="profile-btn" title="Profile" aria-label="View profile">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4">
+        <div class="bg-red-800 rounded-lg p-4 mb-4">
+            <div class="grid grid-cols-5 gap-4">
+                <div class="col-span-1">
+                    <label for="truckType" class="block text-sm mb-2">Fire Truck Type</label>
+                    <select id="truckType" name="truckType" class="w-full bg-red-700 rounded p-2 custom-select" title="Select fire truck type">
+                        <option>All Types</option>
+                        <option>Pumper</option>
+                        <option>Ladder</option>
+                        <option>Rescue</option>
+                        <option>Tanker</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="status" class="block text-sm mb-2">Status</label>
+                    <select id="status" name="status" class="w-full bg-red-700 rounded p-2 custom-select" title="Select fire truck status">
+                        <option>All Statuses</option>
+                        <option>Available</option>
+                        <option>Responding</option>
+                        <option>On Scene</option>
+                        <option>Returning</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="capacity" class="block text-sm mb-2">Water Capacity</label>
+                    <select id="capacity" name="capacity" class="w-full bg-red-700 rounded p-2 custom-select" title="Select water capacity">
+                        <option>Any Capacity</option>
+                        <option>1000-2000L</option>
+                        <option>2000-5000L</option>
+                        <option>5000L+</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label for="zone" class="block text-sm mb-2">Fire Zone</label>
+                    <select id="zone" name="zone" class="w-full bg-red-700 rounded p-2 custom-select" title="Select fire zone">
+                        <option>All Zones</option>
+                        <option>Zone A</option>
+                        <option>Zone B</option>
+                        <option>Zone C</option>
+                        <option>Zone D</option>
+                    </select>
+                </div>
+                <div class="col-span-1 flex items-end space-x-2">
+                    <button class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded flex-1" title="Dispatch fire truck">Dispatch</button>
+                    <button class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded flex-1" title="Report emergency">Emergency</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4 mb-4">
+            <div class="bg-red-800 p-4 rounded-lg glass-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm">Total Fire Trucks</p>
+                        <h3 class="text-2xl font-bold">36</h3>
+                    </div>
+                    <i class="fas fa-truck text-2xl" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="bg-green-600 p-4 rounded-lg glass-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm">Available</p>
+                        <h3 class="text-2xl font-bold">24</h3>
+                    </div>
+                    <i class="fas fa-check-circle text-2xl" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="bg-yellow-500 p-4 rounded-lg glass-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm">Responding</p>
+                        <h3 class="text-2xl font-bold">8</h3>
+                    </div>
+                    <i class="fas fa-clock text-2xl" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="bg-red-600 p-4 rounded-lg glass-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm">Busy</p>
+                        <h3 class="text-2xl font-bold">4</h3>
+                    </div>
+                    <i class="fas fa-exclamation-circle text-2xl" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-red-800 rounded-lg p-4 glass-card">
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold mb-2">Current Fire Risk Level</h3>
+                <div class="h-4 bg-gray-700 rounded-full overflow-hidden">
+                    <div class="fire-risk-bar"></div>
+                </div>
+                <div class="flex justify-between text-sm mt-1">
+                    <span>Low</span>
+                    <span>Moderate</span>
+                    <span>High</span>
+                    <span>Extreme</span>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2 mb-4">
+                <button class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded" title="Show fire hydrant locations">Show Hydrants</button>
+                <button class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded" title="Show fire zone boundaries">Show Fire Zones</button>
+                <button class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded" title="Show fire risk heat map">Heat Map</button>
+            </div>
+            <div id="map" class="map-container" role="application" aria-label="Fire truck locations map"></div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('map').setView(MAP_CONFIG.defaultCenter, MAP_CONFIG.defaultZoom);
+        L.tileLayer(MAP_CONFIG.tileLayer, {
+            attribution: MAP_CONFIG.attribution,
+            maxZoom: MAP_CONFIG.maxZoom
+        }).addTo(map);
+
+        // Function to load and display fire truck locations
+        async function loadFireTrucks() {
+            try {
+                const response = await fetch('php/get_agencies.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    data.agencies.forEach(agency => {
+                        if (agency.type === 'fire_truck') {
+                            const marker = L.marker([agency.latitude, agency.longitude], {
+                                icon: MAP_CONFIG.icons.fireTruck
+                            }).addTo(map);
+                            
+                            marker.bindPopup(`
+                                <div class="p-2">
+                                    <h3 class="font-bold">${agency.name}</h3>
+                                    <p>Status: ${agency.status}</p>
+                                    <p>Contact: ${agency.contact_number}</p>
+                                </div>
+                            `);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading fire truck data:', error);
+            }
+        }
+
+        // Load fire trucks initially and refresh every 30 seconds
+        loadFireTrucks();
+        setInterval(loadFireTrucks, 30000);
+    </script>
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agency Network - Project Rescue</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        .nav-backdrop {
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            background: rgba(30, 41, 59, 0.7);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+        }
+        .bg-image {
+            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('assets/images/three-rescue-workers-walk-through-debris-after-a-disaster-photo.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 1rem;
+            z-index: 1;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .status-online {
+            background-color: #10B981;
+            box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+            animation: status-pulse 2s infinite;
+        }
+        @keyframes status-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        .marker-cluster {
+            background-color: rgba(59, 130, 246, 0.6);
+            border-radius: 50%;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 4px;
+        }
+    </style>
+</head>
+<body class="bg-image min-h-screen text-white">
+    <nav class="nav-backdrop sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-blue-400">
+                    Agency Network
+                </h1>
+                <div class="flex items-center space-x-4">
+                    <a href="emergency-coordination.html" class="hover:text-blue-300">Emergency Coordination</a>
+                    <a href="index.html" class="hover:text-blue-300">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-8">
+        <!-- Agency Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-xl pulse">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-400">Available Resources</h3>
+                        <p class="text-3xl font-bold mt-2" id="resourceCount">24</p>
+                        <p class="text-sm text-gray-400 mt-1">Active equipment & vehicles</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                        <button onclick="window.location.href='resources.html'" class="text-blue-400 hover:text-blue-300 transition-all duration-300" title="View Resources">
+                            <i class="fas fa-ambulance text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-green-400">Active Status</h3>
+                        <p class="text-3xl font-bold mt-2" id="activeStatus">Online</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card p-6 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-purple-400">Response Time</h3>
+                        <p class="text-3xl font-bold mt-2" id="responseTime">< 5 min</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agency Profile and Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card p-6 rounded-xl md:col-span-2">
+                <h2 class="text-xl font-semibold mb-4 text-blue-300">Your Agency Profile</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm text-gray-400">Agency Name</label>
+                        <p class="text-lg font-semibold" id="agencyName">Mumbai Fire Brigade</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Type</label>
+                        <p class="text-lg font-semibold" id="agencyType">Fire & Rescue</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Contact</label>
+                        <p class="text-lg font-semibold" id="agencyContact">+91 22-2307-6111</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Location</label>
+                        <p class="text-lg font-semibold" id="agencyLocation">Mumbai Central</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-xl">
+                <h2 class="text-xl font-semibold mb-4 text-blue-300">Quick Actions</h2>
+                <div class="space-y-3">
+                    <button onclick="broadcastMessage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                        </svg>
+                        <span>Broadcast Message</span>
+                    </button>
+                    <button onclick="updateStatus()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Update Status</span>
+                    </button>
+                    <button onclick="viewResources()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        <span>View Resources</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Map -->
+        <div class="glass-card p-6 rounded-xl">
+            <h2 class="text-xl font-semibold mb-4 text-blue-300">Network Map</h2>
+            <div id="map"></div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize map centered on India
+        const map = L.map('map').setView([20.5937, 78.9629], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ' OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Sample agency data with Indian locations
+        const agencies = [
+            { 
+                name: 'Mumbai Fire Brigade', 
+                lat: 19.0760, 
+                lng: 72.8777, 
+                type: 'Fire & Rescue',
+                status: 'active',
+                resources: {
+                    firetrucks: 8,
+                    ambulances: 4,
+                    personnel: 45
+                }
+            },
+            { 
+                name: 'Delhi Emergency Services', 
+                lat: 28.6139, 
+                lng: 77.2090, 
+                type: 'Medical',
+                status: 'active',
+                resources: {
+                    ambulances: 12,
+                    medicalTeams: 6,
+                    personnel: 35
+                }
+            },
+            { 
+                name: 'Bangalore Rescue Unit', 
+                lat: 12.9716, 
+                lng: 77.5946, 
+                type: 'Rescue',
+                status: 'standby',
+                resources: {
+                    rescueVehicles: 6,
+                    searchTeams: 4,
+                    personnel: 28
+                }
+            },
+            { 
+                name: 'Chennai Coast Guard', 
+                lat: 13.0827, 
+                lng: 80.2707, 
+                type: 'Maritime Rescue',
+                status: 'active',
+                resources: {
+                    boats: 5,
+                    helicopters: 2,
+                    personnel: 32
+                }
+            },
+            { 
+                name: 'Kolkata Emergency Response', 
+                lat: 22.5726, 
+                lng: 88.3639, 
+                type: 'Law Enforcement',
+                status: 'active',
+                resources: {
+                    patrolVehicles: 10,
+                    responseTeams: 5,
+                    personnel: 40
+                }
+            }
+        ];
+
+        // Custom icon for agencies
+        const createCustomIcon = (type) => {
+            let color;
+            switch(type) {
+                case 'Fire & Rescue': color = '#EF4444'; break;
+                case 'Medical': color = '#10B981'; break;
+                case 'Law Enforcement': color = '#3B82F6'; break;
+                case 'Rescue': color = '#F59E0B'; break;
+                default: color = '#8B5CF6';
+            }
+            
+            return L.divIcon({
+                html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 2px ${color}"></div>`,
+                className: 'custom-marker',
+                iconSize: [12, 12]
+            });
+        };
+
+        // Add markers for each agency with custom icons and interactive popups
+        agencies.forEach(agency => {
+            const marker = L.marker([agency.lat, agency.lng], {
+                icon: createCustomIcon(agency.type)
+            }).addTo(map);
+            
+            const resourcesList = Object.entries(agency.resources)
+                .map(([key, value]) => `<li class="text-sm">${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}</li>`)
+                .join('');
+            
+            const popupContent = `
+                <div class="p-3">
+                    <h3 class="font-bold text-gray-900 mb-2">${agency.name}</h3>
+                    <p class="text-sm text-gray-600 mb-1">Type: ${agency.type}</p>
+                    <p class="text-sm text-gray-600 mb-2">
+                        Status: <span class="status-dot ${agency.status === 'active' ? 'status-online' : ''}"></span>
+                        ${agency.status.charAt(0).toUpperCase() + agency.status.slice(1)}
+                    </p>
+                    <div class="border-t border-gray-200 mt-2 pt-2">
+                        <p class="text-sm font-semibold text-gray-700 mb-1">Available Resources:</p>
+                        <ul class="list-none text-gray-600">
+                            ${resourcesList}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            marker.bindPopup(popupContent);
+            
+            // Add hover effect
+            marker.on('mouseover', function() {
+                this.openPopup();
+            });
+        });
+
+        // Add connecting lines between agencies to show network
+        agencies.forEach((agency, i) => {
+            if (i < agencies.length - 1) {
+                const nextAgency = agencies[i + 1];
+                const line = L.polyline(
+                    [[agency.lat, agency.lng], [nextAgency.lat, nextAgency.lng]],
+                    {
+                        color: '#3B82F6',
+                        weight: 2,
+                        opacity: 0.5,
+                        dashArray: '5, 10'
+                    }
+                ).addTo(map);
+            }
+        });
+
+        // Calculate total resources
+        const totalResources = agencies.reduce((total, agency) => {
+            return total + Object.values(agency.resources).reduce((sum, value) => sum + value, 0);
+        }, 0);
+        
+        document.getElementById('resourceCount').textContent = totalResources;
+
+        // Functions for quick actions
+        function broadcastMessage() {
+            alert('Broadcasting message to network...');
+        }
+
+        function updateStatus() {
+            alert('Updating agency status...');
+        }
+
+        function viewResources() {
+            window.location.href = 'resources.html';
+        }
+
+        // Initialize resource count from PHP backend
+        async function initializeResourceCount() {
+            try {
+                const response = await fetch('php/get_agency_info.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const resources = data.data.resources;
+                    const totalResources = Object.values(resources).reduce((sum, count) => sum + count, 0);
+                    document.getElementById('resourceCount').textContent = totalResources;
+                }
+            } catch (error) {
+                console.error('Error loading resource count:', error);
+            }
+        }
+
+        // Initialize resource count on page load
+        initializeResourceCount();
+
+        // Update agency info
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('agencyName').textContent = 'LPU Disaster Management';
+            document.getElementById('agencyType').textContent = 'Agencies Management';
+            document.getElementById('agencyContact').textContent = '6296441903';
+            document.getElementById('agencyLocation').textContent = 'Phagwara Punjab';
+        });
+    </script>
+</body>
+</html>
