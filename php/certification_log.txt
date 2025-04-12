@@ -1,0 +1,16 @@
+2025-04-12 00:08:49 - Connected to database successfully
+2025-04-12 00:08:49 - Table check/creation successful
+2025-04-12 00:08:49 - Found 0 existing certifications
+2025-04-12 00:08:49 - Inserting sample data
+2025-04-12 00:08:49 - Inserted certification: Emergency Response
+2025-04-12 00:08:49 - Inserted certification: First Aid Advanced
+2025-04-12 00:08:49 - Inserted certification: Aerial Operations
+2025-04-12 00:08:49 - Successfully queried certifications
+2025-04-12 00:08:49 - Found 3 certifications
+2025-04-12 00:08:49 - Returning 3 certifications
+2025-04-12 00:08:50 - Connected to database successfully
+2025-04-12 00:08:50 - Table check/creation successful
+2025-04-12 00:08:50 - Found 3 existing certifications
+2025-04-12 00:08:50 - Successfully queried certifications
+2025-04-12 00:08:50 - Found 3 certifications
+2025-04-12 00:08:50 - Returning 3 certifications

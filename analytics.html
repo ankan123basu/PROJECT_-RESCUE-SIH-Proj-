@@ -85,36 +85,42 @@
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-white font-sans min-h-screen">
     <!-- Navigation -->
-    <nav class="glass-effect-dark sticky top-0 z-50">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+    <nav class="glass-effect-dark sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                            <i class="fas fa-map-marked-alt text-white text-xl"></i>
+                    <div class="flex items-center">
+                        <div class="bg-blue-600 rounded-full p-2 mr-2">
+                            <i class="fas fa-hands-helping text-white text-xl"></i>
                         </div>
+                        <span class="text-2xl font-bold text-white">RESCUE</span>
                     </div>
-                    <div class="ml-4 flex items-baseline space-x-4">
-                        <a href="dashboard.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Dashboard</a>
-                        <a href="ambulance-map.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Ambulances</a>
-                        <a href="fire-truck-map.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Fire Trucks</a>
-                        <a href="helicopter-map.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Helicopters</a>
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="agency-dashboard.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Dashboard</a>
+                        <a href="agency-network.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Network</a>
+                        <a href="emergency-coordination.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Coordination</a>
                         <a href="analytics.html" class="px-3 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white">Analytics</a>
+                        <a href="profile.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Profile</a>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="relative">
-                        <button class="glossy-btn rounded-full p-1 text-gray-300 hover:text-white focus:outline-none">
-                            <span class="sr-only">View notifications</span>
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
-                        </button>
-                    </div>
-                    <div class="relative">
-                        <button class="glossy-btn flex items-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 p-1 text-white focus:outline-none">
-                            <span class="sr-only">Open user menu</span>
-                            <i class="fas fa-user-circle text-xl"></i>
-                        </button>
+                    <!-- User profile and notifications -->
+                    <div class="flex items-center space-x-4">
+                        <!-- User profile -->
+                        <div class="relative">
+                            <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                                <img src="assets/images/d3c09cde-dcda-4267-a7a0-d6b4668f08e0.jpg" alt="User profile" class="w-8 h-8 rounded-full border-2 border-blue-500">
+                                <span class="text-white font-medium hidden md:block">Ankan Basu</span>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <!-- User menu dropdown -->
+                            <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 py-2 w-48 bg-gray-800 bg-opacity-50 rounded-lg shadow-lg z-50">
+                                <a href="profile.html" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-all duration-200">Profile Settings</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-all duration-200">Notifications</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-all duration-200">Help Center</a>
+                                <a href="index.html" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-all duration-200">Logout</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,7 +178,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-300">Total Incidents</p>
-                                <p class="text-3xl font-bold text-white mt-1">1,248</p>
+                                <p class="text-3xl font-bold text-white mt-1" id="total-incidents">1,248</p>
                                 <p class="text-sm text-green-400 mt-1">+12% from last period</p>
                             </div>
                             <div class="p-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-700 shadow-lg">
@@ -185,7 +191,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-300">Avg. Response Time</p>
-                                <p class="text-3xl font-bold text-white mt-1">8.2 min</p>
+                                <p class="text-3xl font-bold text-white mt-1" id="avg-response-time">8.2 min</p>
                                 <p class="text-sm text-green-400 mt-1">-5% from last period</p>
                             </div>
                             <div class="p-3 rounded-lg bg-gradient-to-r from-purple-500 to-purple-700 shadow-lg">
@@ -198,10 +204,10 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-300">Active Resources</p>
-                                <p class="text-3xl font-bold text-white mt-1">342</p>
-                                <p class="text-sm text-yellow-400 mt-1">+3% from last period</p>
+                                <p class="text-3xl font-bold text-white mt-1" id="active-resources">342</p>
+                                <p class="text-sm text-red-400 mt-1">-8% from last period</p>
                             </div>
-                            <div class="p-3 rounded-lg bg-gradient-to-r from-red-500 to-red-700 shadow-lg">
+                            <div class="p-3 rounded-lg bg-gradient-to-r from-green-500 to-green-700 shadow-lg">
                                 <i class="fas fa-ambulance text-white text-xl"></i>
                             </div>
                         </div>
@@ -211,18 +217,19 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-300">Success Rate</p>
-                                <p class="text-3xl font-bold text-white mt-1">94.8%</p>
+                                <p class="text-3xl font-bold text-white mt-1" id="success-rate">94.7%</p>
                                 <p class="text-sm text-green-400 mt-1">+2.3% from last period</p>
                             </div>
-                            <div class="p-3 rounded-lg bg-gradient-to-r from-green-500 to-green-700 shadow-lg">
-                                <i class="fas fa-check-circle text-white text-xl"></i>
+                            <div class="p-3 rounded-lg bg-gradient-to-r from-yellow-500 to-yellow-700 shadow-lg">
+                                <i class="fas fa-chart-line text-white text-xl"></i>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Charts -->
+                <!-- Main Charts Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Incidents by Type Chart -->
                     <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
                         <div class="p-4 glass-effect-dark">
                             <h2 class="text-xl font-semibold">Incidents by Type</h2>
@@ -234,6 +241,22 @@
                         </div>
                     </div>
                     
+                    <!-- Incidents by Region Chart -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
+                        <div class="p-4 glass-effect-dark">
+                            <h2 class="text-xl font-semibold">Incidents by Region</h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="chart-container">
+                                <canvas id="incidents-by-region"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Charts -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Response Time Trend -->
                     <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
                         <div class="p-4 glass-effect-dark">
                             <h2 class="text-xl font-semibold">Response Time Trend</h2>
@@ -245,17 +268,7 @@
                         </div>
                     </div>
                     
-                    <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
-                        <div class="p-4 glass-effect-dark">
-                            <h2 class="text-xl font-semibold">Incidents by Region</h2>
-                        </div>
-                        <div class="p-6">
-                            <div class="chart-container">
-                                <canvas id="incidents-by-region"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    <!-- Resource Utilization -->
                     <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
                         <div class="p-4 glass-effect-dark">
                             <h2 class="text-xl font-semibold">Resource Utilization</h2>
@@ -268,13 +281,109 @@
                     </div>
                 </div>
                 
+                <!-- Heat Map and Real-time Incidents -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- Heat Map -->
+                    <div class="col-span-12 lg:col-span-8 bg-gray-800 bg-opacity-50 p-4 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700 overflow-hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-white">Incident Heat Map</h2>
+                            <div class="flex space-x-2">
+                                <button id="heatmap-day" class="px-3 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">24h</button>
+                                <button id="heatmap-week" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">7d</button>
+                                <button id="heatmap-month" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">30d</button>
+                            </div>
+                        </div>
+                        <div id="heat-map" class="w-full h-[400px] rounded-lg overflow-hidden relative">
+                            <!-- Heat map will be rendered here by D3.js -->
+                            <!-- Adding a loading spinner until the map loads -->
+                            <div class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 heat-map-loading">
+                                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-3 gap-2">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                                <span class="text-xs text-gray-300">High Intensity</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                                <span class="text-xs text-gray-300">Medium Intensity</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                <span class="text-xs text-gray-300">Low Intensity</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Incidents and Emergency Impact Assessment -->
+                    <div class="md:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Live Incidents -->
+                        <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
+                            <div class="p-4 glass-effect-dark">
+                                <h2 class="text-xl font-semibold">Live Incidents</h2>
+                            </div>
+                            <div class="p-4">
+                                <div id="live-incidents" class="space-y-3 max-h-80 overflow-y-auto">
+                                    <!-- Live incidents will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Emergency Impact Assessment -->
+                        <div class="md:col-span-2 glass-effect rounded-xl overflow-hidden shadow-2xl">
+                            <div class="p-4 glass-effect-dark flex justify-between items-center">
+                                <h2 class="text-xl font-semibold">Emergency Impact Assessment</h2>
+                                <div class="flex space-x-2">
+                                    <button id="impact-day" class="px-3 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">24h</button>
+                                    <button id="impact-week" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">7d</button>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <canvas id="impact-assessment" class="w-full h-64"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Charts Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Incident Severity Trend -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
+                        <div class="p-4 glass-effect-dark flex justify-between items-center">
+                            <h2 class="text-xl font-semibold">Incident Severity Trend</h2>
+                            <div class="flex space-x-2">
+                                <button id="severity-day" class="px-3 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">24h</button>
+                                <button id="severity-week" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">7d</button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <canvas id="severity-trend" class="w-full h-64"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Response Success Rate -->
+                    <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
+                        <div class="p-4 glass-effect-dark flex justify-between items-center">
+                            <h2 class="text-xl font-semibold">Response Success Rate</h2>
+                            <div class="flex space-x-2">
+                                <button id="success-month" class="px-3 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">Monthly</button>
+                                <button id="success-quarter" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">Quarterly</button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <canvas id="success-rate-chart" class="w-full h-64"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Recent Incidents Table -->
                 <div class="glass-effect rounded-xl overflow-hidden shadow-2xl">
                     <div class="flex justify-between items-center p-4 glass-effect-dark">
                         <h2 class="text-xl font-semibold">Recent Incidents</h2>
-                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-3 py-1 rounded-lg text-sm">
+                        <a href="https://gdacs.org/" target="_blank" rel="noopener noreferrer" class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-sm">
                             View All
-                        </button>
+                        </a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-700">
@@ -335,37 +444,291 @@
                         </table>
                     </div>
                 </div>
+                
+                <!-- Additional Charts Section -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Advanced Analytics</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- 3D Incident Visualization -->
+                        <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700 overflow-hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-white">3D Incident Visualization</h2>
+                                <div class="flex space-x-2">
+                                    <button id="view-top" class="px-3 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">Top View</button>
+                                    <button id="view-side" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">Side View</button>
+                                </div>
+                            </div>
+                            <div id="incident-3d-visualization" class="w-full h-[350px] rounded-lg overflow-hidden relative">
+                                <!-- 3D visualization will be rendered here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Emergency Response Timeline -->
+                        <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700 overflow-hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-white">Emergency Response Timeline</h2>
+                                <div class="flex space-x-2">
+                                    <button id="timeline-day" class="px-3 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">Today</button>
+                                    <button id="timeline-week" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">This Week</button>
+                                </div>
+                            </div>
+                            <div id="response-timeline" class="w-full h-[350px] rounded-lg overflow-hidden relative">
+                                <!-- Timeline will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Resource Allocation Section -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Resource Management</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Resource Distribution Map -->
+                        <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700 overflow-hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-white">Resource Distribution</h2>
+                                <div class="flex space-x-2">
+                                    <button id="resources-all" class="px-3 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">All</button>
+                                    <button id="resources-medical" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">Medical</button>
+                                    <button id="resources-fire" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">Fire</button>
+                                </div>
+                            </div>
+                            <div id="resource-distribution" class="w-full h-[350px] rounded-lg overflow-hidden relative">
+                                <!-- Resource distribution map will be rendered here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Response Efficiency Analysis -->
+                        <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700 overflow-hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-white">Response Efficiency Analysis</h2>
+                                <div class="flex space-x-2">
+                                    <button id="efficiency-time" class="px-3 py-1 text-xs font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200">Time</button>
+                                    <button id="efficiency-resources" class="px-3 py-1 text-xs font-medium rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-all duration-200">Resources</button>
+                                </div>
+                            </div>
+                            <div id="efficiency-analysis" class="w-full h-[350px] rounded-lg overflow-hidden relative">
+                                <!-- Efficiency analysis chart will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </main>
 
     <script src="js/config.js"></script>
+    <!-- Add Three.js for 3D visualizations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         // Initialize charts when the DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all charts
+            initCharts();
+            
+            // Set up real-time data updates
+            setupRealTimeUpdates();
+            
+            // Initialize additional charts
+            updateImpactAssessment('day');
+            updateSuccessRate('month');
+            
+            // Set up filter event listeners
+            document.getElementById('apply-filters').addEventListener('click', function() {
+                updateAllData();
+            });
+            
+            // Set up heatmap time range buttons
+            document.getElementById('heatmap-day').addEventListener('click', function() {
+                updateHeatmapTimeRange('day');
+                setActiveHeatmapButton('day');
+            });
+            
+            document.getElementById('heatmap-week').addEventListener('click', function() {
+                updateHeatmapTimeRange('week');
+                setActiveHeatmapButton('week');
+            });
+            
+            document.getElementById('heatmap-month').addEventListener('click', function() {
+                updateHeatmapTimeRange('month');
+                setActiveHeatmapButton('month');
+            });
+            
+            // Set up impact assessment time range buttons
+            document.getElementById('impact-day').addEventListener('click', function() {
+                updateImpactAssessment('day');
+                setActiveButton('impact-day', 'impact-week');
+            });
+            
+            document.getElementById('impact-week').addEventListener('click', function() {
+                updateImpactAssessment('week');
+                setActiveButton('impact-week', 'impact-day');
+            });
+            
+            // Set up severity trend time range buttons
+            document.getElementById('severity-day').addEventListener('click', function() {
+                updateSeverityTrend('day');
+                setActiveButton('severity-day', 'severity-week');
+            });
+            
+            document.getElementById('severity-week').addEventListener('click', function() {
+                updateSeverityTrend('week');
+                setActiveButton('severity-week', 'severity-day');
+            });
+            
+            // Set up success rate time range buttons
+            document.getElementById('success-month').addEventListener('click', function() {
+                updateSuccessRate('month');
+                setActiveButton('success-month', 'success-quarter');
+            });
+            
+            document.getElementById('success-quarter').addEventListener('click', function() {
+                updateSuccessRate('quarter');
+                setActiveButton('success-quarter', 'success-month');
+            });
+            
+            // Initialize 3D visualization
+            init3DVisualization();
+            
+            // Initialize response timeline
+            initResponseTimeline();
+            
+            // Initialize resource distribution map
+            initResourceDistribution();
+            
+            // Initialize efficiency analysis chart
+            initEfficiencyAnalysis();
+            
+            // Set up view buttons for 3D visualization
+            document.getElementById('view-top').addEventListener('click', function() {
+                change3DView('top');
+                setActiveButton('view-top', 'view-side');
+            });
+            
+            document.getElementById('view-side').addEventListener('click', function() {
+                change3DView('side');
+                setActiveButton('view-side', 'view-top');
+            });
+            
+            // Set up timeline view buttons
+            document.getElementById('timeline-day').addEventListener('click', function() {
+                updateTimeline('day');
+                setActiveButton('timeline-day', 'timeline-week');
+            });
+            
+            document.getElementById('timeline-week').addEventListener('click', function() {
+                updateTimeline('week');
+                setActiveButton('timeline-week', 'timeline-day');
+            });
+            
+            // Set up resource filter buttons
+            document.getElementById('resources-all').addEventListener('click', function() {
+                updateResourceDistribution('all');
+                setActiveResourceButton('all');
+            });
+            
+            document.getElementById('resources-medical').addEventListener('click', function() {
+                updateResourceDistribution('medical');
+                setActiveResourceButton('medical');
+            });
+            
+            document.getElementById('resources-fire').addEventListener('click', function() {
+                updateResourceDistribution('fire');
+                setActiveResourceButton('fire');
+            });
+            
+            // Set up efficiency view buttons
+            document.getElementById('efficiency-time').addEventListener('click', function() {
+                updateEfficiencyAnalysis('time');
+                setActiveButton('efficiency-time', 'efficiency-resources');
+            });
+            
+            document.getElementById('efficiency-resources').addEventListener('click', function() {
+                updateEfficiencyAnalysis('resources');
+                setActiveButton('efficiency-resources', 'efficiency-time');
+            });
+            
+            // Function to toggle user menu dropdown
+            document.getElementById('user-menu-button').addEventListener('click', function() {
+                const dropdown = document.getElementById('user-menu-dropdown');
+                dropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                const dropdown = document.getElementById('user-menu-dropdown');
+                const button = document.getElementById('user-menu-button');
+                
+                if (!dropdown.contains(event.target) && !button.contains(event.target) && !dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Helper function to set active button
+        function setActiveButton(activeId, inactiveId) {
+            document.getElementById(activeId).classList.remove('bg-gray-700');
+            document.getElementById(activeId).classList.add('bg-blue-600');
+            document.getElementById(inactiveId).classList.remove('bg-blue-600');
+            document.getElementById(inactiveId).classList.add('bg-gray-700');
+        }
+        
+        // Helper function to set active resource button
+        function setActiveResourceButton(type) {
+            const buttons = ['resources-all', 'resources-medical', 'resources-fire'];
+            buttons.forEach(btn => {
+                const button = document.getElementById(btn);
+                if (btn === `resources-${type}`) {
+                    button.classList.remove('bg-gray-700');
+                    button.classList.add('bg-blue-600');
+                } else {
+                    button.classList.remove('bg-blue-600');
+                    button.classList.add('bg-gray-700');
+                }
+            });
+        }
+        
+        // Function to set the active heatmap button
+        function setActiveHeatmapButton(timeRange) {
+            const buttons = ['heatmap-day', 'heatmap-week', 'heatmap-month'];
+            buttons.forEach(btn => {
+                const button = document.getElementById(btn);
+                if (btn === `heatmap-${timeRange}`) {
+                    button.classList.remove('bg-gray-700');
+                    button.classList.add('bg-blue-600');
+                } else {
+                    button.classList.remove('bg-blue-600');
+                    button.classList.add('bg-gray-700');
+                }
+            });
+        }
+        
+        // Function to initialize all charts
+        function initCharts() {
             // Incidents by Type Chart
             const incidentsByTypeCtx = document.getElementById('incidents-by-type').getContext('2d');
-            const incidentsByTypeChart = new Chart(incidentsByTypeCtx, {
+            window.incidentsByTypeChart = new Chart(incidentsByTypeCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Fire', 'Medical', 'Flood', 'Earthquake', 'Traffic'],
+                    labels: ['Fire', 'Medical', 'Flood', 'Earthquake', 'Other'],
                     datasets: [{
-                        data: [35, 25, 20, 10, 10],
+                        data: [35, 45, 10, 5, 5],
                         backgroundColor: [
                             'rgba(239, 68, 68, 0.8)',
-                            'rgba(16, 185, 129, 0.8)',
                             'rgba(59, 130, 246, 0.8)',
-                            'rgba(124, 58, 237, 0.8)',
-                            'rgba(245, 158, 11, 0.8)'
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(107, 114, 128, 0.8)'
                         ],
                         borderColor: [
                             'rgba(239, 68, 68, 1)',
-                            'rgba(16, 185, 129, 1)',
                             'rgba(59, 130, 246, 1)',
-                            'rgba(124, 58, 237, 1)',
-                            'rgba(245, 158, 11, 1)'
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(107, 114, 128, 1)'
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        hoverOffset: 10
                     }]
                 },
                 options: {
@@ -375,26 +738,123 @@
                         legend: {
                             position: 'right',
                             labels: {
-                                color: 'white'
+                                color: 'white',
+                                font: {
+                                    family: '"Poppins", sans-serif',
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: true,
+                            usePointStyle: true,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
                             }
                         }
+                    },
+                    cutout: '65%',
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+            
+            // Incidents by Region Chart
+            const incidentsByRegionCtx = document.getElementById('incidents-by-region').getContext('2d');
+            window.incidentsByRegionChart = new Chart(incidentsByRegionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['North', 'South', 'East', 'West', 'Central'],
+                    datasets: [{
+                        label: 'Incidents',
+                        data: [320, 280, 205, 190, 253],
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        hoverBackgroundColor: 'rgba(59, 130, 246, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
             
             // Response Time Trend Chart
             const responseTimeTrendCtx = document.getElementById('response-time-trend').getContext('2d');
-            const responseTimeTrendChart = new Chart(responseTimeTrendCtx, {
+            window.responseTimeTrendChart = new Chart(responseTimeTrendCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [{
-                        label: 'Avg. Response Time (min)',
-                        data: [12, 11.5, 10.8, 9.6, 9.2, 8.7, 8.2],
-                        fill: true,
-                        backgroundColor: 'rgba(124, 58, 237, 0.2)',
+                        label: 'Average Response Time (min)',
+                        data: [10.2, 9.8, 9.5, 9.1, 8.9, 8.7, 8.5, 8.4, 8.3, 8.2, 8.1, 8.0],
                         borderColor: 'rgba(124, 58, 237, 1)',
-                        tension: 0.4
+                        backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(124, 58, 237, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.3
                     }]
                 },
                 options: {
@@ -407,110 +867,142 @@
                                 color: 'rgba(255, 255, 255, 0.1)'
                             },
                             ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
                             }
                         },
                         x: {
                             grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
+                                display: false
                             },
                             ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
                             }
                         }
                     },
                     plugins: {
                         legend: {
-                            labels: {
-                                color: 'white'
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Incidents by Region Chart
-            const incidentsByRegionCtx = document.getElementById('incidents-by-region').getContext('2d');
-            const incidentsByRegionChart = new Chart(incidentsByRegionCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['North', 'South', 'East', 'West', 'Central'],
-                    datasets: [{
-                        label: 'Number of Incidents',
-                        data: [320, 280, 205, 380, 63],
-                        backgroundColor: [
-                            'rgba(59, 130, 246, 0.8)',
-                            'rgba(16, 185, 129, 0.8)',
-                            'rgba(239, 68, 68, 0.8)',
-                            'rgba(245, 158, 11, 0.8)',
-                            'rgba(124, 58, 237, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(59, 130, 246, 1)',
-                            'rgba(16, 185, 129, 1)',
-                            'rgba(239, 68, 68, 1)',
-                            'rgba(245, 158, 11, 1)',
-                            'rgba(124, 58, 237, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
-                            }
+                            display: false
                         },
-                        x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
-                            }
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12
                         }
                     },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: 'white'
-                            }
-                        }
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
             
             // Resource Utilization Chart
             const resourceUtilizationCtx = document.getElementById('resource-utilization').getContext('2d');
-            const resourceUtilizationChart = new Chart(resourceUtilizationCtx, {
+            window.resourceUtilizationChart = new Chart(resourceUtilizationCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Ambulances', 'Fire Trucks', 'Police Units', 'Medical Staff', 'Rescue Teams', 'Helicopters'],
+                    datasets: [{
+                        label: 'Current Utilization',
+                        data: [85, 72, 90, 65, 80, 50],
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4
+                    }, {
+                        label: 'Optimal Utilization',
+                        data: [70, 70, 70, 70, 70, 70],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            pointLabels: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif',
+                                    size: 12
+                                }
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif',
+                                    size: 10
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: 'white',
+                                font: {
+                                    family: '"Poppins", sans-serif',
+                                    size: 12
+                                },
+                                boxWidth: 15
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12
+                        }
+                    },
+                    animation: {
+                        duration: 2000
+                    }
+                }
+            });
+            
+            // Initialize Heat Map
+            initHeatMap();
+            
+            // Initialize Incident Severity Trend Chart
+            const severityTrendCtx = document.getElementById('severity-trend').getContext('2d');
+            window.severityTrendChart = new Chart(severityTrendCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Ambulances', 'Fire Trucks', 'Helicopters', 'Rescue Boats', 'Drones'],
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [{
-                        label: 'Utilization (%)',
-                        data: [85, 72, 64, 45, 92],
-                        backgroundColor: [
-                            'rgba(59, 130, 246, 0.8)',
-                            'rgba(239, 68, 68, 0.8)',
-                            'rgba(124, 58, 237, 0.8)',
-                            'rgba(16, 185, 129, 0.8)',
-                            'rgba(245, 158, 11, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(59, 130, 246, 1)',
-                            'rgba(239, 68, 68, 1)',
-                            'rgba(124, 58, 237, 1)',
-                            'rgba(16, 185, 129, 1)',
-                            'rgba(245, 158, 11, 1)'
-                        ],
-                        borderWidth: 1
+                        label: 'Severity Index',
+                        data: [8.2, 8.5, 8.8, 9.1, 9.3, 9.5, 9.7, 9.9, 10.1, 10.3, 10.5, 10.7],
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        hoverBackgroundColor: 'rgba(59, 130, 246, 0.8)'
                     }]
                 },
                 options: {
@@ -518,13 +1010,1214 @@
                     maintainAspectRatio: false,
                     scales: {
                         y: {
-                            beginAtZero: true,
-                            max: 100,
+                            beginAtZero: false,
                             grid: {
                                 color: 'rgba(255, 255, 255, 0.1)'
                             },
                             ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+            
+            // Initialize Response Success Rate Chart
+            const successRateChartCtx = document.getElementById('success-rate-chart').getContext('2d');
+            window.successRateChart = new Chart(successRateChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Success Rate',
+                        data: [90, 92, 94, 96, 98, 99, 99, 99, 99, 99, 99, 99],
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        hoverBackgroundColor: 'rgba(59, 130, 246, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+            
+            // Initialize Emergency Impact Assessment Chart
+            const impactAssessmentCtx = document.getElementById('impact-assessment').getContext('2d');
+            window.impactAssessmentChart = new Chart(impactAssessmentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Impact Index',
+                        data: [8.2, 8.5, 8.8, 9.1, 9.3, 9.5, 9.7, 9.9, 10.1, 10.3, 10.5, 10.7],
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        hoverBackgroundColor: 'rgba(59, 130, 246, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+        
+        // Function to initialize the heat map
+        function initHeatMap() {
+            // Create a simple div-based heat map for demonstration
+            const heatMap = document.getElementById('heat-map');
+            const width = heatMap.clientWidth;
+            const height = heatMap.clientHeight;
+            
+            // Clear previous content
+            heatMap.innerHTML = '';
+            
+            // Create SVG element
+            const svg = d3.select(heatMap)
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Add a background map (simplified)
+            svg.append('rect')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('fill', '#1f2937');
+            
+            // Generate random data points for the heat map
+            const numPoints = 200;
+            const points = [];
+            
+            for (let i = 0; i < numPoints; i++) {
+                points.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    intensity: Math.random()
+                });
+            }
+            
+            // Create heat points
+            svg.selectAll('circle')
+                .data(points)
+                .enter()
+                .append('circle')
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y)
+                .attr('r', d => 5 + d.intensity * 15)
+                .attr('fill', d => {
+                    const intensity = d.intensity;
+                    if (intensity > 0.7) {
+                        return 'rgba(239, 68, 68, 0.7)'; // Red for high intensity
+                    } else if (intensity > 0.4) {
+                        return 'rgba(245, 158, 11, 0.6)'; // Orange for medium intensity
+                    } else {
+                        return 'rgba(59, 130, 246, 0.5)'; // Blue for low intensity
+                    }
+                })
+                .attr('stroke', 'none')
+                .style('filter', 'blur(10px)');
+            
+            // Add some city/region labels
+            const regions = [
+                { name: 'North District', x: width * 0.2, y: height * 0.2 },
+                { name: 'Central City', x: width * 0.5, y: height * 0.5 },
+                { name: 'East Region', x: width * 0.8, y: height * 0.3 },
+                { name: 'South Coast', x: width * 0.6, y: height * 0.8 },
+                { name: 'West Hills', x: width * 0.2, y: height * 0.7 }
+            ];
+            
+            svg.selectAll('text')
+                .data(regions)
+                .enter()
+                .append('text')
+                .attr('x', d => d.x)
+                .attr('y', d => d.y)
+                .text(d => d.name)
+                .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                .attr('font-size', '10px')
+                .attr('text-anchor', 'middle')
+                .attr('font-family', '"Poppins", sans-serif');
+        }
+        
+        // Function to update the heat map based on time range
+        function updateHeatmapTimeRange(timeRange) {
+            // In a real application, this would fetch data for the selected time range
+            console.log(`Updating heat map for time range: ${timeRange}`);
+            
+            // For demo, we'll just regenerate the heat map with different densities
+            setTimeout(() => {
+                initHeatMap();
+            }, 300);
+        }
+        
+        // Function to set up real-time data updates
+        function setupRealTimeUpdates() {
+            // Simulate real-time updates every 5 seconds
+            setInterval(() => {
+                updateLiveIncidents();
+                updateKPICards();
+            }, 5000);
+        }
+        
+        // Function to update live incidents feed
+        function updateLiveIncidents() {
+            const liveIncidents = document.getElementById('live-incidents');
+            const incidents = [
+                { type: 'fire', title: 'Building fire reported', location: 'Downtown Area', time: '1 min ago' },
+                { type: 'medical', title: 'Medical emergency', location: 'North District', time: '3 min ago' },
+                { type: 'flood', title: 'Flash flood warning', location: 'River Valley', time: '7 min ago' },
+                { type: 'earthquake', title: 'Minor tremors detected', location: 'Eastern Region', time: '12 min ago' },
+                { type: 'other', title: 'Traffic accident', location: 'Highway 101', time: '15 min ago' }
+            ];
+            
+            // Randomly select an incident to add
+            if (Math.random() > 0.5) {
+                const randomIncident = incidents[Math.floor(Math.random() * incidents.length)];
+                
+                // Create new incident element
+                const incidentElement = document.createElement('div');
+                incidentElement.className = 'flex items-start space-x-3 p-3 bg-gray-800 bg-opacity-50 rounded-lg animate-pulse';
+                
+                // Set color based on incident type
+                let dotColor = 'bg-blue-500';
+                if (randomIncident.type === 'fire') dotColor = 'bg-red-500';
+                else if (randomIncident.type === 'medical') dotColor = 'bg-blue-500';
+                else if (randomIncident.type === 'flood') dotColor = 'bg-green-500';
+                else if (randomIncident.type === 'earthquake') dotColor = 'bg-yellow-500';
+                
+                incidentElement.innerHTML = `
+                    <div class="w-2 h-2 rounded-full ${dotColor} mt-2"></div>
+                    <div>
+                        <p class="text-sm font-medium">${randomIncident.title}</p>
+                        <p class="text-xs text-gray-400">${randomIncident.location} - ${randomIncident.time}</p>
+                    </div>
+                `;
+                
+                // Add to the top of the list
+                liveIncidents.prepend(incidentElement);
+                
+                // Remove animation after 3 seconds
+                setTimeout(() => {
+                    incidentElement.classList.remove('animate-pulse');
+                }, 3000);
+                
+                // Remove oldest incident if more than 5
+                if (liveIncidents.children.length > 5) {
+                    liveIncidents.removeChild(liveIncidents.lastChild);
+                }
+            }
+        }
+        
+        // Function to update KPI cards with slight variations
+        function updateKPICards() {
+            // Get current values
+            const totalIncidents = parseInt(document.getElementById('total-incidents').textContent.replace(/,/g, ''));
+            const avgResponseTime = parseFloat(document.getElementById('avg-response-time').textContent);
+            const activeResources = parseInt(document.getElementById('active-resources').textContent);
+            const successRate = parseFloat(document.getElementById('success-rate').textContent);
+            
+            // Add small random variations
+            const newTotalIncidents = totalIncidents + Math.floor(Math.random() * 5);
+            const newAvgResponseTime = Math.max(7.5, Math.min(9.0, avgResponseTime + (Math.random() * 0.2 - 0.1))).toFixed(1);
+            const newActiveResources = activeResources + Math.floor(Math.random() * 7 - 3);
+            const newSuccessRate = Math.max(90, Math.min(98, successRate + (Math.random() * 0.4 - 0.2))).toFixed(1);
+            
+            // Update the display with animation
+            animateValue('total-incidents', totalIncidents, newTotalIncidents, 1000, true);
+            animateValue('avg-response-time', avgResponseTime, newAvgResponseTime, 1000, false);
+            animateValue('active-resources', activeResources, newActiveResources, 1000, true);
+            animateValue('success-rate', successRate, newSuccessRate, 1000, false);
+        }
+        
+        // Function to animate value changes
+        function animateValue(id, start, end, duration, isInteger) {
+            const obj = document.getElementById(id);
+            const range = end - start;
+            const minTimer = 50;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            
+            stepTime = Math.max(stepTime, minTimer);
+            const startTime = new Date().getTime();
+            const endTime = startTime + duration;
+            let timer;
+            
+            function run() {
+                const now = new Date().getTime();
+                const remaining = Math.max((endTime - now) / duration, 0);
+                const value = end - (remaining * range);
+                if (isInteger) {
+                    obj.textContent = Math.floor(value).toLocaleString();
+                } else {
+                    obj.textContent = value.toFixed(1) + (id === 'avg-response-time' ? ' min' : '%');
+                }
+                if (now >= endTime) {
+                    clearInterval(timer);
+                }
+            }
+            
+            timer = setInterval(run, stepTime);
+            run();
+        }
+        
+        // Function to update all data based on selected filters
+        function updateAllData() {
+            const dateRange = document.getElementById('date-range').value;
+            const region = document.getElementById('region').value;
+            const incidentType = document.getElementById('incident-type').value;
+            
+            console.log(`Applying filters: Date Range=${dateRange}, Region=${region}, Incident Type=${incidentType}`);
+            
+            // Show loading state
+            document.getElementById('apply-filters').innerHTML = '<span class="animate-pulse">Loading...</span>';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Update charts with new random data
+                updateIncidentsByTypeChart(incidentType);
+                updateIncidentsByRegionChart(region);
+                updateResponseTimeTrendChart(dateRange);
+                updateResourceUtilizationChart();
+                
+                // Reset button text
+                document.getElementById('apply-filters').textContent = 'Apply Filters';
+                
+                // Show notification
+                showNotification('Filters applied successfully!');
+            }, 1000);
+        }
+        
+        // Function to show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transform transition-all duration-500 translate-x-full';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+            }, 10);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.classList.remove('translate-x-0');
+                notification.classList.add('translate-x-full');
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 3000);
+        }
+        
+        // Functions to update individual charts
+        function updateIncidentsByTypeChart(incidentType) {
+            // Generate new data based on selected incident type
+            let data;
+            if (incidentType === 'all') {
+                data = [35, 45, 10, 5, 5];
+            } else if (incidentType === 'fire') {
+                data = [70, 15, 5, 5, 5];
+            } else if (incidentType === 'medical') {
+                data = [15, 75, 5, 3, 2];
+            } else if (incidentType === 'flood') {
+                data = [10, 15, 65, 5, 5];
+            } else if (incidentType === 'earthquake') {
+                data = [10, 20, 5, 60, 5];
+            }
+            
+            // Update chart data
+            window.incidentsByTypeChart.data.datasets[0].data = data;
+            window.incidentsByTypeChart.update();
+        }
+        
+        function updateIncidentsByRegionChart(region) {
+            // Generate new data based on selected region
+            let data;
+            if (region === 'all') {
+                data = [320, 280, 205, 190, 253];
+            } else if (region === 'north') {
+                data = [450, 120, 150, 130, 200];
+            } else if (region === 'south') {
+                data = [150, 420, 130, 140, 180];
+            } else if (region === 'east') {
+                data = [180, 150, 380, 120, 170];
+            } else if (region === 'west') {
+                data = [170, 160, 140, 350, 190];
+            }
+            
+            // Update chart data
+            window.incidentsByRegionChart.data.datasets[0].data = data;
+            window.incidentsByRegionChart.update();
+        }
+        
+        function updateResponseTimeTrendChart(dateRange) {
+            // Generate new data based on selected date range
+            let data, labels;
+            if (dateRange === '7d') {
+                labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                data = [10.2, 9.8, 9.5, 9.1, 8.9, 8.7, 8.5];
+            } else if (dateRange === '30d') {
+                labels = Array.from({length: 30}, (_, i) => `Day ${i+1}`);
+                data = Array.from({length: 30}, () => 7.5 + Math.random() * 1.5);
+            } else if (dateRange === '90d') {
+                labels = ['Jan', 'Feb', 'Mar'];
+                data = [9.1, 8.5, 8.0];
+            } else if (dateRange === '1y') {
+                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                data = [10.2, 9.8, 9.5, 9.1, 8.9, 8.7, 8.5, 8.4, 8.3, 8.2, 8.1, 8.0];
+            }
+            
+            // Update chart data
+            window.responseTimeTrendChart.data.labels = labels;
+            window.responseTimeTrendChart.data.datasets[0].data = data;
+            window.responseTimeTrendChart.update();
+        }
+        
+        function updateResourceUtilizationChart() {
+            // Generate random data for resource utilization
+            const currentUtilization = Array.from({length: 6}, () => 50 + Math.random() * 40);
+            
+            // Update chart data
+            window.resourceUtilizationChart.data.datasets[0].data = currentUtilization;
+            window.resourceUtilizationChart.update();
+        }
+        
+        // 3D Visualization variables
+        let scene, camera, renderer, incidents3D;
+        let cameraPosition = { top: { x: 0, y: 100, z: 0 }, side: { x: 100, y: 30, z: 0 } };
+        
+        // Function to initialize 3D visualization
+        function init3DVisualization() {
+            const container = document.getElementById('incident-3d-visualization');
+            
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1f2937);
+            
+            // Create camera
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+            camera.position.set(0, 100, 100);
+            camera.lookAt(0, 0, 0);
+            
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(width, height);
+            container.innerHTML = '';
+            container.appendChild(renderer.domElement);
+            
+            // Add grid
+            const gridHelper = new THREE.GridHelper(100, 10, 0x555555, 0x333333);
+            scene.add(gridHelper);
+            
+            // Add ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            // Add directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(50, 100, 50);
+            scene.add(directionalLight);
+            
+            // Create incident markers
+            createIncidentMarkers();
+            
+            // Start animation loop
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+        }
+        
+        // Function to create incident markers
+        function createIncidentMarkers() {
+            // Remove previous markers
+            if (incidents3D) {
+                scene.remove(incidents3D);
+            }
+            
+            incidents3D = new THREE.Group();
+            
+            // Generate random incident data
+            const incidentTypes = [
+                { type: 'fire', color: 0xef4444, height: 5 },
+                { type: 'medical', color: 0x3b82f6, height: 3 },
+                { type: 'flood', color: 0x10b981, height: 2 },
+                { type: 'earthquake', color: 0xf59e0b, height: 4 },
+                { type: 'other', color: 0x6b7280, height: 1 }
+            ];
+            
+            // Create 30 random incidents
+            for (let i = 0; i < 30; i++) {
+                const incident = incidentTypes[Math.floor(Math.random() * incidentTypes.length)];
+                const x = Math.random() * 80 - 40;
+                const z = Math.random() * 80 - 40;
+                
+                // Create cylinder for incident
+                const geometry = new THREE.CylinderGeometry(0.5, 0.5, incident.height, 8);
+                const material = new THREE.MeshLambertMaterial({ 
+                    color: incident.color,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const cylinder = new THREE.Mesh(geometry, material);
+                cylinder.position.set(x, incident.height / 2, z);
+                
+                // Add pulse effect
+                const pulseGeometry = new THREE.CircleGeometry(1.5, 32);
+                const pulseMaterial = new THREE.MeshBasicMaterial({ 
+                    color: incident.color,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const pulse = new THREE.Mesh(pulseGeometry, pulseMaterial);
+                pulse.rotation.x = -Math.PI / 2;
+                pulse.position.set(x, 0.1, z);
+                pulse.scale.set(1, 1, 1);
+                pulse.userData = { 
+                    initialScale: 1,
+                    pulseSpeed: 0.02 + Math.random() * 0.03,
+                    maxScale: 2 + Math.random() * 2
+                };
+                
+                incidents3D.add(cylinder);
+                incidents3D.add(pulse);
+            }
+            
+            scene.add(incidents3D);
+        }
+        
+        // Animation loop for 3D visualization
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Animate pulse effects
+            if (incidents3D) {
+                incidents3D.children.forEach(child => {
+                    if (child.geometry instanceof THREE.CircleGeometry) {
+                        child.scale.x += child.userData.pulseSpeed;
+                        child.scale.z += child.userData.pulseSpeed;
+                        child.material.opacity = 0.3 * (1 - (child.scale.x - 1) / (child.userData.maxScale - 1));
+                        
+                        if (child.scale.x > child.userData.maxScale) {
+                            child.scale.x = child.userData.initialScale;
+                            child.scale.z = child.userData.initialScale;
+                            child.material.opacity = 0.3;
+                        }
+                    }
+                });
+            }
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            const container = document.getElementById('incident-3d-visualization');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        }
+        
+        // Change 3D view (top or side)
+        function change3DView(view) {
+            if (view === 'top') {
+                gsap.to(camera.position, {
+                    x: cameraPosition.top.x,
+                    y: cameraPosition.top.y,
+                    z: cameraPosition.top.z,
+                    duration: 1,
+                    onUpdate: function() {
+                        camera.lookAt(0, 0, 0);
+                    }
+                });
+            } else if (view === 'side') {
+                gsap.to(camera.position, {
+                    x: cameraPosition.side.x,
+                    y: cameraPosition.side.y,
+                    z: cameraPosition.side.z,
+                    duration: 1,
+                    onUpdate: function() {
+                        camera.lookAt(0, 0, 0);
+                    }
+                });
+            }
+        }
+        
+        // Function to initialize response timeline
+        function initResponseTimeline() {
+            const container = document.getElementById('response-timeline');
+            
+            // Create SVG element
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            // Clear previous content
+            container.innerHTML = '';
+            
+            const svg = d3.select(container)
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Add background
+            svg.append('rect')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('fill', '#1f2937');
+            
+            // Generate timeline data for today
+            const timelineData = generateTimelineData('day');
+            
+            // Set up scales
+            const xScale = d3.scaleTime()
+                .domain([d3.min(timelineData, d => d.time), d3.max(timelineData, d => d.time)])
+                .range([50, width - 30]);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([height - 40, 30]);
+            
+            // Add x-axis
+            const xAxis = d3.axisBottom(xScale)
+                .ticks(6)
+                .tickFormat(d3.timeFormat('%H:%M'));
+            
+            svg.append('g')
+                .attr('transform', `translate(0, ${height - 40})`)
+                .attr('class', 'x-axis')
+                .call(xAxis)
+                .selectAll('text')
+                .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                .attr('font-size', '10px');
+            
+            svg.selectAll('.x-axis path, .x-axis line')
+                .attr('stroke', 'rgba(255, 255, 255, 0.3)');
+            
+            // Add y-axis
+            const yAxis = d3.axisLeft(yScale)
+                .ticks(5);
+            
+            svg.append('g')
+                .attr('transform', 'translate(50, 0)')
+                .attr('class', 'y-axis')
+                .call(yAxis)
+                .selectAll('text')
+                .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                .attr('font-size', '10px');
+            
+            svg.selectAll('.y-axis path, .y-axis line')
+                .attr('stroke', 'rgba(255, 255, 255, 0.3)');
+            
+            // Add y-axis label
+            svg.append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', 15)
+                .attr('x', -height / 2)
+                .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                .attr('text-anchor', 'middle')
+                .attr('font-size', '12px')
+                .text('Response Time (min)');
+            
+            // Add timeline events
+            svg.selectAll('circle')
+                .data(timelineData)
+                .enter()
+                .append('circle')
+                .attr('cx', d => xScale(d.time))
+                .attr('cy', d => yScale(d.responseTime))
+                .attr('r', 6)
+                .attr('fill', d => {
+                    if (d.type === 'fire') return 'rgba(239, 68, 68, 0.7)';
+                    if (d.type === 'medical') return 'rgba(59, 130, 246, 0.7)';
+                    if (d.type === 'flood') return 'rgba(16, 185, 129, 0.7)';
+                    if (d.type === 'earthquake') return 'rgba(245, 158, 11, 0.7)';
+                    return 'rgba(107, 114, 128, 0.7)';
+                })
+                .attr('stroke', 'white')
+                .attr('stroke-width', 1)
+                .attr('class', 'timeline-event')
+                .on('mouseover', function(event, d) {
+                    d3.select(this)
+                        .attr('r', 8);
+                    
+                    // Show tooltip
+                    const tooltip = svg.append('g')
+                        .attr('class', 'tooltip')
+                        .attr('transform', `translate(${xScale(d.time)}, ${yScale(d.responseTime) - 20})`);
+                    
+                    tooltip.append('rect')
+                        .attr('x', -60)
+                        .attr('y', -40)
+                        .attr('width', 120)
+                        .attr('height', 40)
+                        .attr('fill', 'rgba(17, 24, 39, 0.9)')
+                        .attr('rx', 4);
+                    
+                    tooltip.append('text')
+                        .attr('x', 0)
+                        .attr('y', -25)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', 'white')
+                        .attr('font-size', '10px')
+                        .text(d.title);
+                    
+                    tooltip.append('text')
+                        .attr('x', 0)
+                        .attr('y', -10)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                        .attr('font-size', '10px')
+                        .text(`Response: ${d.responseTime} min`);
+                })
+                .on('mouseout', function(event, d) {
+                    d3.select(this)
+                        .attr('r', 6);
+                    
+                    svg.selectAll('.tooltip').remove();
+                });
+            
+            // Add connecting line
+            const line = d3.line()
+                .x(d => xScale(d.time))
+                .y(d => yScale(d.responseTime))
+                .curve(d3.curveMonotoneX);
+            
+            svg.append('path')
+                .datum(timelineData)
+                .attr('fill', 'none')
+                .attr('stroke', 'rgba(59, 130, 246, 0.5)')
+                .attr('stroke-width', 2)
+                .attr('d', line);
+        }
+        
+        // Generate timeline data
+        function generateTimelineData(timeRange) {
+            const data = [];
+            const now = new Date();
+            let startTime;
+            
+            if (timeRange === 'day') {
+                // Generate data for today (last 12 hours)
+                startTime = new Date(now);
+                startTime.setHours(now.getHours() - 12);
+                
+                // Generate an event every hour
+                for (let i = 0; i < 12; i++) {
+                    const eventTime = new Date(startTime);
+                    eventTime.setHours(startTime.getHours() + i);
+                    
+                    const types = ['fire', 'medical', 'flood', 'earthquake', 'other'];
+                    const titles = [
+                        'Building Fire', 'Medical Emergency', 'Flash Flood', 'Minor Tremor', 'Traffic Accident',
+                        'Gas Leak', 'Power Outage', 'Chemical Spill', 'Structure Collapse', 'Water Rescue'
+                    ];
+                    
+                    data.push({
+                        time: eventTime,
+                        type: types[Math.floor(Math.random() * types.length)],
+                        title: titles[Math.floor(Math.random() * titles.length)],
+                        responseTime: 5 + Math.random() * 5
+                    });
+                }
+            } else if (timeRange === 'week') {
+                // Generate data for the week
+                startTime = new Date(now);
+                startTime.setDate(now.getDate() - 7);
+                
+                // Generate an event for each day
+                for (let i = 0; i < 7; i++) {
+                    const eventTime = new Date(startTime);
+                    eventTime.setDate(startTime.getDate() + i);
+                    
+                    const types = ['fire', 'medical', 'flood', 'earthquake', 'other'];
+                    const titles = [
+                        'Major Incident', 'Emergency Response', 'Disaster Alert', 'Critical Situation', 'Urgent Call',
+                        'Rescue Operation', 'Crisis Management', 'Emergency Evacuation', 'Safety Protocol', 'Rapid Response'
+                    ];
+                    
+                    // Add 2-4 events per day
+                    const eventsPerDay = 2 + Math.floor(Math.random() * 3);
+                    for (let j = 0; j < eventsPerDay; j++) {
+                        const eventHour = new Date(eventTime);
+                        eventHour.setHours(9 + Math.floor(Math.random() * 12)); // Between 9 AM and 9 PM
+                        
+                        data.push({
+                            time: eventHour,
+                            type: types[Math.floor(Math.random() * types.length)],
+                            title: titles[Math.floor(Math.random() * titles.length)],
+                            responseTime: 5 + Math.random() * 5
+                        });
+                    }
+                }
+            }
+            
+            // Sort by time
+            return data.sort((a, b) => a.time - b.time);
+        }
+        
+        // Update timeline based on selected time range
+        function updateTimeline(timeRange) {
+            // Generate new timeline data
+            const timelineData = generateTimelineData(timeRange);
+            
+            // Reinitialize timeline with new data
+            initResponseTimeline();
+        }
+        
+        // Function to initialize resource distribution map
+        function initResourceDistribution() {
+            const container = document.getElementById('resource-distribution');
+            
+            // Create SVG element
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            // Clear previous content
+            container.innerHTML = '';
+            
+            const svg = d3.select(container)
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Add background
+            svg.append('rect')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('fill', '#1f2937');
+            
+            // Generate resource distribution data
+            const resourceData = generateResourceData('all');
+            
+            // Create a map layout (simplified for demo)
+            const mapWidth = width - 60;
+            const mapHeight = height - 60;
+            
+            // Add map outline
+            svg.append('rect')
+                .attr('x', 30)
+                .attr('y', 30)
+                .attr('width', mapWidth)
+                .attr('height', mapHeight)
+                .attr('fill', '#2d3748')
+                .attr('stroke', 'rgba(255, 255, 255, 0.2)')
+                .attr('stroke-width', 1)
+                .attr('rx', 4);
+            
+            // Add region boundaries (simplified)
+            const regions = [
+                { name: 'North', x: 30, y: 30, width: mapWidth, height: mapHeight / 3 },
+                { name: 'Central', x: 30, y: 30 + mapHeight / 3, width: mapWidth, height: mapHeight / 3 },
+                { name: 'South', x: 30, y: 30 + (2 * mapHeight / 3), width: mapWidth, height: mapHeight / 3 }
+            ];
+            
+            // Add region dividers
+            svg.append('line')
+                .attr('x1', 30)
+                .attr('y1', 30 + mapHeight / 3)
+                .attr('x2', 30 + mapWidth)
+                .attr('y2', 30 + mapHeight / 3)
+                .attr('stroke', 'rgba(255, 255, 255, 0.2)')
+                .attr('stroke-width', 1);
+            
+            svg.append('line')
+                .attr('x1', 30)
+                .attr('y1', 30 + (2 * mapHeight / 3))
+                .attr('x2', 30 + mapWidth)
+                .attr('y2', 30 + (2 * mapHeight / 3))
+                .attr('stroke', 'rgba(255, 255, 255, 0.2)')
+                .attr('stroke-width', 1);
+            
+            // Add region labels
+            regions.forEach(region => {
+                svg.append('text')
+                    .attr('x', region.x + 15)
+                    .attr('y', region.y + 20)
+                    .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                    .attr('font-size', '12px')
+                    .text(region.name);
+            });
+            
+            // Add resource markers
+            svg.selectAll('.resource-marker')
+                .data(resourceData)
+                .enter()
+                .append('circle')
+                .attr('class', 'resource-marker')
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y)
+                .attr('r', d => d.count * 1.5)
+                .attr('fill', d => {
+                    if (d.type === 'medical') return 'rgba(59, 130, 246, 0.7)';
+                    if (d.type === 'fire') return 'rgba(239, 68, 68, 0.7)';
+                    if (d.type === 'police') return 'rgba(16, 185, 129, 0.7)';
+                    return 'rgba(107, 114, 128, 0.7)';
+                })
+                .attr('stroke', 'white')
+                .attr('stroke-width', 1)
+                .attr('opacity', 0.8)
+                .on('mouseover', function(event, d) {
+                    d3.select(this)
+                        .attr('r', d.count * 1.8)
+                        .attr('opacity', 1);
+                    
+                    // Show tooltip
+                    const tooltip = svg.append('g')
+                        .attr('class', 'resource-tooltip')
+                        .attr('transform', `translate(${d.x}, ${d.y - 20})`);
+                    
+                    tooltip.append('rect')
+                        .attr('x', -60)
+                        .attr('y', -40)
+                        .attr('width', 120)
+                        .attr('height', 40)
+                        .attr('fill', 'rgba(17, 24, 39, 0.9)')
+                        .attr('rx', 4);
+                    
+                    tooltip.append('text')
+                        .attr('x', 0)
+                        .attr('y', -25)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', 'white')
+                        .attr('font-size', '10px')
+                        .text(d.name);
+                    
+                    tooltip.append('text')
+                        .attr('x', 0)
+                        .attr('y', -10)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                        .attr('font-size', '10px')
+                        .text(`Units: ${d.count}`);
+                })
+                .on('mouseout', function(event, d) {
+                    d3.select(this)
+                        .attr('r', d.count * 1.5)
+                        .attr('opacity', 0.8);
+                    
+                    svg.selectAll('.resource-tooltip').remove();
+                });
+            
+            // Add legend
+            const legendData = [
+                { type: 'medical', label: 'Medical Units' },
+                { type: 'fire', label: 'Fire Units' },
+                { type: 'police', label: 'Police Units' },
+                { type: 'other', label: 'Other Resources' }
+            ];
+            
+            const legend = svg.append('g')
+                .attr('transform', `translate(${width - 140}, 20)`);
+            
+            legendData.forEach((item, i) => {
+                const legendItem = legend.append('g')
+                    .attr('transform', `translate(0, ${i * 20})`);
+                
+                let color;
+                if (item.type === 'medical') color = 'rgba(59, 130, 246, 0.7)';
+                else if (item.type === 'fire') color = 'rgba(239, 68, 68, 0.7)';
+                else if (item.type === 'police') color = 'rgba(16, 185, 129, 0.7)';
+                else color = 'rgba(107, 114, 128, 0.7)';
+                
+                legendItem.append('circle')
+                    .attr('r', 6)
+                    .attr('fill', color)
+                    .attr('stroke', 'white')
+                    .attr('stroke-width', 1);
+                
+                legendItem.append('text')
+                    .attr('x', 15)
+                    .attr('y', 4)
+                    .attr('fill', 'rgba(255, 255, 255, 0.7)')
+                    .attr('font-size', '10px')
+                    .text(item.label);
+            });
+        }
+        
+        // Generate resource distribution data
+        function generateResourceData(filterType) {
+            const data = [];
+            const resourceTypes = ['medical', 'fire', 'police', 'other'];
+            const resourceNames = {
+                medical: ['Ambulance Team', 'Medical Unit', 'First Aid Station', 'Emergency Medical', 'Field Hospital'],
+                fire: ['Fire Engine', 'Rescue Squad', 'Hazmat Team', 'Fire Brigade', 'Ladder Truck'],
+                police: ['Police Unit', 'Traffic Control', 'Security Team', 'Patrol Unit', 'Command Post'],
+                other: ['Drone Team', 'Rescue Boat', 'Supply Truck', 'Mobile Command', 'Helicopter']
+            };
+            
+            // Generate 20 random resource points
+            for (let i = 0; i < 20; i++) {
+                const type = resourceTypes[Math.floor(Math.random() * resourceTypes.length)];
+                
+                // Skip if filtering by type and not matching
+                if (filterType !== 'all' && type !== filterType) continue;
+                
+                const names = resourceNames[type];
+                const name = names[Math.floor(Math.random() * names.length)];
+                const container = document.getElementById('resource-distribution');
+                
+                data.push({
+                    type: type,
+                    name: name,
+                    count: 3 + Math.floor(Math.random() * 8),
+                    x: 60 + Math.random() * (container.clientWidth - 120),
+                    y: 60 + Math.random() * (container.clientHeight - 120)
+                });
+            }
+            
+            return data;
+        }
+        
+        // Update resource distribution based on filter
+        function updateResourceDistribution(filterType) {
+            // Show loading animation
+            const container = document.getElementById('resource-distribution');
+            container.innerHTML = '<div class="flex items-center justify-center h-full"><div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div></div>';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Reinitialize with filtered data
+                initResourceDistribution();
+                
+                // Show notification
+                showNotification(`Showing ${filterType === 'all' ? 'all' : filterType} resources`);
+            }, 800);
+        }
+        
+        // Function to initialize efficiency analysis chart
+        function initEfficiencyAnalysis() {
+            const container = document.getElementById('efficiency-analysis');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            // Clear previous content
+            container.innerHTML = '';
+            
+            // Create canvas for Chart.js
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            container.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Generate data
+            const timeLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const responseTimeData = [9.8, 9.5, 9.2, 8.9, 8.7, 8.5, 8.4, 8.3, 8.2, 8.1, 8.0, 7.9];
+            const resourceEfficiencyData = [72, 74, 76, 78, 80, 82, 84, 85, 87, 89, 91, 92];
+            
+            // Create chart
+            window.efficiencyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [{
+                        label: 'Avg. Response Time (min)',
+                        data: responseTimeData,
+                        borderColor: 'rgba(124, 58, 237, 1)',
+                        backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(124, 58, 237, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.3,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Resource Efficiency (%)',
+                        data: resourceEfficiencyData,
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.3,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Response Time (min)',
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif',
+                                    size: 12
+                                }
+                            },
+                            min: 7,
+                            max: 10,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Resource Efficiency (%)',
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif',
+                                    size: 12
+                                }
+                            },
+                            min: 70,
+                            max: 100,
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
                             }
                         },
                         x: {
@@ -532,20 +2225,261 @@
                                 color: 'rgba(255, 255, 255, 0.1)'
                             },
                             ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    family: '"Poppins", sans-serif'
+                                }
                             }
                         }
                     },
                     plugins: {
                         legend: {
+                            position: 'top',
                             labels: {
-                                color: 'white'
+                                color: 'white',
+                                font: {
+                                    family: '"Poppins", sans-serif',
+                                    size: 12
+                                },
+                                boxWidth: 15
                             }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 12
                         }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
-        });
+        }
+        
+        // Update efficiency analysis based on selected view
+        function updateEfficiencyAnalysis(view) {
+            // Show loading animation
+            const container = document.getElementById('efficiency-analysis');
+            container.innerHTML = '<div class="flex items-center justify-center h-full"><div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div></div>';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Reinitialize chart
+                initEfficiencyAnalysis();
+                
+                if (view === 'time') {
+                    // Show response time dataset, hide resource efficiency
+                    window.efficiencyChart.data.datasets[0].hidden = false;
+                    window.efficiencyChart.data.datasets[1].hidden = true;
+                } else if (view === 'resources') {
+                    // Show resource efficiency dataset, hide response time
+                    window.efficiencyChart.data.datasets[0].hidden = true;
+                    window.efficiencyChart.data.datasets[1].hidden = false;
+                }
+                
+                window.efficiencyChart.update();
+                
+                // Show notification
+                showNotification(`Showing ${view === 'time' ? 'response time' : 'resource efficiency'} data`);
+            }, 800);
+        }
+        
+        // Function to update impact assessment chart
+        function updateImpactAssessment(timeRange) {
+            // Show loading animation
+            const container = document.getElementById('impact-assessment').parentElement;
+            container.innerHTML = '<div class="flex items-center justify-center h-64"><div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div></div>';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Re-add canvas
+                container.innerHTML = '<canvas id="impact-assessment" class="w-full h-64"></canvas>';
+                const ctx = document.getElementById('impact-assessment').getContext('2d');
+                
+                // Prepare data based on time range
+                let labels, data;
+                if (timeRange === 'day') {
+                    // Hourly data for 24h
+                    labels = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
+                    data = [8.2, 8.5, 8.8, 9.1, 9.3, 9.5, 9.7, 9.9, 10.1, 10.3, 10.5, 10.7];
+                } else if (timeRange === 'week') {
+                    // Daily data for 7 days
+                    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    data = [9.5, 9.8, 10.1, 10.3, 10.5, 10.7, 10.9];
+                }
+                
+                // Create new chart
+                window.impactAssessmentChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Impact Index',
+                            data: data,
+                            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            hoverBackgroundColor: 'rgba(59, 130, 246, 0.8)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    font: {
+                                        family: '"Poppins", sans-serif'
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    font: {
+                                        family: '"Poppins", sans-serif'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                                titleColor: 'white',
+                                bodyColor: 'white',
+                                borderColor: 'rgba(255, 255, 255, 0.1)',
+                                borderWidth: 1,
+                                padding: 12
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        }
+                    }
+                });
+                
+                // Show notification
+                showNotification(`Showing ${timeRange === 'day' ? '24-hour' : '7-day'} impact assessment`);
+            }, 800);
+        }
+        
+        // Function to update success rate chart
+        function updateSuccessRate(timeRange) {
+            // Show loading animation
+            const container = document.getElementById('success-rate-chart').parentElement;
+            container.innerHTML = '<div class="flex items-center justify-center h-64"><div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div></div>';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Re-add canvas
+                container.innerHTML = '<canvas id="success-rate-chart" class="w-full h-64"></canvas>';
+                const ctx = document.getElementById('success-rate-chart').getContext('2d');
+                
+                // Prepare data based on time range
+                let labels, data;
+                if (timeRange === 'month') {
+                    // Monthly data
+                    labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    data = [90, 92, 94, 96, 98, 99, 99, 99, 99, 99, 99, 99];
+                } else if (timeRange === 'quarter') {
+                    // Quarterly data
+                    labels = ['Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024'];
+                    data = [92, 95, 97, 98, 99, 99.5];
+                }
+                
+                // Create new chart
+                window.successRateChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Success Rate (%)',
+                            data: data,
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                            pointBorderColor: '#fff',
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 85,
+                                max: 100,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    font: {
+                                        family: '"Poppins", sans-serif'
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    font: {
+                                        family: '"Poppins", sans-serif'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                                titleColor: 'white',
+                                bodyColor: 'white',
+                                borderColor: 'rgba(255, 255, 255, 0.1)',
+                                borderWidth: 1,
+                                padding: 12
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        }
+                    }
+                });
+                
+                // Show notification
+                showNotification(`Showing ${timeRange === 'month' ? 'monthly' : 'quarterly'} success rates`);
+            }, 800);
+        }
     </script>
+    <!-- Add GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 </body>
 </html>

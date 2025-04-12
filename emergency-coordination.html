@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Audio files for notifications -->
+    <audio id="broadcast-sound" preload="auto">
+        <source src="assets/sounds/alertreal.wav" type="audio/wav">
+    </audio>
+    <audio id="emergency-sound" preload="auto">
+        <source src="assets/sounds/notificationreal.wav" type="audio/wav">
+    </audio>
+    <audio id="success-sound" preload="auto">
+        <source src="assets/sounds/successreal.wav" type="audio/wav">
+    </audio>
     <style>
         body {
             background: #0f172a;
@@ -201,10 +211,10 @@
                 <div class="glass-card bg-opacity-20 p-6 rounded-xl border border-blue-500/30">
                     <h3 class="text-lg font-semibold text-blue-400 mb-2">Available Resources</h3>
                     <div class="flex items-center justify-between">
-                        <span class="text-3xl font-bold text-white">24</span>
+                        <span class="text-3xl font-bold text-white">242</span>
                         <span class="text-blue-400">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
                         </span>
                     </div>
@@ -304,6 +314,9 @@
                     <option value="evacuation">Evacuation Order</option>
                     <option value="warning">Warning</option>
                     <option value="info">Information</option>
+                    <option value="earthquake">Earthquake</option>
+                    <option value="flood">Flood Warning</option>
+                    <option value="fire">Fire Alert</option>
                 </select>
             </div>
             <div class="mb-4">
@@ -336,33 +349,54 @@
 
         // Function to declare emergency
         async function declareEmergency() {
-            const type = document.getElementById('emergency-type').value;
-            if (!type) return;
-
-            try {
-                const response = await fetch('php/declare_emergency.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ type })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    activeEmergency = data.emergency;
-                    document.getElementById('active-emergency').innerHTML = `
-                        <div class="flex items-center">
-                            <div class="w-3 h-3 bg-red-500 rounded-full mr-2 pulse"></div>
-                            <div>
-                                <div class="text-red-400 font-semibold">${type.replace('-', ' ').toUpperCase()}</div>
-                                <div class="text-sm">Declared at: ${new Date().toLocaleTimeString()}</div>
-                            </div>
-                        </div>
-                    `;
-                    loadAgencies();
+            const confirmed = confirm('⚠️ EMERGENCY DECLARATION PROTOCOL ⚠️\n\nThis will notify all connected agencies and activate emergency response protocols. Continue?');
+            
+            if (confirmed) {
+                // Play emergency sound
+                document.getElementById('emergency-sound').play();
+                
+                // Update UI to show emergency state
+                document.getElementById('emergency-status').textContent = 'ACTIVE';
+                document.getElementById('emergency-status').classList.remove('bg-green-600');
+                document.getElementById('emergency-status').classList.add('bg-red-600', 'animate-pulse');
+                
+                // Update emergency details
+                document.getElementById('emergency-time').textContent = new Date().toLocaleTimeString();
+                document.getElementById('emergency-date').textContent = new Date().toLocaleDateString();
+                document.getElementById('emergency-level').textContent = 'Level 1 - Critical';
+                
+                try {
+                    // Send emergency declaration to server
+                    const response = await fetch('php/declare_emergency.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            level: 1,
+                            timestamp: new Date().toISOString()
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        // Show success message
+                        alert('Emergency has been declared. All agencies have been notified.');
+                        // Play success sound
+                        document.getElementById('success-sound').play();
+                    } else {
+                        // Show error message
+                        alert('Error declaring emergency: ' + data.message);
+                        // Play emergency sound again for error
+                        document.getElementById('emergency-sound').play();
+                    }
+                } catch (error) {
+                    console.error('Error declaring emergency:', error);
+                    alert('Failed to declare emergency. Please try again.');
+                    // Play emergency sound again for error
+                    document.getElementById('emergency-sound').play();
                 }
-            } catch (error) {
-                console.error('Error declaring emergency:', error);
             }
         }
 
@@ -506,13 +540,53 @@
         }
 
         // Function to send broadcast
-        function sendBroadcast() {
-            const type = document.getElementById('alert-type').value;
+        async function sendBroadcast() {
+            const alertType = document.getElementById('alert-type').value;
             const message = document.getElementById('broadcast-message').value;
-            if (!message) return;
-
-            alert(`Broadcasting ${type} alert: ${message}. This functionality will be implemented in the next phase.`);
-            closeBroadcastModal();
+            
+            if (!message) {
+                alert('Please enter a message for the alert');
+                return;
+            }
+            
+            // Show loading state
+            const sendButton = document.querySelector('#broadcast-modal button:last-child');
+            const originalText = sendButton.innerHTML;
+            sendButton.innerHTML = '<span class="animate-pulse">Sending...</span>';
+            sendButton.disabled = true;
+            
+            try {
+                // Send data to PHP script
+                const formData = new FormData();
+                formData.append('alertType', alertType);
+                formData.append('message', message);
+                
+                const response = await fetch('php/send_broadcast.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Show success message
+                    alert('Emergency alert has been broadcast successfully!');
+                    closeBroadcastModal();
+                    document.getElementById('broadcast-sound').play();
+                } else {
+                    // Show error message
+                    alert('Failed to send broadcast: ' + data.message);
+                    document.getElementById('emergency-sound').play();
+                }
+            } catch (error) {
+                console.error('Error sending broadcast:', error);
+                alert('An error occurred while sending the broadcast. Please try again.');
+                document.getElementById('emergency-sound').play();
+            } finally {
+                // Reset button state
+                sendButton.innerHTML = originalText;
+                sendButton.disabled = false;
+            }
         }
 
         // Function to show resource allocation

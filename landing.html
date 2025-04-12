@@ -214,7 +214,7 @@
                     </p>
                     <div class="grid grid-cols-2 gap-6">
                         <div>
-                            <h4 class="text-2xl font-bold text-blue-400 mb-2">100+</h4>
+                            <h4 class="text-2xl font-bold text-blue-400 mb-2">10+</h4>
                             <p class="text-gray-400">Agencies Connected</p>
                         </div>
                         <div>
@@ -246,7 +246,7 @@
             <div class="max-w-4xl mx-auto glass-card rounded-xl p-10 text-center">
                 <i class="fas fa-quote-left text-4xl text-blue-400 mb-6"></i>
                 <p class="text-2xl text-white mb-8">
-                    "RESCUE has transformed how our fire department coordinates with other agencies during emergencies. The real-time updates and resource sharing capabilities have significantly improved our response times."
+                    "RESCUE has transformed how our every department coordinates with other agencies during emergencies. The real-time updates and resource sharing capabilities have significantly improved our response times."
                 </p>
                 <div class="flex items-center justify-center">
                     <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
@@ -254,7 +254,7 @@
                     </div>
                     <div class="text-left">
                         <h4 class="text-white font-semibold">Ankan Basu</h4>
-                        <p class="text-gray-400">Fire Chief, Metro Fire Department</p>
+                        <p class="text-gray-400">Co-owner, Project Rescue</p>
                     </div>
                 </div>
             </div>
@@ -291,7 +291,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-white font-medium mb-1">Email</h4>
-                                    <p class="text-gray-400">ankanbasu10@gmail.com</p>
+                                    <p class="text-gray-400">ankanbasu1234@gmail.com</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
@@ -308,22 +308,23 @@
                 </div>
                 <div class="md:w-1/2">
                     <div class="glass-card rounded-xl p-8">
-                        <form>
+                        <form id="contactForm" method="post" action="send_email.php">
                             <div class="mb-6">
                                 <label for="name" class="block text-gray-400 mb-2">Name</label>
-                                <input type="text" id="name" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="name" name="name" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-6">
                                 <label for="email" class="block text-gray-400 mb-2">Email</label>
-                                <input type="email" id="email" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="email" id="email" name="email" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-6">
                                 <label for="message" class="block text-gray-400 mb-2">Message</label>
-                                <textarea id="message" rows="4" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <textarea id="message" name="message" rows="4" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
                             <button type="submit" class="w-full btn-glow px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-800 text-white font-medium hover:from-blue-700 hover:to-blue-900 transition-all">
                                 Send Message
                             </button>
+                            <div id="formStatus" class="mt-4 text-center hidden"></div>
                         </form>
                     </div>
                 </div>
@@ -340,16 +341,13 @@
                     <p class="text-gray-400 mt-2">Emergency Response Coordination System</p>
                 </div>
                 <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors" title="Facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors" title="Twitter">
+                    <a href="https://x.com/AnkanBasu02" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" title="Twitter">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors" title="Instagram">
+                    <a href="https://www.instagram.com/ank2n10/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" title="Instagram">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors" title="LinkedIn">
+                    <a href="https://www.linkedin.com/in/ankan-basu-595152271/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" title="LinkedIn">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
                 </div>
@@ -374,6 +372,54 @@
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
+            });
+        });
+        
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const statusDiv = document.getElementById('formStatus');
+            const submitBtn = this.querySelector('button[type="submit"]');
+            
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Sending...';
+            
+            fetch('send_email.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Show status message
+                statusDiv.classList.remove('hidden');
+                
+                if (data.status === 'success') {
+                    statusDiv.innerHTML = '<p class="text-green-400">' + data.message + '</p>';
+                    // Reset form on success
+                    document.getElementById('contactForm').reset();
+                } else {
+                    statusDiv.innerHTML = '<p class="text-red-400">' + data.message + '</p>';
+                }
+                
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Send Message';
+                
+                // Hide status message after 5 seconds
+                setTimeout(() => {
+                    statusDiv.classList.add('hidden');
+                }, 5000);
+            })
+            .catch(error => {
+                statusDiv.classList.remove('hidden');
+                statusDiv.innerHTML = '<p class="text-red-400">An error occurred. Please try again later.</p>';
+                
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Send Message';
             });
         });
     </script>

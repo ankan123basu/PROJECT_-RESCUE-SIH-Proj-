@@ -1,0 +1,10 @@
+2025-04-12 00:04:53 - Connected to database successfully
+2025-04-12 00:04:53 - Found 4 existing weather alerts
+2025-04-12 00:04:53 - Successfully queried alerts
+2025-04-12 00:04:53 - Found 4 alerts
+2025-04-12 00:04:53 - Returning 4 alerts
+2025-04-12 00:04:58 - Connected to database successfully
+2025-04-12 00:04:58 - Found 4 existing weather alerts
+2025-04-12 00:04:58 - Successfully queried alerts
+2025-04-12 00:04:58 - Found 4 alerts
+2025-04-12 00:04:58 - Returning 4 alerts

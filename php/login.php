@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                         
                         // Redirect user to dashboard
-                        header("location: ../dashboard.html");
+                        header("location: ../agency-dashboard.html");
                         exit;
                     } else {
                         $login_err = "Invalid password.";

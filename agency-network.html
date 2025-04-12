@@ -3,73 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agency Network - Project Rescue</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>Agency Network | Project Rescue</title>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    
+    <!-- Audio files for notifications -->
+    <audio id="success-sound" preload="auto">
+        <source src="assets/sounds/successreal.wav" type="audio/wav">
+    </audio>
+    <audio id="alert-sound" preload="auto">
+        <source src="assets/sounds/alertreal.wav" type="audio/wav">
+    </audio>
+    <audio id="notification-sound" preload="auto">
+        <source src="assets/sounds/notificationreal.wav" type="audio/wav">
+    </audio>
+    
     <style>
-        .nav-backdrop {
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-            background: rgba(30, 41, 59, 0.7);
-        }
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .glass-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
-        }
         .bg-image {
-            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('assets/images/three-rescue-workers-walk-through-debris-after-a-disaster-photo.jpeg');
+            background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)), url('assets/images/world-map-bg.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
-        #map {
-            height: 500px;
-            width: 100%;
-            border-radius: 1rem;
-            z-index: 1;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        
+        .glass-card {
+            background: rgba(17, 25, 40, 0.75);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
         }
+        
+        .nav-backdrop {
+            background: rgba(10, 25, 47, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 0.5rem;
+            z-index: 10;
+        }
+        
         .pulse {
+            position: relative;
+        }
+        
+        .pulse::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0.75rem;
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
             animation: pulse 2s infinite;
         }
+        
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
         }
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 6px;
+        
+        /* Animation for activity items */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .status-online {
-            background-color: #10B981;
-            box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
-            animation: status-pulse 2s infinite;
+        
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
         }
-        @keyframes status-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        
+        /* Animation for notifications */
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
         }
-        .marker-cluster {
-            background-color: rgba(59, 130, 246, 0.6);
-            border-radius: 50%;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-            padding: 4px;
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); }
+            to { transform: translateX(100%); }
+        }
+        
+        /* Emergency pulse animation */
+        @keyframes emergencyPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+        
+        .emergency-pulse::before {
+            animation: emergencyPulse 1.5s infinite;
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+        }
+        
+        /* Custom scrollbar for activity log */
+        #activity-log::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #activity-log::-webkit-scrollbar-track {
+            background: rgba(17, 25, 40, 0.5);
+            border-radius: 10px;
+        }
+        
+        #activity-log::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 10px;
+        }
+        
+        #activity-log::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.7);
         }
     </style>
 </head>
@@ -160,17 +222,17 @@
             <div class="glass-card p-6 rounded-xl">
                 <h2 class="text-xl font-semibold mb-4 text-blue-300">Quick Actions</h2>
                 <div class="space-y-3">
-                    <button onclick="broadcastMessage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2">
+                    <button onclick="requestAssistance()" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                         </svg>
-                        <span>Broadcast Message</span>
+                        <span>Request Assistance</span>
                     </button>
-                    <button onclick="updateStatus()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2">
+                    <button onclick="shareIntelligence()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        <span>Update Status</span>
+                        <span>Share Intelligence</span>
                     </button>
                     <button onclick="viewResources()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -338,12 +400,370 @@
         document.getElementById('resourceCount').textContent = totalResources;
 
         // Functions for quick actions
-        function broadcastMessage() {
-            alert('Broadcasting message to network...');
+        function requestAssistance() {
+            // Create modal dialog for requesting assistance
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="glass-card p-6 rounded-xl w-full max-w-lg">
+                    <h2 class="text-xl font-semibold mb-4 text-red-300 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        Request Assistance
+                    </h2>
+                    <form id="assistance-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Emergency Type*</label>
+                            <select id="emergency-type" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2" required>
+                                <option value="">Select emergency type</option>
+                                <option value="medical">Medical Emergency</option>
+                                <option value="fire">Fire Incident</option>
+                                <option value="natural">Natural Disaster</option>
+                                <option value="security">Security Threat</option>
+                                <option value="rescue">Rescue Operation</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Location*</label>
+                            <input type="text" id="location" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2" placeholder="Specify location" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Description*</label>
+                            <textarea id="description" rows="3" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2" placeholder="Describe the situation" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Resources Needed</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="resource-medical" name="resources" value="medical" class="mr-2">
+                                    <label for="resource-medical">Medical</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="resource-fire" name="resources" value="fire" class="mr-2">
+                                    <label for="resource-fire">Fire Fighting</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="resource-rescue" name="resources" value="rescue" class="mr-2">
+                                    <label for="resource-rescue">Rescue Team</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="resource-transport" name="resources" value="transport" class="mr-2">
+                                    <label for="resource-transport">Transportation</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="resource-shelter" name="resources" value="shelter" class="mr-2">
+                                    <label for="resource-shelter">Shelter</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="resource-supplies" name="resources" value="supplies" class="mr-2">
+                                    <label for="resource-supplies">Supplies</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Priority</label>
+                            <div class="flex space-x-4">
+                                <div class="flex items-center">
+                                    <input type="radio" id="priority-low" name="priority" value="low" class="mr-2">
+                                    <label for="priority-low">Low</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="priority-medium" name="priority" value="medium" class="mr-2" checked>
+                                    <label for="priority-medium">Medium</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="priority-high" name="priority" value="high" class="mr-2">
+                                    <label for="priority-high">High</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="priority-critical" name="priority" value="critical" class="mr-2">
+                                    <label for="priority-critical">Critical</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end space-x-3 pt-4 border-t border-gray-700">
+                            <button type="button" id="cancel-assistance" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-all">Cancel</button>
+                            <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-all">Send Request</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Handle form submission
+            document.getElementById('assistance-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const emergencyType = document.getElementById('emergency-type').value;
+                const location = document.getElementById('location').value;
+                const description = document.getElementById('description').value;
+                
+                // Get selected resources
+                const resourceCheckboxes = document.querySelectorAll('input[name="resources"]:checked');
+                const resourcesNeeded = Array.from(resourceCheckboxes).map(cb => cb.value);
+                
+                // Get priority
+                const priorityRadio = document.querySelector('input[name="priority"]:checked');
+                const priority = priorityRadio ? priorityRadio.value : 'medium';
+                
+                // Show loading state
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                submitButton.innerHTML = '<span class="animate-pulse">Sending request...</span>';
+                submitButton.disabled = true;
+                
+                try {
+                    // Send request to server
+                    const formData = new FormData();
+                    formData.append('emergency_type', emergencyType);
+                    formData.append('location', location);
+                    formData.append('description', description);
+                    resourcesNeeded.forEach(resource => {
+                        formData.append('resources_needed[]', resource);
+                    });
+                    formData.append('priority', priority);
+                    
+                    const response = await fetch('php/request_assistance.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        // Close modal
+                        modal.remove();
+                        
+                        // Play success sound
+                        document.getElementById('success-sound').play();
+                        
+                        // Show success notification
+                        showNotification('success', `Assistance request sent! ${data.agencies_notified} agencies have been notified.`);
+                        
+                        // Add to activity log
+                        addActivityItem({
+                            type: 'emergency',
+                            title: 'Assistance Requested',
+                            description: `${emergencyType} emergency at ${location}`,
+                            timestamp: new Date().toISOString()
+                        });
+                    } else {
+                        // Play alert sound
+                        document.getElementById('alert-sound').play();
+                        
+                        // Show error
+                        showNotification('error', data.message || 'Failed to send request. Please try again.');
+                        
+                        // Reset button
+                        submitButton.innerHTML = originalText;
+                        submitButton.disabled = false;
+                    }
+                } catch (error) {
+                    console.error('Error sending assistance request:', error);
+                    showNotification('error', 'Network error. Please check your connection and try again.');
+                    
+                    // Reset button
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                }
+            });
+            
+            // Handle cancel button
+            document.getElementById('cancel-assistance').addEventListener('click', function() {
+                modal.remove();
+            });
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
         }
 
-        function updateStatus() {
-            alert('Updating agency status...');
+        function shareIntelligence() {
+            // Create modal dialog for sharing intelligence
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="glass-card p-6 rounded-xl w-full max-w-lg">
+                    <h2 class="text-xl font-semibold mb-4 text-blue-300 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Share Intelligence
+                    </h2>
+                    <form id="intelligence-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Intelligence Type*</label>
+                            <select id="intel-type" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2" required>
+                                <option value="">Select intelligence type</option>
+                                <option value="situation">Situation Report</option>
+                                <option value="threat">Threat Assessment</option>
+                                <option value="resource">Resource Information</option>
+                                <option value="weather">Weather Update</option>
+                                <option value="infrastructure">Infrastructure Status</option>
+                                <option value="other">Other Information</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Title*</label>
+                            <input type="text" id="intel-title" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2" placeholder="Intelligence title" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Content*</label>
+                            <textarea id="intel-content" rows="4" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2" placeholder="Detailed intelligence information" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Classification</label>
+                            <select id="classification" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2">
+                                <option value="standard">Standard (All Agencies)</option>
+                                <option value="sensitive">Sensitive (Limited Distribution)</option>
+                                <option value="restricted">Restricted (Select Agencies)</option>
+                            </select>
+                        </div>
+                        <div id="share-with-container" class="hidden">
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Share With</label>
+                            <div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="share-fire" name="share-with" value="fire" class="mr-2">
+                                    <label for="share-fire">Fire Department</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="share-police" name="share-with" value="police" class="mr-2">
+                                    <label for="share-police">Police</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="share-medical" name="share-with" value="medical" class="mr-2">
+                                    <label for="share-medical">Medical Services</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="share-rescue" name="share-with" value="rescue" class="mr-2">
+                                    <label for="share-rescue">Rescue Teams</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="share-govt" name="share-with" value="government" class="mr-2">
+                                    <label for="share-govt">Government</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="share-ngo" name="share-with" value="ngo" class="mr-2">
+                                    <label for="share-ngo">NGOs</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end space-x-3 pt-4 border-t border-gray-700">
+                            <button type="button" id="cancel-intelligence" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-all">Cancel</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all">Share Intelligence</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Show/hide share with section based on classification
+            const classificationSelect = document.getElementById('classification');
+            const shareWithContainer = document.getElementById('share-with-container');
+            
+            classificationSelect.addEventListener('change', function() {
+                if (this.value === 'restricted') {
+                    shareWithContainer.classList.remove('hidden');
+                } else {
+                    shareWithContainer.classList.add('hidden');
+                }
+            });
+            
+            // Handle form submission
+            document.getElementById('intelligence-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const intelType = document.getElementById('intel-type').value;
+                const title = document.getElementById('intel-title').value;
+                const content = document.getElementById('intel-content').value;
+                const classification = document.getElementById('classification').value;
+                
+                // Get selected agencies to share with
+                const shareCheckboxes = document.querySelectorAll('input[name="share-with"]:checked');
+                const shareWith = Array.from(shareCheckboxes).map(cb => cb.value);
+                
+                // Show loading state
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                submitButton.innerHTML = '<span class="animate-pulse">Sharing intelligence...</span>';
+                submitButton.disabled = true;
+                
+                try {
+                    // Send request to server
+                    const formData = new FormData();
+                    formData.append('intel_type', intelType);
+                    formData.append('title', title);
+                    formData.append('content', content);
+                    formData.append('classification', classification);
+                    shareWith.forEach(agency => {
+                        formData.append('share_with[]', agency);
+                    });
+                    
+                    const response = await fetch('php/share_intelligence.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        // Close modal
+                        modal.remove();
+                        
+                        // Play notification sound
+                        document.getElementById('notification-sound').play();
+                        
+                        // Show success notification
+                        showNotification('success', `Intelligence shared! ${data.agencies_notified} agencies have been notified.`);
+                        
+                        // Add to activity log
+                        addActivityItem({
+                            type: 'info',
+                            title: 'Intelligence Shared',
+                            description: title,
+                            timestamp: new Date().toISOString()
+                        });
+                    } else {
+                        // Play alert sound
+                        document.getElementById('alert-sound').play();
+                        
+                        // Show error
+                        showNotification('error', data.message || 'Failed to share intelligence. Please try again.');
+                        
+                        // Reset button
+                        submitButton.innerHTML = originalText;
+                        submitButton.disabled = false;
+                    }
+                } catch (error) {
+                    console.error('Error sharing intelligence:', error);
+                    showNotification('error', 'Network error. Please check your connection and try again.');
+                    
+                    // Reset button
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                }
+            });
+            
+            // Handle cancel button
+            document.getElementById('cancel-intelligence').addEventListener('click', function() {
+                modal.remove();
+            });
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
         }
 
         function viewResources() {
@@ -375,6 +795,221 @@
             document.getElementById('agencyType').textContent = 'Agencies Management';
             document.getElementById('agencyContact').textContent = '6296441903';
             document.getElementById('agencyLocation').textContent = 'Phagwara Punjab';
+        });
+
+        // Notification system
+        function showNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-6 p-4 rounded-lg shadow-lg z-50 flex items-center space-x-3 transform transition-all duration-500 translate-x-full`;
+            
+            // Set notification style based on type
+            if (type === 'success') {
+                notification.classList.add('bg-green-600', 'text-white');
+                notification.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>${message}</span>
+                `;
+            } else if (type === 'error') {
+                notification.classList.add('bg-red-600', 'text-white');
+                notification.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>${message}</span>
+                `;
+            } else if (type === 'warning') {
+                notification.classList.add('bg-yellow-500', 'text-white');
+                notification.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span>${message}</span>
+                `;
+            } else {
+                notification.classList.add('bg-blue-600', 'text-white');
+                notification.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>${message}</span>
+                `;
+            }
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+            }, 10);
+            
+            // Animate out and remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('translate-x-0');
+                notification.classList.add('translate-x-full');
+                
+                // Remove from DOM after animation completes
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Activity log system
+        function addActivityItem(activity) {
+            // Validate activity data
+            if (!activity || !activity.type || !activity.title || !activity.description) {
+                console.error('Invalid activity data:', activity);
+                return; // Don't add invalid activities
+            }
+            
+            // Find activity log container or create one if it doesn't exist
+            let activityLog = document.getElementById('activity-log');
+            
+            if (!activityLog) {
+                // Create activity log if it doesn't exist
+                const mainContainer = document.querySelector('main');
+                
+                const activityLogContainer = document.createElement('div');
+                activityLogContainer.className = 'glass-card p-6 rounded-xl mt-8';
+                activityLogContainer.innerHTML = `
+                    <h2 class="text-xl font-semibold mb-4 text-blue-300 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Recent Activity
+                    </h2>
+                    <div id="activity-log" class="space-y-3 max-h-64 overflow-y-auto"></div>
+                `;
+                
+                mainContainer.appendChild(activityLogContainer);
+                activityLog = document.getElementById('activity-log');
+                
+                // Remove any existing activity items to start fresh
+                while (activityLog.firstChild) {
+                    activityLog.removeChild(activityLog.firstChild);
+                }
+            }
+            
+            // Create activity item
+            const activityItem = document.createElement('div');
+            activityItem.className = 'p-3 rounded-lg bg-gray-800 bg-opacity-50 flex items-start space-x-3';
+            
+            // Format timestamp
+            const timestamp = new Date(activity.timestamp);
+            const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Set icon based on activity type
+            let icon = '';
+            let typeClass = '';
+            
+            if (activity.type === 'emergency') {
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>`;
+                typeClass = 'text-yellow-400';
+            } else if (activity.type === 'info') {
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>`;
+                typeClass = 'text-blue-400';
+            } else if (activity.type === 'success') {
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>`;
+                typeClass = 'text-green-400';
+            } else {
+                icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>`;
+                typeClass = 'text-gray-400';
+            }
+            
+            activityItem.innerHTML = `
+                <div class="${typeClass} flex-shrink-0 mt-1">
+                    ${icon}
+                </div>
+                <div class="flex-grow">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-medium">${activity.title}</h4>
+                        <span class="text-xs text-gray-400">${formattedTime}</span>
+                    </div>
+                    <p class="text-sm text-gray-300">${activity.description}</p>
+                </div>
+            `;
+            
+            // Add to activity log (at the top)
+            activityLog.insertBefore(activityItem, activityLog.firstChild);
+            
+            // Add animation
+            activityItem.classList.add('animate-fade-in');
+            
+            // Limit number of items in log
+            const maxItems = 10;
+            const items = activityLog.querySelectorAll('div');
+            if (items.length > maxItems) {
+                for (let i = maxItems; i < items.length; i++) {
+                    items[i].remove();
+                }
+            }
+        }
+
+        // Add some initial activities to demonstrate the log
+        setTimeout(() => {
+            // Remove any existing empty items
+            const emptyItems = document.querySelectorAll('#activity-log > div:empty');
+            emptyItems.forEach(item => item.remove());
+            
+            // Remove items with only an icon and no content
+            const incompleteItems = document.querySelectorAll('#activity-log > div');
+            incompleteItems.forEach(item => {
+                if (item.textContent.trim() === '') {
+                    item.remove();
+                }
+            });
+            
+            addActivityItem({
+                type: 'info',
+                title: 'Network Connection Established',
+                description: 'Connected to 8 agencies in the Mumbai region',
+                timestamp: new Date().toISOString()
+            });
+            
+            // Add with a slight delay to show animation
+            setTimeout(() => {
+                addActivityItem({
+                    type: 'success',
+                    title: 'Resources Updated',
+                    description: 'Resource inventory synchronized with central database',
+                    timestamp: new Date().toISOString()
+                });
+            }, 1000);
+        }, 500);
+    </script>
+    
+    <!-- Script to remove the empty activity item -->
+    <script>
+        // Function to remove empty activity items
+        function cleanupEmptyActivities() {
+            // Get all activity items
+            const activityItems = document.querySelectorAll('#activity-log > div');
+            
+            // Check if there are more than 2 items
+            if (activityItems.length > 2) {
+                // Loop through items starting from the third one
+                for (let i = 2; i < activityItems.length; i++) {
+                    // Remove the item
+                    activityItems[i].remove();
+                }
+            }
+        }
+        
+        // Run the cleanup after the page is fully loaded
+        window.addEventListener('load', function() {
+            // Wait a bit to ensure all activities are loaded
+            setTimeout(cleanupEmptyActivities, 1500);
         });
     </script>
 </body>

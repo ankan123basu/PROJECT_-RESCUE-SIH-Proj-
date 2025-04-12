@@ -34,7 +34,27 @@
         }
 
         .animate-pulse-slow {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .animate-flash {
+            animation: flash 1s ease-in-out;
+        }
+        
+        .animate-progress {
+            animation: progress 1s ease-in-out;
+        }
+        
+        @keyframes flash {
+            0% { opacity: 0; }
+            50% { opacity: 0.2; }
+            100% { opacity: 0; }
+        }
+        
+        @keyframes progress {
+            0% { transform: scaleX(0.9); }
+            50% { transform: scaleX(1.1); }
+            100% { transform: scaleX(1); }
         }
 
         @keyframes pulse {
@@ -45,9 +65,230 @@
                 opacity: 0.7;
             }
         }
+        
+        /* Emergency mode styles */
+        .emergency-mode {
+            position: relative;
+        }
+        
+        .emergency-mode::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(220, 38, 38, 0.3);
+            z-index: 100;
+            pointer-events: none;
+            animation: emergency-flash 1s infinite;
+        }
+        
+        @keyframes emergency-flash {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+        
+        /* Emergency stop button */
+        .emergency-stop-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #fff;
+            color: #e11d48;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7), 0 0 40px rgba(220, 38, 38, 0.5);
+            z-index: 9999;
+            border: 4px solid #e11d48;
+            cursor: pointer;
+            animation: pulse-stop 2s infinite;
+        }
+        
+        @keyframes pulse-stop {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.7), 0 0 40px rgba(220, 38, 38, 0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(255, 255, 255, 0.9), 0 0 50px rgba(220, 38, 38, 0.7);
+            }
+        }
+        
+        .emergency-notification {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+            animation: notification-pulse 1.5s infinite;
+        }
+        
+        @keyframes notification-pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(220, 38, 38, 0.9);
+            }
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background-color: #10B981; /* green-500 */
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+        }
+        
+        .status-standby {
+            background-color: #F59E0B; /* yellow-500 */
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+        }
+        
+        .status-emergency {
+            background-color: #EF4444; /* red-500 */
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .status-offline {
+            background-color: #6B7280; /* gray-500 */
+            box-shadow: 0 0 8px rgba(107, 114, 128, 0.6);
+        }
+        
+        .status-maintenance {
+            background-color: #3B82F6; /* blue-500 */
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+        }
+        
+        /* Status effect styles */
+        .status-effect-active {
+            background-color: #10B981;
+        }
+        
+        .status-effect-standby {
+            background-color: #F59E0B;
+        }
+        
+        .status-effect-emergency {
+            background-color: #EF4444;
+        }
+        
+        .status-effect-offline {
+            background-color: #6B7280;
+        }
+        
+        .status-effect-maintenance {
+            background-color: #3B82F6;
+        }
+        
+        /* Status flash styles */
+        .status-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+            animation: flash 1s ease-in-out;
+            opacity: 0.2;
+        }
+        
+        .status-flash-active {
+            background-color: #10B981;
+        }
+        
+        .status-flash-standby {
+            background-color: #F59E0B;
+        }
+        
+        .status-flash-emergency {
+            background-color: #EF4444;
+        }
+        
+        .status-flash-offline {
+            background-color: #6B7280;
+        }
+        
+        .status-flash-maintenance {
+            background-color: #3B82F6;
+        }
+        
+        /* Fade out animation */
+        .fade-out {
+            animation: fade-out 0.5s ease-in-out;
+        }
+        
+        @keyframes fade-out {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        /* Custom styles for status options */
+        .status-option {
+            background-color: rgba(15, 23, 42, 0.7);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+        
+        .status-option:hover {
+            background-color: rgba(30, 58, 138, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-option.selected-status {
+            background-color: rgba(30, 58, 138, 0.5);
+            border: 1px solid #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Audio elements */
+        .audio-container {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-900">
+    <!-- Audio elements for status sounds -->
+    <div class="audio-container">
+        <audio id="status-active-sound" preload="auto">
+            <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c518b4e807.mp3?filename=success-1-6297.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="status-standby-sound" preload="auto">
+            <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8a410a9c5.mp3?filename=notification-sound-7062.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="status-emergency-sound" preload="auto">
+            <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_12b0c19487.mp3?filename=error-call-to-attention-129258.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="status-offline-sound" preload="auto">
+            <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_942422d4e3.mp3?filename=interface-124464.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="status-maintenance-sound" preload="auto">
+            <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d1a8d6dc0f.mp3?filename=click-124467.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="click-sound" preload="auto">
+            <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_b6117b2189.mp3?filename=click-21156.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
     <!-- Navigation -->
     <nav class="nav-backdrop sticky top-0 z-50 shadow-lg">
         <div class="container mx-auto px-6 py-4">
@@ -148,6 +389,22 @@
                         <label class="text-sm text-gray-400">Location</label>
                         <p class="text-lg font-semibold" id="agencyLocation">Phagwara Punjab</p>
                     </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Headquarters</label>
+                        <p class="text-lg font-semibold" id="agencyHeadquarters">Phagwara, Punjab</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Established</label>
+                        <p class="text-lg font-semibold" id="agencyEstablished">2020</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Staff Count</label>
+                        <p class="text-lg font-semibold" id="agencyStaffCount">120</p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Email</label>
+                        <p class="text-lg font-semibold" id="agencyEmail">rescue@lpu.co.in</p>
+                    </div>
                 </div>
             </div>
 
@@ -240,37 +497,17 @@
 
             <!-- Recent Activity -->
             <div class="glass-card rounded-xl p-6">
-                <h2 class="text-xl font-semibold mb-6">Recent Activity</h2>
-                <div class="space-y-4">
-                    <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-check text-green-400"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium">Mission Completed</p>
-                            <p class="text-sm text-gray-400">Successfully evacuated 23 civilians from flood zone</p>
-                            <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-sync text-blue-400"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium">Status Update</p>
-                            <p class="text-sm text-gray-400">Resources reallocated to northern sector</p>
-                            <p class="text-xs text-gray-500 mt-1">4 hours ago</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-exclamation text-yellow-400"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium">Alert Received</p>
-                            <p class="text-sm text-gray-400">Weather warning: Heavy rainfall expected</p>
-                            <p class="text-xs text-gray-500 mt-1">6 hours ago</p>
-                        </div>
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold">Recent Activity</h2>
+                    <button onclick="refreshActivities()" class="text-blue-400 hover:text-blue-300 transition-all duration-300" title="Refresh Activities">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div id="activities-container" class="space-y-4">
+                    <!-- Activities will be loaded dynamically -->
+                    <div class="flex justify-center items-center py-4">
+                        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                        <span class="ml-2 text-gray-400">Loading activities...</span>
                     </div>
                 </div>
             </div>
@@ -283,24 +520,24 @@
         <div class="glass-card rounded-xl p-6">
             <h2 class="text-xl font-semibold mb-4">Performance Metrics</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <h3 class="text-sm font-medium text-gray-400 mb-2">Response Time Trend</h3>
+                <div class="p-4 rounded-lg bg-blue-500/10 transform transition-all duration-500 hover:scale-105 hover:bg-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 cursor-pointer" onclick="animateMetrics(this)">
+                    <h3 class="text-sm font-medium text-blue-400 mb-2">Response Time Trend</h3>
                     <div class="progress-bar">
-                        <div class="progress-fill progress-85"></div>
+                        <div class="progress-fill progress-85 animate-pulse-slow"></div>
                     </div>
                     <p class="text-sm mt-2">15% faster than last month</p>
                 </div>
-                <div>
-                    <h3 class="text-sm font-medium text-gray-400 mb-2">Resource Utilization</h3>
+                <div class="p-4 rounded-lg bg-green-500/10 transform transition-all duration-500 hover:scale-105 hover:bg-green-500/20 hover:shadow-lg hover:shadow-green-500/30 cursor-pointer" onclick="animateMetrics(this)">
+                    <h3 class="text-sm font-medium text-green-400 mb-2">Resource Utilization</h3>
                     <div class="progress-bar">
-                        <div class="progress-fill progress-70"></div>
+                        <div class="progress-fill progress-70 animate-pulse-slow"></div>
                     </div>
                     <p class="text-sm mt-2">70% resources actively deployed</p>
                 </div>
-                <div>
-                    <h3 class="text-sm font-medium text-gray-400 mb-2">Mission Success Rate</h3>
+                <div class="p-4 rounded-lg bg-purple-500/10 transform transition-all duration-500 hover:scale-105 hover:bg-purple-500/20 hover:shadow-lg hover:shadow-purple-500/30 cursor-pointer" onclick="animateMetrics(this)">
+                    <h3 class="text-sm font-medium text-purple-400 mb-2">Mission Success Rate</h3>
                     <div class="progress-bar">
-                        <div class="progress-fill progress-95"></div>
+                        <div class="progress-fill progress-95 animate-pulse-slow"></div>
                     </div>
                     <p class="text-sm mt-2">95% successful missions</p>
                 </div>
@@ -316,34 +553,34 @@
                 </button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg transform transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20 cursor-pointer" onclick="viewAllTraining()">
                     <div class="flex items-center mb-2">
-                        <i class="fas fa-certificate text-yellow-500 mr-2"></i>
+                        <i class="fas fa-certificate text-yellow-500 mr-2 animate-pulse"></i>
                         <h3 class="font-medium">Emergency Response</h3>
                     </div>
                     <p class="text-sm text-gray-400">12 team members certified</p>
                     <div class="mt-2 progress-bar">
-                        <div class="progress-fill progress-80"></div>
+                        <div class="progress-fill progress-80 animate-pulse-slow"></div>
                     </div>
                 </div>
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg transform transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-red-500/20 cursor-pointer" onclick="viewAllTraining()">
                     <div class="flex items-center mb-2">
-                        <i class="fas fa-heartbeat text-red-500 mr-2"></i>
+                        <i class="fas fa-heartbeat text-red-500 mr-2 animate-pulse"></i>
                         <h3 class="font-medium">First Aid Advanced</h3>
                     </div>
                     <p class="text-sm text-gray-400">8 team members certified</p>
                     <div class="mt-2 progress-bar">
-                        <div class="progress-fill progress-60"></div>
+                        <div class="progress-fill progress-60 animate-pulse-slow"></div>
                     </div>
                 </div>
-                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                <div class="bg-gray-800 bg-opacity-50 p-4 rounded-lg transform transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer" onclick="viewAllTraining()">
                     <div class="flex items-center mb-2">
-                        <i class="fas fa-helicopter text-blue-500 mr-2"></i>
+                        <i class="fas fa-helicopter text-blue-500 mr-2 animate-pulse"></i>
                         <h3 class="font-medium">Aerial Operations</h3>
                     </div>
                     <p class="text-sm text-gray-400">4 team members certified</p>
                     <div class="mt-2 progress-bar">
-                        <div class="progress-fill progress-40"></div>
+                        <div class="progress-fill progress-40 animate-pulse-slow"></div>
                     </div>
                 </div>
             </div>
@@ -373,6 +610,26 @@
                     </div>
                     <p class="text-sm mt-2">Southern Region</p>
                 </div>
+                <div class="weather-alert warning p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-snowflake text-blue-400 mr-2"></i>
+                            <span>Heavy Snowfall</span>
+                        </div>
+                        <span class="text-sm">2 Days</span>
+                    </div>
+                    <p class="text-sm mt-2">Eastern Mountains</p>
+                </div>
+                <div class="weather-alert danger p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-house-damage text-orange-500 mr-2"></i>
+                            <span>Earthquake</span>
+                        </div>
+                        <span class="text-sm">Recent</span>
+                    </div>
+                    <p class="text-sm mt-2">Western Coast</p>
+                </div>
             </div>
         </div>
     </div>
@@ -384,18 +641,27 @@
                 const response = await fetch('php/get_agency_info.php');
                 const data = await response.json();
                 
-                if (data.success) {
-                    const agency = data.data;
-                    document.getElementById('agencyName').textContent = agency.name;
-                    document.getElementById('agencyType').textContent = agency.type;
-                    document.getElementById('agencyContact').textContent = agency.contact;
-                    document.getElementById('agencyLocation').textContent = agency.location;
+                if (data.status === 'success') {
+                    document.getElementById('agencyName').textContent = data.agency.name;
+                    document.getElementById('agencyType').textContent = data.agency.type;
+                    document.getElementById('agencyContact').textContent = data.agency.contact;
+                    document.getElementById('agencyLocation').textContent = data.agency.location;
                     
-                    // Update resource counts
-                    if (agency.resources) {
-                        document.getElementById('resourceCount').textContent = 
-                            Object.values(agency.resources).reduce((sum, count) => sum + count, 0);
+                    // Set values for new fields if they exist in the data
+                    if (data.agency.headquarters) {
+                        document.getElementById('agencyHeadquarters').textContent = data.agency.headquarters;
                     }
+                    if (data.agency.established) {
+                        document.getElementById('agencyEstablished').textContent = data.agency.established;
+                    }
+                    if (data.agency.staffCount) {
+                        document.getElementById('agencyStaffCount').textContent = data.agency.staffCount;
+                    }
+                    if (data.agency.email) {
+                        document.getElementById('agencyEmail').textContent = data.agency.email;
+                    }
+                } else {
+                    console.error('Failed to load agency info:', data.message);
                 }
             } catch (error) {
                 console.error('Error loading agency info:', error);
@@ -404,56 +670,370 @@
 
         // Function to update agency status
         async function updateStatus() {
-            const statuses = ['Active', 'Standby', 'Emergency'];
-            const currentStatus = prompt('Update status to: ' + statuses.join(', '));
-            if (currentStatus && statuses.includes(currentStatus)) {
-                try {
-                    const response = await fetch('php/update_status.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ status: currentStatus })
+            const statuses = ['active', 'standby', 'emergency', 'offline', 'maintenance'];
+            const statusLabels = ['Active', 'Standby', 'Emergency', 'Offline', 'Maintenance'];
+            const statusColors = {
+                'active': 'bg-green-500',
+                'standby': 'bg-yellow-500',
+                'emergency': 'bg-red-500',
+                'offline': 'bg-gray-500',
+                'maintenance': 'bg-blue-500'
+            };
+            
+            // Get current status
+            const currentStatusText = document.querySelector('.status-indicator + span');
+            let currentStatus = currentStatusText ? currentStatusText.textContent.toLowerCase() : 'active';
+            
+            // Create custom dialog
+            const dialog = document.createElement('div');
+            dialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            dialog.innerHTML = `
+                <div class="glass-card p-6 w-full max-w-md">
+                    <h2 class="text-xl font-semibold mb-4">Update Agency Status</h2>
+                    <div class="grid grid-cols-1 gap-3 mb-4">
+                        ${statuses.map((status, index) => `
+                            <div class="status-option flex items-center p-3 rounded-lg cursor-pointer transition-all ${status === currentStatus ? 'selected-status' : ''}">
+                                <div class="flex-shrink-0 mr-3">
+                                    <span class="inline-block w-4 h-4 rounded-full ${statusColors[status]}"></span>
+                                </div>
+                                <div class="flex-grow">
+                                    <span class="font-medium">${statusLabels[index]}</span>
+                                </div>
+                                <div>
+                                    <input type="radio" name="status" value="${status}" class="form-radio h-5 w-5" ${status === currentStatus ? 'checked' : ''}>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Notes (optional)</label>
+                        <textarea id="status-notes" rows="2" 
+                                class="w-full rounded-lg bg-blue-800 bg-opacity-50 border-blue-600 text-white px-3 py-2"
+                                placeholder="Add notes about this status change..."></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button id="cancel-status" class="px-4 py-2 rounded-lg bg-blue-800 bg-opacity-50 hover:bg-opacity-70 transition-all">
+                            Cancel
+                        </button>
+                        <button id="update-status" class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition-all">
+                            Update Status
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+            
+            // Add custom styles for status options
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+                .status-option {
+                    background-color: rgba(15, 23, 42, 0.7);
+                    border: 1px solid transparent;
+                    transition: all 0.3s ease;
+                    margin-bottom: 8px;
+                    border-radius: 8px;
+                }
+                
+                .status-option:hover {
+                    background-color: rgba(30, 58, 138, 0.3);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+                
+                .status-option.selected-status {
+                    background-color: rgba(30, 58, 138, 0.5);
+                    border: 1px solid #3b82f6;
+                    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+                }
+            `;
+            document.head.appendChild(styleElement);
+            
+            // Add event listeners to status options for easier selection
+            dialog.querySelectorAll('.status-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    // Play click sound
+                    const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_b6117b2189.mp3?filename=click-21156.mp3');
+                    audio.volume = 0.5;
+                    audio.play().catch(e => console.error('Error playing click sound:', e));
+                    
+                    // Find the radio input within this option and check it
+                    const radio = option.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                    
+                    // Update visual selection - first remove all selection styling
+                    dialog.querySelectorAll('.status-option').forEach(opt => {
+                        opt.classList.remove('selected-status');
+                        // Force a repaint to avoid any transition issues
+                        void opt.offsetWidth;
                     });
+                    
+                    // Add selection styling to the clicked option only
+                    option.classList.add('selected-status');
+                });
+            });
+            
+            // Add event listeners for buttons
+            dialog.querySelector('#cancel-status').addEventListener('click', () => {
+                dialog.remove();
+            });
+            
+            dialog.querySelector('#update-status').addEventListener('click', async () => {
+                const selectedStatus = dialog.querySelector('input[name="status"]:checked').value;
+                const notes = dialog.querySelector('#status-notes').value;
+                
+                try {
+                    // Show loading state
+                    const updateButton = dialog.querySelector('#update-status');
+                    const originalText = updateButton.innerHTML;
+                    updateButton.innerHTML = '<span class="animate-pulse">Updating...</span>';
+                    updateButton.disabled = true;
+                    
+                    // Send update to server
+                    const response = await fetch(`php/update_status.php?status=${selectedStatus}&notes=${encodeURIComponent(notes)}`, {
+                        method: 'GET'
+                    });
+                    
                     const data = await response.json();
+                    
                     if (data.success) {
-                        alert('Status updated successfully');
-                        loadAgencyInfo(); // Refresh agency info
+                        // Update UI
+                        const statusIndicator = document.querySelector('.status-indicator');
+                        const statusText = document.querySelector('.status-indicator + span');
+                        
+                        if (statusIndicator && statusText) {
+                            // Remove all status classes
+                            statusIndicator.classList.remove('status-active', 'status-standby', 'status-emergency', 'status-offline', 'status-maintenance');
+                            // Add new status class
+                            statusIndicator.classList.add(`status-${selectedStatus}`);
+                            // Update text
+                            statusText.textContent = statusLabels[statuses.indexOf(selectedStatus)];
+                        }
+                        
+                        // Apply color effect to the screen based on status
+                        const effectDuration = applyStatusColorEffect(selectedStatus);
+                        
+                        // Play sound effect for status update
+                        playStatusSound(selectedStatus);
+                        
+                        // Show notification banner
+                        setTimeout(() => {
+                            showStatusNotification(selectedStatus, statusLabels[statuses.indexOf(selectedStatus)], notes);
+                        }, effectDuration);
+                        
+                        // Close dialog
+                        dialog.remove();
                     } else {
-                        alert('Failed to update status: ' + data.error);
+                        alert('Failed to update status: ' + (data.error || 'Unknown error'));
+                        updateButton.innerHTML = originalText;
+                        updateButton.disabled = false;
                     }
                 } catch (error) {
                     console.error('Error updating status:', error);
-                    alert('Failed to update status');
+                    alert('Failed to update status. Please try again.');
+                    const updateButton = dialog.querySelector('#update-status');
+                    updateButton.innerHTML = 'Update Status';
+                    updateButton.disabled = false;
                 }
-            }
+            });
+            
+            // Close dialog on click outside
+            dialog.addEventListener('click', (event) => {
+                if (event.target === dialog) {
+                    dialog.remove();
+                }
+            });
         }
-
+        
+        // Function to apply color effect based on status
+        function applyStatusColorEffect(status) {
+            // Remove any existing status effect
+            document.body.classList.remove(
+                'status-effect-active',
+                'status-effect-standby',
+                'status-effect-emergency',
+                'status-effect-offline',
+                'status-effect-maintenance'
+            );
+            
+            // Create flash effect that lasts longer
+            const flash = document.createElement('div');
+            flash.className = `status-flash status-flash-${status}`;
+            document.body.appendChild(flash);
+            
+            // Create multiple flashes for a toggling effect
+            let flashCount = 0;
+            const maxFlashes = 3;
+            const flashInterval = setInterval(() => {
+                flashCount++;
+                if (flashCount >= maxFlashes) {
+                    clearInterval(flashInterval);
+                    // Remove the last flash
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 1000);
+                    return;
+                }
+                
+                // Toggle visibility for flashing effect
+                flash.style.opacity = flash.style.opacity === '0.3' ? '0' : '0.3';
+            }, 500); // Toggle every 500ms
+            
+            // Return the total duration of the effect
+            return (maxFlashes * 500) + 1000; // Total toggle time + final fade
+        }
+        
+        // Function to play status sound
+        function playStatusSound(status) {
+            // Create audio element dynamically to ensure it plays
+            const audio = new Audio();
+            
+            switch(status) {
+                case 'active':
+                    audio.src = 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_c518b4e807.mp3?filename=success-1-6297.mp3';
+                    break;
+                case 'standby':
+                    audio.src = 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8a410a9c5.mp3?filename=notification-sound-7062.mp3';
+                    break;
+                case 'emergency':
+                    audio.src = 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_12b0c19487.mp3?filename=error-call-to-attention-129258.mp3';
+                    break;
+                case 'offline':
+                    audio.src = 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_942422d4e3.mp3?filename=interface-124464.mp3';
+                    break;
+                case 'maintenance':
+                    audio.src = 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d1a8d6dc0f.mp3?filename=click-124467.mp3';
+                    break;
+                default:
+                    audio.src = 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_b6117b2189.mp3?filename=click-21156.mp3';
+            }
+            
+            // Set volume and play
+            audio.volume = 0.7;
+            audio.play().catch(e => console.error('Error playing sound:', e));
+        }
+        
+        // Function to show status notification
+        function showStatusNotification(status, statusLabel, notes) {
+            const statusColors = {
+                'active': 'bg-green-600',
+                'standby': 'bg-yellow-600',
+                'emergency': 'bg-red-600',
+                'offline': 'bg-gray-600',
+                'maintenance': 'bg-blue-600'
+            };
+            
+            // Create notification
+            const notification = document.createElement('div');
+            notification.className = `fixed top-0 left-0 w-full ${statusColors[status]} text-white text-center py-3 z-50 shadow-lg`;
+            notification.innerHTML = `
+                <div class="flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span class="font-medium">Status updated to ${statusLabel} - All connected agencies have been notified</span>
+                </div>
+            `;
+            document.body.prepend(notification);
+            
+            // Also show an alert with the same message
+            let alertMessage = `Status updated to ${statusLabel} - All connected agencies have been notified`;
+            if (notes && notes.trim() !== '') {
+                alertMessage += `\n\nNotes: ${notes}`;
+            }
+            
+            setTimeout(() => {
+                alert(alertMessage);
+            }, 1000);
+            
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 5000);
+        }
+        
         // Function to declare emergency
         async function declareEmergency() {
-            const confirmed = confirm('Are you sure you want to declare an emergency? This will alert all connected agencies.');
+            const confirmed = confirm('⚠️ EMERGENCY DECLARATION PROTOCOL ⚠️\n\nYou are about to initiate a critical emergency response sequence that will:\n\n• Activate the nationwide emergency alert system\n• Dispatch immediate SOS to all connected rescue agencies\n• Mobilize first responders to your location\n• Send real-time updates to emergency coordination centers\n\nConfirm only if this is a genuine emergency situation requiring immediate response.');
             if (confirmed) {
+                // Get emergency details from the page
+                const agencyName = document.getElementById('agencyName').textContent;
+                const agencyLocation = document.getElementById('agencyLocation').textContent;
+                
+                // Toggle emergency mode UI
+                document.body.classList.toggle('emergency-mode');
+                startEmergencyFlash();
+                
                 try {
-                    const response = await fetch('php/declare_emergency.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ 
-                            type: 'emergency',
-                            location: document.getElementById('agencyLocation').textContent
-                        })
+                    // Show loading state
+                    const emergencyButton = document.querySelector('button[onclick="declareEmergency()"]');
+                    const originalText = emergencyButton.innerHTML;
+                    emergencyButton.innerHTML = '<span class="animate-pulse">Sending SOS...</span>';
+                    emergencyButton.disabled = true;
+                    
+                    // Send emergency declaration to server
+                    const response = await fetch('php/declare_emergency.php?type=emergency&description=' + 
+                        encodeURIComponent('SOS Emergency declared by ' + agencyName) + 
+                        '&location=' + encodeURIComponent(agencyLocation || 'Unknown Location') + 
+                        '&severity=critical', {
+                        method: 'GET'
                     });
+                    
                     const data = await response.json();
+                    
                     if (data.success) {
-                        alert('Emergency declared. Notifying all connected agencies...');
-                        window.location.href = 'emergency-coordination.html';
+                        // Add emergency notification to the page
+                        const notification = document.createElement('div');
+                        notification.className = 'fixed top-0 left-0 w-full bg-red-600 text-white text-center py-2 z-50 emergency-notification';
+                        notification.innerHTML = `
+                            <div class="flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <span>EMERGENCY MODE ACTIVE - SOS SENT</span>
+                                <button onclick="toggleEmergencyMode()" class="ml-4 bg-white text-red-600 px-2 py-1 rounded text-sm">Toggle Emergency Mode</button>
+                            </div>
+                        `;
+                        document.body.prepend(notification);
+                        
+                        // Reset button
+                        emergencyButton.innerHTML = originalText;
+                        emergencyButton.disabled = false;
+                        
+                        // Show success message
+                        if (data.email_sent) {
+                            alert('SOS Emergency declared! Email notification sent successfully.');
+                        } else {
+                            alert('SOS Emergency declared! However, there was an issue sending the email notification.');
+                        }
                     } else {
-                        alert('Failed to declare emergency: ' + data.error);
+                        // Reset emergency mode if failed
+                        document.body.classList.remove('emergency-mode');
+                        stopEmergencyFlash();
+                        
+                        // Reset button
+                        emergencyButton.innerHTML = originalText;
+                        emergencyButton.disabled = false;
+                        
+                        // Show error message
+                        alert('Failed to declare emergency: ' + (data.error || 'Unknown error'));
                     }
                 } catch (error) {
                     console.error('Error declaring emergency:', error);
-                    alert('Failed to declare emergency');
+                    
+                    // Reset emergency mode if failed
+                    document.body.classList.remove('emergency-mode');
+                    stopEmergencyFlash();
+                    
+                    // Reset button state
+                    const emergencyButton = document.querySelector('button[onclick="declareEmergency()"]');
+                    emergencyButton.innerHTML = 'Declare Emergency';
+                    emergencyButton.disabled = false;
+                    
+                    alert('Failed to declare emergency. Please try again.');
                 }
             }
         }
@@ -482,7 +1062,7 @@
 
         // Function to view all training
         function viewAllTraining() {
-            window.location.href = 'training.html';
+            window.open('https://nidm.gov.in/online.asp', '_blank');
         }
 
         // Load weather alerts
@@ -501,6 +1081,9 @@
 
         // Initialize weather alerts
         loadWeatherAlerts();
+        
+        // Load activities
+        loadActivities();
 
         // Load initial data
         document.addEventListener('DOMContentLoaded', function() {
@@ -543,22 +1126,206 @@
         // Animate count up
         function animateCount(elementId, target) {
             const element = document.getElementById(elementId);
-            const start = parseInt(element.textContent);
-            const duration = 1000;
-            const steps = 20;
-            const increment = (target - start) / steps;
-            let current = start;
-            
+            let current = 0;
+            const increment = target / 50;
             const timer = setInterval(() => {
                 current += increment;
-                element.textContent = Math.round(current);
-                
-                if ((increment > 0 && current >= target) || 
-                    (increment < 0 && current <= target)) {
-                    element.textContent = target;
+                if (current >= target) {
                     clearInterval(timer);
+                    current = target;
                 }
-            }, duration / steps);
+                element.textContent = current.toFixed(1);
+            }, 20);
+        }
+        
+        // Animate metrics when clicked
+        function animateMetrics(element) {
+            // Add flash animation
+            element.classList.add('animate-flash');
+            
+            // Animate progress bar
+            const progressBar = element.querySelector('.progress-fill');
+            progressBar.classList.add('animate-progress');
+            
+            // Remove animations after they complete
+            setTimeout(() => {
+                element.classList.remove('animate-flash');
+                progressBar.classList.remove('animate-progress');
+            }, 1000);
+        }
+        
+        // Load activities from backend
+        async function loadActivities() {
+            try {
+                const response = await fetch('php/get_activities.php');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    const activitiesContainer = document.getElementById('activities-container');
+                    activitiesContainer.innerHTML = '';
+                    
+                    data.activities.forEach(activity => {
+                        const activityElement = document.createElement('div');
+                        activityElement.className = 'flex items-start space-x-3 transform transition-all duration-300 hover:translate-x-2';
+                        
+                        activityElement.innerHTML = `
+                            <div class="w-8 h-8 rounded-full ${activity.bg_color} flex items-center justify-center flex-shrink-0">
+                                <i class="fas ${activity.icon} ${activity.icon_color}"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">${activity.title}</p>
+                                <p class="text-sm text-gray-400">${activity.description}</p>
+                                <p class="text-xs text-gray-500 mt-1">${activity.time_ago}</p>
+                            </div>
+                        `;
+                        
+                        activitiesContainer.appendChild(activityElement);
+                    });
+                } else {
+                    console.error('Failed to load activities:', data.message);
+                }
+            } catch (error) {
+                console.error('Error loading activities:', error);
+            }
+        }
+        
+        // Refresh activities
+        function refreshActivities() {
+            loadActivities();
+        }
+        
+        // Emergency mode functions
+        let emergencyFlashInterval = null;
+        
+        function startEmergencyFlash() {
+            // Only start if not already running
+            if (emergencyFlashInterval === null) {
+                // Add the emergency class to body for the red overlay effect
+                document.body.classList.add('emergency-mode');
+                
+                // Add emergency stop button if it doesn't exist
+                if (!document.querySelector('.emergency-stop-btn')) {
+                    const stopButton = document.createElement('button');
+                    stopButton.className = 'emergency-stop-btn';
+                    stopButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 0118.364 5.636z" />
+                        </svg>
+                        STOP<br>EMERGENCY
+                    `;
+                    stopButton.addEventListener('click', stopEmergencyFlash);
+                    document.body.appendChild(stopButton);
+                }
+                
+                // Create audio context for alarm sound (if needed)
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Play emergency sound
+                function playEmergencyBeep() {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    // Use a more urgent sound pattern
+                    oscillator.type = 'square'; // More harsh sound
+                    oscillator.frequency.value = 880; // Higher pitch
+                    gainNode.gain.value = 0.15; // Slightly louder
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.start();
+                    
+                    // Short beep
+                    setTimeout(() => {
+                        oscillator.stop();
+                    }, 250);
+                    
+                    // Double beep effect
+                    setTimeout(() => {
+                        const oscillator2 = audioContext.createOscillator();
+                        oscillator2.type = 'square';
+                        oscillator2.frequency.value = 660; // Lower second beep
+                        oscillator2.connect(gainNode);
+                        oscillator2.start();
+                        setTimeout(() => {
+                            oscillator2.stop();
+                        }, 250);
+                    }, 350);
+                }
+                
+                // Play initial beep
+                playEmergencyBeep();
+                
+                // Set interval for repeated beeps (every 4 seconds)
+                emergencyFlashInterval = setInterval(() => {
+                    playEmergencyBeep();
+                }, 4000);
+            }
+        }
+        
+        function stopEmergencyFlash() {
+            // Clear the interval if it exists
+            if (emergencyFlashInterval !== null) {
+                clearInterval(emergencyFlashInterval);
+                emergencyFlashInterval = null;
+            }
+            
+            // Remove emergency class
+            document.body.classList.remove('emergency-mode');
+            
+            // Remove emergency notification if it exists
+            const notification = document.querySelector('.emergency-notification');
+            if (notification) {
+                notification.remove();
+            }
+            
+            // Remove emergency stop button if it exists
+            const stopButton = document.querySelector('.emergency-stop-btn');
+            if (stopButton) {
+                stopButton.remove();
+            }
+            
+            // Show confirmation message
+            const confirmationMessage = document.createElement('div');
+            confirmationMessage.className = 'fixed top-0 left-0 w-full bg-green-600 text-white text-center py-2 z-50';
+            confirmationMessage.innerHTML = `
+                <div class="flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Emergency mode deactivated</span>
+                </div>
+            `;
+            document.body.prepend(confirmationMessage);
+            
+            // Remove confirmation after 3 seconds
+            setTimeout(() => {
+                confirmationMessage.remove();
+            }, 3000);
+        }
+        
+        function toggleEmergencyMode() {
+            if (document.body.classList.contains('emergency-mode')) {
+                stopEmergencyFlash();
+            } else {
+                startEmergencyFlash();
+                
+                // Add emergency notification if it doesn't exist
+                if (!document.querySelector('.emergency-notification')) {
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-0 left-0 w-full bg-red-600 text-white text-center py-2 z-50 emergency-notification';
+                    notification.innerHTML = `
+                        <div class="flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <span>EMERGENCY MODE ACTIVE</span>
+                            <button onclick="toggleEmergencyMode()" class="ml-4 bg-white text-red-600 px-2 py-1 rounded text-sm">Toggle Emergency Mode</button>
+                        </div>
+                    `;
+                    document.body.prepend(notification);
+                }
+            }
         }
     </script>
 </body>
