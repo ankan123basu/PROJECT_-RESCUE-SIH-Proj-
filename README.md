@@ -2,8 +2,6 @@
 
 A comprehensive web-based platform for tracking and managing emergency resources across multiple Indian cities. The system provides real-time tracking of emergency vehicles, interactive map interfaces, incident reporting, and comprehensive resource management.
 
-![RESCUE Logo](assets/images/DeWatermark.ai_1744543533742.png)
-
 ## 🚨 Key Features
 
 ### Real-time Tracking & Visualization
