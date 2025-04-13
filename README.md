@@ -1,4 +1,18 @@
 # RESCUE - Emergency Response Tracking System
+![Screenshot 2025-04-13 173018](https://github.com/user-attachments/assets/21215697-2e2b-4aa2-bba4-02362d97ba71)
+![Screenshot 2025-04-13 175508](https://github.com/user-attachments/assets/df9df6e8-c27f-4ef1-91cf-cf206ef36569)
+![Screenshot 2025-04-13 173036](https://github.com/user-attachments/assets/514096a9-1f90-4789-8e0b-fbda2a57ddff)
+![Screenshot 2025-04-13 173448](https://github.com/user-attachments/assets/a55c8745-2293-483d-ba4b-94dfd743d329)
+![Screenshot 2025-04-13 174734](https://github.com/user-attachments/assets/3e68acc2-f19f-4d97-bd2d-a3ce1c5caee5)
+![Screenshot 2025-04-13 174841](https://github.com/user-attachments/assets/c973dff3-5cc7-4ce7-918c-6f5e3e3a0cb0)
+![Screenshot 2025-04-13 174503](https://github.com/user-attachments/assets/ed2806d8-0959-4c95-9054-d59660f5ccb7)
+![Screenshot 2025-04-13 174750](https://github.com/user-attachments/assets/8a1790b3-21f0-4c4c-b210-52b97de83963)
+![Screenshot 2025-04-13 174442](https://github.com/user-attachments/assets/2befd33d-f269-486b-9401-52297f395703)
+![Screenshot 2025-04-13 174812](https://github.com/user-attachments/assets/ca2cf313-4828-41fd-bb10-12e5abe14209)
+![Screenshot 2025-04-13 174418](https://github.com/user-attachments/assets/f69044be-dd19-428a-8dfc-e392d9f18115)
+![Screenshot 2025-04-13 174801](https://github.com/user-attachments/assets/45a4c767-2bdb-4b1a-b26d-4f9ae6af0fe7)
+![Screenshot 2025-04-13 173059](https://github.com/user-attachments/assets/4467db43-e173-4bc8-a25a-7db3a0b9ca65)
+![Screenshot 2025-04-13 173120](https://github.com/user-attachments/assets/785efe8a-19df-44a4-8c6f-9c41699a44c9)
 
 A comprehensive web-based platform for tracking and managing emergency resources across multiple Indian cities. The system provides real-time tracking of emergency vehicles, interactive map interfaces, incident reporting, and comprehensive resource management.
 
