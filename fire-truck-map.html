@@ -87,150 +87,164 @@
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-red-900 to-gray-900 text-white font-sans min-h-screen">
     <!-- Navigation -->
-    <nav class="glass-effect-dark sticky top-0 z-50">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                            <i class="fas fa-fire-truck text-white text-xl"></i>
+    <nav class="glass-card p-4 mb-4 rounded-none">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+                <a href="dashboard.html" class="text-xl font-bold bg-gradient-to-r from-red-400 to-amber-500 bg-clip-text text-transparent">Rescue Coordination</a>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="agency-dashboard.html" class="hover:text-red-300">Dashboard</a></li>
+                        <li><a href="ambulance-tracking.html" class="hover:text-red-300">Ambulance Tracking</a></li>
+                        <li><a href="helicopter-tracking.html" class="hover:text-red-300">Helicopter Tracking</a></li>
+                        <li><a href="fire-truck-map.html" class="hover:text-red-300 border-b-2 border-red-400">Fire Truck Tracking</a></li>
+                        <li><a href="emergency-coordination.html" class="hover:text-red-300">Emergency Coordination</a></li>
+                        <li><a href="analytics.html" class="hover:text-red-300">Analytics</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="relative">
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-1 rounded-full hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-800 focus:ring-white">
+                        <span class="sr-only">View notifications</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-amber-400 ring-2 ring-red-900"></span>
+                    </button>
+                    
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2 focus:outline-none" aria-expanded="false" aria-haspopup="true">
+                            <img class="h-8 w-8 rounded-full" src="assets/images/d3c09cde-dcda-4267-a7a0-d6b4668f08e0.jpg" alt="Ankan Basu">
+                            <span>Ankan Basu</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Profile dropdown menu -->
+                        <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-red-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-red-700" role="menuitem">Your Profile</a>
+                            <a href="settings.html" class="block px-4 py-2 text-sm text-white hover:bg-red-700" role="menuitem">Settings</a>
+                            <a href="index.html" class="block px-4 py-2 text-sm text-white hover:bg-red-700" role="menuitem">Logout</a>
                         </div>
                     </div>
-                    <div class="ml-4 flex items-baseline space-x-4">
-                        <a href="dashboard.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Dashboard</a>
-                        <a href="ambulance-tracking.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Ambulance</a>
-                        <a href="helicopter-tracking.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Helicopter</a>
-                        <a href="fire-truck-map.html" class="px-3 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-red-600 to-red-700 text-white">Fire Trucks</a>
-                        <a href="incidents.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200">Incidents</a>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button class="notification-btn" title="Notifications" aria-label="View notifications">
-                        <i class="fas fa-bell"></i>
-                    </button>
-                    <button class="profile-btn" title="Profile" aria-label="View profile">
-                        <i class="fas fa-user"></i>
-                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
     <div class="container mx-auto p-4">
-        <div class="glass-card p-4 mb-4">
+        <div class="glass-card p-6 mb-6 rounded-xl">
+            <h1 class="text-2xl font-bold mb-4 bg-gradient-to-r from-red-400 to-amber-500 bg-clip-text text-transparent">Fire Truck Tracking System</h1>
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div class="col-span-1">
-                    <label for="fireTruckType" class="block text-sm mb-2">Fire Truck Type</label>
-                    <select id="fireTruckType" class="custom-select w-full bg-red-700 text-white rounded-lg p-2 border border-red-500/30" title="Select fire truck type">
-                        <option class="bg-blue-600">All Types</option>
-                        <option class="bg-red-600 text-white">Pumper</option>
-                        <option class="bg-red-600 text-white">Ladder</option>
-                        <option class="bg-red-600 text-white">Rescue</option>
-                        <option class="bg-red-600 text-white">Tanker</option>
+                    <label class="block text-sm mb-1">Fire Truck Type</label>
+                    <select id="fireTruckType" class="w-full bg-red-800 rounded-lg p-2 border border-red-600" title="Select fire truck type">
+                        <option value="all" class="bg-red-300 text-red-900">All Types</option>
+                        <option value="pumper" class="bg-red-300 text-red-900">Pumper</option>
+                        <option value="ladder" class="bg-red-300 text-red-900">Ladder</option>
+                        <option value="rescue" class="bg-red-300 text-red-900">Rescue</option>
+                        <option value="tanker" class="bg-red-300 text-red-900">Tanker</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="status" class="block text-sm mb-2">Status</label>
-                    <select id="status" class="custom-select w-full bg-red-700 text-white rounded-lg p-2 border border-red-500/30" title="Select fire truck status">
-                        <option class="bg-blue-600">All Statuses</option>
-                        <option class="bg-red-600 text-white">Available</option>
-                        <option class="bg-red-600 text-white">On Call</option>
-                        <option class="bg-red-600 text-white">Responding</option>
-                        <option class="bg-red-600 text-white">At Scene</option>
+                    <label class="block text-sm mb-1">Status</label>
+                    <select id="status" class="w-full bg-red-800 rounded-lg p-2 border border-red-600" title="Select fire truck status">
+                        <option value="all" class="bg-red-300 text-red-900">All Statuses</option>
+                        <option value="available" class="bg-red-300 text-red-900">Available</option>
+                        <option value="responding" class="bg-red-300 text-red-900">Responding</option>
+                        <option value="on call" class="bg-red-300 text-red-900">On Call</option>
+                        <option value="busy" class="bg-red-300 text-red-900">Busy</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="waterCapacity" class="block text-sm mb-2">Water Capacity</label>
-                    <select id="waterCapacity" class="custom-select w-full bg-red-700 text-white rounded-lg p-2 border border-red-500/30" title="Select water capacity">
-                        <option class="bg-blue-600">Any Capacity</option>
-                        <option class="bg-red-600 text-white">1000+ Gallons</option>
-                        <option class="bg-red-600 text-white">2000+ Gallons</option>
-                        <option class="bg-red-600 text-white">5000+ Gallons</option>
+                    <label class="block text-sm mb-1">Station</label>
+                    <select id="station" class="w-full bg-red-800 rounded-lg p-2 border border-red-600" title="Select fire station">
+                        <option value="all" class="bg-red-300 text-red-900">All Stations</option>
+                        <option value="delhi" class="bg-red-300 text-red-900">Delhi</option>
+                        <option value="mumbai" class="bg-red-300 text-red-900">Mumbai</option>
+                        <option value="kolkata" class="bg-red-300 text-red-900">Kolkata</option>
+                        <option value="chennai" class="bg-red-300 text-red-900">Chennai</option>
+                        <option value="bangalore" class="bg-red-300 text-red-900">Bangalore</option>
+                        <option value="hyderabad" class="bg-red-300 text-red-900">Hyderabad</option>
+                        <option value="ahmedabad" class="bg-red-300 text-red-900">Ahmedabad</option>
+                        <option value="pune" class="bg-red-300 text-red-900">Pune</option>
+                        <option value="jaipur" class="bg-red-300 text-red-900">Jaipur</option>
+                        <option value="lucknow" class="bg-red-300 text-red-900">Lucknow</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="fireZone" class="block text-sm mb-2">Fire Zone</label>
-                    <select id="fireZone" class="custom-select w-full bg-red-700 text-white rounded-lg p-2 border border-red-500/30" title="Select fire zone">
-                        <option class="bg-blue-600">All Zones</option>
-                        <option class="bg-red-600 text-white">Urban</option>
-                        <option class="bg-red-600 text-white">Rural</option>
-                        <option class="bg-red-600 text-white">Forest</option>
-                        <option class="bg-red-600 text-white">Industrial</option>
+                    <label class="block text-sm mb-1">Response Time</label>
+                    <select id="response" class="w-full bg-red-800 rounded-lg p-2 border border-red-600" title="Select response time">
+                        <option value="all" class="bg-red-300 text-red-900">All Times</option>
+                        <option value="0-5" class="bg-red-300 text-red-900">Under 5 min</option>
+                        <option value="5-10" class="bg-red-300 text-red-900">5-10 min</option>
+                        <option value="10-20" class="bg-red-300 text-red-900">10-20 min</option>
+                        <option value="20-30" class="bg-red-300 text-red-900">20-30 min</option>
+                        <option value="Over 30" class="bg-red-300 text-red-900">Over 30 min</option>
                     </select>
                 </div>
                 <div class="col-span-1 flex items-end space-x-2">
-                    <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-lg flex-1" title="Dispatch fire truck">
+                    <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 px-4 py-2 rounded-lg flex-1" title="Dispatch fire truck">
                         Dispatch
                     </button>
-                    <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg flex-1" title="Report emergency">
+                    <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-2 rounded-lg flex-1" title="Report emergency">
                         Emergency
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            <div class="glass-card dark p-4 rounded-lg hover-scale">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="glass-card p-4 rounded-xl">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-300">Total Fire Trucks</p>
-                        <h3 class="text-2xl font-bold">36</h3>
+                        <p class="text-sm text-red-200">Total Fire Trucks</p>
+                        <h3 class="text-2xl font-bold">14</h3>
                     </div>
-                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                        <i class="fas fa-truck-moving text-white text-xl"></i>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <div class="progress-bar">
-                        <div class="progress-bar-fill success w-90"></div>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-red-700/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
                     </div>
                 </div>
             </div>
-            <div class="glass-card dark p-4 rounded-lg hover-scale">
+            <div class="glass-card p-4 rounded-xl">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-300">Available</p>
-                        <h3 class="text-2xl font-bold">24</h3>
-                    </div>
-                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center shadow-lg">
-                        <i class="fas fa-check-circle text-white text-xl"></i>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <div class="progress-bar">
-                        <div class="progress-bar-fill success w-65"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass-card dark p-4 rounded-lg hover-scale">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-300">Responding</p>
+                        <p class="text-sm text-green-200">Available</p>
                         <h3 class="text-2xl font-bold">8</h3>
                     </div>
-                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 flex items-center justify-center shadow-lg">
-                        <i class="fas fa-clock text-white text-xl"></i>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <div class="progress-bar">
-                        <div class="progress-bar-fill warning w-25"></div>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-green-600/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
                     </div>
                 </div>
             </div>
-            <div class="glass-card dark p-4 rounded-lg hover-scale">
+            <div class="glass-card p-4 rounded-xl">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-300">Busy</p>
+                        <p class="text-sm text-yellow-200">Responding</p>
                         <h3 class="text-2xl font-bold">4</h3>
                     </div>
-                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                        <i class="fas fa-exclamation-circle text-white text-xl"></i>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
                 </div>
-                <div class="mt-2">
-                    <div class="progress-bar">
-                        <div class="progress-bar-fill danger w-10"></div>
+            </div>
+            <div class="glass-card p-4 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-red-200">Busy</p>
+                        <h3 class="text-2xl font-bold">2</h3>
+                    </div>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-red-600/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -260,79 +274,464 @@
         // Initialize map
         const map = initMap('map');
         
+        // Global variables to store fire truck data and markers
+        let allFireTrucks = [];
+        let fireTruckMarkers = [];
+
         // Load and display fire trucks
         async function initializeFireTruckTracking() {
             try {
                 // Load fire truck data
-                const fireTrucks = await loadAgencies('fire_truck');
+                const fireTrucks = await loadFireTrucks();
                 
                 // Display fire trucks on the map
-                displayAgencies(map, fireTrucks, 'fire_truck');
+                displayFireTrucksOnMap(fireTrucks);
+                
+                // Update KPI cards
+                updateKPICards();
+                
+                // Set up filters
+                setupFilters();
                 
                 // Set up button event listeners
-                document.querySelector('button[title="Show hydrants"]').addEventListener('click', function() {
-                    addFacilities(map, 'hydrants');
-                });
+                document.querySelector('button[title="Dispatch fire truck"]').addEventListener('click', handleDispatch);
+                document.querySelector('button[title="Report emergency"]').addEventListener('click', handleEmergency);
                 
-                document.querySelector('button[title="Show fire zones"]').addEventListener('click', function() {
-                    // In a real app, this would load fire zone data from an API
-                    alert('Fire zone data would be loaded from a GIS API in a production environment');
-                });
-                
-                document.querySelector('button[title="Show heat map"]').addEventListener('click', function() {
-                    // In a real app, this would load heat map data
-                    alert('Heat map data would be loaded from a fire monitoring API in a production environment');
-                });
-                
-                // Set up filter listeners
-                const fireTruckType = document.getElementById('fireTruckType');
-                if (fireTruckType) {
-                    fireTruckType.addEventListener('change', function() {
-                        // In a real app, this would filter based on truck types
-                        alert('Fire truck type filtering would be implemented in a production environment');
-                    });
-                }
-                
-                const fireZone = document.getElementById('fireZone');
-                if (fireZone) {
-                    fireZone.addEventListener('change', function() {
-                        const selectedZone = this.value;
-                        if (selectedZone === 'All Zones') {
-                            displayAgencies(map, fireTrucks, 'fire_truck');
-                        } else {
-                            // In a real app, this would filter based on zones
-                            alert(`Fire trucks in ${selectedZone} zone would be displayed in a production environment`);
-                        }
-                    });
-                }
-                
-                // Set up dispatch button
-                document.querySelector('button[title="Dispatch fire truck"]').addEventListener('click', function() {
-                    // In a real app, this would open a dispatch interface
-                    alert('Fire truck dispatch interface would open in a production environment');
-                });
-                
-                // Set up emergency button
-                document.querySelector('button[title="Report emergency"]').addEventListener('click', function() {
-                    // In a real app, this would open an emergency reporting interface
-                    alert('Emergency reporting interface would open in a production environment');
-                });
-                
-                // Add fire stations to the map
-                addFacilities(map, 'fire_stations');
+                console.log('Fire truck tracking system initialized successfully');
             } catch (error) {
-                console.error('Error initializing fire truck tracking:', error);
+                console.error('Error initializing fire truck tracking system:', error);
             }
         }
-
+        
+        // Function to initialize the map
+        function initMap(containerId) {
+            // Center the map on India (coordinates for central India)
+            const map = L.map(containerId).setView([22.5937, 78.9629], 5);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+            
+            return map;
+        }
+        
+        // Function to load fire truck data
+        async function loadFireTrucks() {
+            try {
+                // In a real application, this would be an API call
+                // For demonstration, we'll use mock data for Indian cities with correct coordinates
+                allFireTrucks = [
+                    // Delhi
+                    { id: 'F001', name: 'Delhi Fire Brigade Unit 1', type: 'pumper', status: 'available', station: 'delhi', responseTime: 5, lat: 28.6139, lng: 77.2090, lastUpdate: '3 mins ago' },
+                    // Mumbai
+                    { id: 'F002', name: 'Mumbai Fire Service', type: 'ladder', status: 'responding', station: 'mumbai', responseTime: 7, lat: 19.0760, lng: 72.8777, lastUpdate: '5 mins ago' },
+                    // Kolkata (West Bengal)
+                    { id: 'F003', name: 'Kolkata Fire Response', type: 'rescue', status: 'on call', station: 'kolkata', responseTime: 10, lat: 22.5726, lng: 88.3639, lastUpdate: '8 mins ago' },
+                    // Chennai
+                    { id: 'F004', name: 'Chennai Fire Department', type: 'tanker', status: 'busy', station: 'chennai', responseTime: 15, lat: 13.0827, lng: 80.2707, lastUpdate: '12 mins ago' },
+                    // Bangalore
+                    { id: 'F005', name: 'Bangalore Fire Force', type: 'pumper', status: 'available', station: 'bangalore', responseTime: 4, lat: 12.9716, lng: 77.5946, lastUpdate: '2 mins ago' },
+                    // Hyderabad
+                    { id: 'F006', name: 'Hyderabad Fire Rescue', type: 'ladder', status: 'available', station: 'hyderabad', responseTime: 6, lat: 17.3850, lng: 78.4867, lastUpdate: '4 mins ago' },
+                    // Ahmedabad
+                    { id: 'F007', name: 'Ahmedabad Fire Brigade', type: 'rescue', status: 'responding', station: 'ahmedabad', responseTime: 8, lat: 23.0225, lng: 72.5714, lastUpdate: '7 mins ago' },
+                    // Pune
+                    { id: 'F008', name: 'Pune Fire Services', type: 'tanker', status: 'on call', station: 'pune', responseTime: 11, lat: 18.5204, lng: 73.8567, lastUpdate: '10 mins ago' },
+                    // Jaipur
+                    { id: 'F009', name: 'Jaipur Fire Department', type: 'pumper', status: 'available', station: 'jaipur', responseTime: 5, lat: 26.9124, lng: 75.7873, lastUpdate: '3 mins ago' },
+                    // Lucknow (UP)
+                    { id: 'F010', name: 'Lucknow Fire Brigade', type: 'ladder', status: 'responding', station: 'lucknow', responseTime: 9, lat: 26.8467, lng: 80.9462, lastUpdate: '8 mins ago' },
+                    // Chandigarh (Punjab)
+                    { id: 'F011', name: 'Chandigarh Fire Unit', type: 'rescue', status: 'available', station: 'chandigarh', responseTime: 6, lat: 30.7333, lng: 76.7794, lastUpdate: '4 mins ago' },
+                    // Amritsar (Punjab)
+                    { id: 'F012', name: 'Amritsar Fire Service', type: 'pumper', status: 'available', station: 'amritsar', responseTime: 5, lat: 31.6340, lng: 74.8723, lastUpdate: '3 mins ago' },
+                    // Varanasi (UP)
+                    { id: 'F013', name: 'Varanasi Fire Department', type: 'tanker', status: 'on call', station: 'varanasi', responseTime: 12, lat: 25.3176, lng: 82.9739, lastUpdate: '11 mins ago' },
+                    // Patna (Bihar)
+                    { id: 'F014', name: 'Patna Fire Brigade', type: 'ladder', status: 'responding', station: 'patna', responseTime: 10, lat: 25.5941, lng: 85.1376, lastUpdate: '9 mins ago' }
+                ];
+                return allFireTrucks;
+            } catch (error) {
+                console.error('Error loading fire truck data:', error);
+                return [];
+            }
+        }
+        
+        // Function to clear all markers from the map
+        function clearMarkers() {
+            fireTruckMarkers.forEach(marker => {
+                map.removeLayer(marker);
+            });
+            fireTruckMarkers = [];
+        }
+        
+        // Function to display fire trucks on the map
+        function displayFireTrucksOnMap(fireTrucks) {
+            // Clear existing markers
+            clearMarkers();
+            
+            fireTrucks.forEach(truck => {
+                // Create custom HTML icon for the fire truck
+                const customIcon = L.divIcon({
+                    className: 'custom-firetruck-icon',
+                    html: `<img src="assets/images/paw-patrol-ultimate-rescue-fire-truck.webp" alt="Fire Truck" style="width:40px; height:40px; border-radius:5px;">`,
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 20],
+                    popupAnchor: [0, -20]
+                });
+                
+                // Create marker with the custom icon
+                const marker = L.marker([truck.lat, truck.lng], {
+                    icon: customIcon
+                }).addTo(map);
+                
+                // Add popup with fire truck information
+                marker.bindPopup(`
+                    <div class="p-3 bg-red-100 rounded-lg text-gray-900 shadow-lg">
+                        <h3 class="font-bold text-red-800 text-lg">${truck.name}</h3>
+                        <div class="mt-2 text-sm">
+                            <p><strong>Station:</strong> ${truck.station}</p>
+                            <p><strong>ID:</strong> ${truck.id}</p>
+                            <p><strong>Type:</strong> ${truck.type}</p>
+                            <p><strong>Status:</strong> <span class="font-semibold ${getStatusColor(truck.status)}">${truck.status}</span></p>
+                            <p><strong>Response Time:</strong> ${truck.responseTime} min</p>
+                            <p><strong>Last Update:</strong> ${truck.lastUpdate}</p>
+                        </div>
+                    </div>
+                `);
+                
+                // Store marker reference
+                fireTruckMarkers.push(marker);
+                
+                // Simulate movement for real-time effect
+                simulateMovement(marker, truck);
+            });
+        }
+        
+        // Helper function to get color class based on status
+        function getStatusColor(status) {
+            switch(status) {
+                case 'available': return 'text-green-700';
+                case 'responding': return 'text-yellow-700';
+                case 'on call': return 'text-blue-700';
+                case 'busy': return 'text-red-700';
+                default: return 'text-gray-900';
+            }
+        }
+        
+        // Function to simulate fire truck movement
+        function simulateMovement(marker, truck) {
+            // Set an interval to update position every few seconds
+            setInterval(() => {
+                // Generate small random movement
+                const latChange = (Math.random() - 0.5) * 0.01;
+                const lngChange = (Math.random() - 0.5) * 0.01;
+                
+                // Update marker position
+                const newLat = marker.getLatLng().lat + latChange;
+                const newLng = marker.getLatLng().lng + lngChange;
+                
+                // Animate the movement
+                marker.setLatLng([newLat, newLng]);
+            }, 5000 + Math.random() * 5000); // Random interval between 5-10 seconds
+        }
+        
+        // Function to update KPI cards
+        function updateKPICards(fireTrucks = allFireTrucks) {
+            // Count fire trucks by status
+            const totalFireTrucks = fireTrucks.length;
+            const availableFireTrucks = fireTrucks.filter(truck => truck.status === 'available').length;
+            const respondingFireTrucks = fireTrucks.filter(truck => truck.status === 'responding').length;
+            const busyFireTrucks = fireTrucks.filter(truck => truck.status === 'busy' || truck.status === 'on call').length;
+            
+            // Update card values
+            document.querySelector('.glass-card:nth-child(1) h3').textContent = totalFireTrucks;
+            document.querySelector('.glass-card:nth-child(2) h3').textContent = availableFireTrucks;
+            document.querySelector('.glass-card:nth-child(3) h3').textContent = respondingFireTrucks;
+            document.querySelector('.glass-card:nth-child(4) h3').textContent = busyFireTrucks;
+        }
+        
+        // Function to set up filter listeners
+        function setupFilters() {
+            // Get filter elements
+            const fireTruckTypeFilter = document.getElementById('fireTruckType');
+            const statusFilter = document.getElementById('status');
+            const stationFilter = document.getElementById('station');
+            const responseTimeFilter = document.getElementById('response');
+            
+            // Add event listeners
+            fireTruckTypeFilter.addEventListener('change', filterFireTrucks);
+            statusFilter.addEventListener('change', filterFireTrucks);
+            stationFilter.addEventListener('change', filterFireTrucks);
+            responseTimeFilter.addEventListener('change', filterFireTrucks);
+        }
+        
+        // Function to filter fire trucks based on selected criteria
+        function filterFireTrucks() {
+            const fireTruckType = document.getElementById('fireTruckType').value;
+            const status = document.getElementById('status').value;
+            const station = document.getElementById('station').value;
+            const responseTime = document.getElementById('response').value;
+            
+            // Filter fire trucks based on selected criteria
+            let filteredFireTrucks = allFireTrucks;
+            
+            if (fireTruckType !== 'all') {
+                filteredFireTrucks = filteredFireTrucks.filter(truck => truck.type === fireTruckType);
+            }
+            
+            if (status !== 'all') {
+                filteredFireTrucks = filteredFireTrucks.filter(truck => truck.status === status);
+            }
+            
+            if (station !== 'all') {
+                filteredFireTrucks = filteredFireTrucks.filter(truck => truck.station === station);
+            }
+            
+            if (responseTime !== 'all') {
+                if (responseTime === '0-5') {
+                    filteredFireTrucks = filteredFireTrucks.filter(truck => truck.responseTime <= 5);
+                } else if (responseTime === '5-10') {
+                    filteredFireTrucks = filteredFireTrucks.filter(truck => truck.responseTime > 5 && truck.responseTime <= 10);
+                } else if (responseTime === '10-20') {
+                    filteredFireTrucks = filteredFireTrucks.filter(truck => truck.responseTime > 10 && truck.responseTime <= 20);
+                } else if (responseTime === '20-30') {
+                    filteredFireTrucks = filteredFireTrucks.filter(truck => truck.responseTime > 20 && truck.responseTime <= 30);
+                } else if (responseTime === 'Over 30') {
+                    filteredFireTrucks = filteredFireTrucks.filter(truck => truck.responseTime > 30);
+                }
+            }
+            
+            // Update the map with filtered fire trucks
+            displayFireTrucksOnMap(filteredFireTrucks);
+            
+            // Update KPI cards
+            updateKPICards(filteredFireTrucks);
+        }
+        
+        // Function to handle dispatch button click
+        function handleDispatch() {
+            // Create a modal for dispatching fire truck
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-red-900 p-6 rounded-lg shadow-xl max-w-md w-full">
+                    <h2 class="text-xl font-bold mb-4 bg-gradient-to-r from-red-400 to-amber-500 bg-clip-text text-transparent">Dispatch Fire Truck</h2>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Select Fire Truck</label>
+                        <select id="dispatch-firetruck" class="w-full bg-red-800 text-white rounded-lg p-2 border border-red-600">
+                            ${allFireTrucks.filter(truck => truck.status === 'available').map(truck => 
+                                `<option value="${truck.id}" data-name="${truck.name}">${truck.name} (${truck.type})</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Incident Location</label>
+                        <input type="text" id="incident-location" class="w-full bg-red-800 text-white rounded-lg p-2 border border-red-600" placeholder="Enter location">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Incident Type</label>
+                        <select id="incident-type" class="w-full bg-red-800 text-white rounded-lg p-2 border border-red-600">
+                            <option value="structure">Structure Fire</option>
+                            <option value="vehicle">Vehicle Fire</option>
+                            <option value="brush">Brush Fire</option>
+                            <option value="hazmat">Hazardous Materials</option>
+                            <option value="rescue">Rescue Needed</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button id="cancel-dispatch" class="px-4 py-2 bg-red-700 text-white rounded-lg">Cancel</button>
+                        <button id="confirm-dispatch" class="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg">Dispatch</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add event listeners for modal buttons
+            document.getElementById('cancel-dispatch').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            document.getElementById('confirm-dispatch').addEventListener('click', () => {
+                const fireTruckSelect = document.getElementById('dispatch-firetruck');
+                const fireTruckId = fireTruckSelect.value;
+                const fireTruckName = fireTruckSelect.options[fireTruckSelect.selectedIndex].dataset.name;
+                const location = document.getElementById('incident-location').value;
+                const incidentType = document.getElementById('incident-type').value;
+                
+                // Find the selected fire truck
+                const fireTruck = allFireTrucks.find(truck => truck.id === fireTruckId);
+                
+                if (fireTruck) {
+                    // Update fire truck status
+                    fireTruck.status = 'responding';
+                    
+                    // Send email notification
+                    sendNotificationEmail('dispatch', {
+                        fireTruckId: fireTruckId,
+                        fireTruckName: fireTruckName,
+                        location: location,
+                        incidentType: incidentType
+                    });
+                    
+                    // Show notification
+                    alert(`Fire Truck ${fireTruck.name} dispatched to ${location} for ${incidentType} incident.`);
+                    
+                    // Update the map
+                    filterFireTrucks();
+                }
+                
+                modal.remove();
+            });
+        }
+        
+        // Function to handle emergency button click
+        function handleEmergency() {
+            // Create a modal for reporting emergency
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-red-900 p-6 rounded-lg shadow-xl max-w-md w-full">
+                    <h2 class="text-xl font-bold mb-4 text-red-400">Report Fire Emergency</h2>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Emergency Type</label>
+                        <select id="emergency-type" class="w-full bg-red-800 text-white rounded-lg p-2 border border-red-600">
+                            <option value="structure">Structure Fire</option>
+                            <option value="vehicle">Vehicle Fire</option>
+                            <option value="brush">Brush Fire</option>
+                            <option value="hazmat">Hazardous Materials</option>
+                            <option value="rescue">Rescue Needed</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Location</label>
+                        <input type="text" id="emergency-location" class="w-full bg-red-800 text-white rounded-lg p-2 border border-red-600" placeholder="Enter location">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Description</label>
+                        <textarea id="emergency-description" class="w-full bg-red-800 text-white rounded-lg p-2 border border-red-600" rows="3" placeholder="Describe the emergency"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Severity</label>
+                        <select id="emergency-severity" class="w-full bg-red-800 text-white rounded-lg p-2 border border-red-600">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button id="cancel-emergency" class="px-4 py-2 bg-red-700 text-white rounded-lg">Cancel</button>
+                        <button id="confirm-emergency" class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg">Report Emergency</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add event listeners for modal buttons
+            document.getElementById('cancel-emergency').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            document.getElementById('confirm-emergency').addEventListener('click', () => {
+                const emergencyType = document.getElementById('emergency-type').value;
+                const location = document.getElementById('emergency-location').value;
+                const description = document.getElementById('emergency-description').value;
+                const severity = document.getElementById('emergency-severity').value;
+                
+                // Find nearest available fire truck
+                const availableFireTrucks = allFireTrucks.filter(truck => truck.status === 'available');
+                
+                // Send email notification
+                sendNotificationEmail('emergency', {
+                    incidentType: emergencyType,
+                    location: location,
+                    description: description,
+                    severity: severity
+                });
+                
+                if (availableFireTrucks.length > 0) {
+                    // Select the first available fire truck (in a real app, would select the nearest)
+                    const fireTruck = availableFireTrucks[0];
+                    
+                    // Update fire truck status
+                    fireTruck.status = 'responding';
+                    
+                    // Show notification
+                    alert(`Fire emergency reported at ${location}. ${fireTruck.name} has been dispatched.`);
+                    
+                    // Update the map
+                    filterFireTrucks();
+                } else {
+                    alert('No available fire trucks. Emergency has been logged and will be addressed as soon as a fire truck becomes available.');
+                }
+                
+                modal.remove();
+            });
+        }
+        
+        // Function to send notification email
+        function sendNotificationEmail(type, data) {
+            // Prepare the data to send
+            const notificationData = {
+                type: type,
+                ...data
+            };
+            
+            // Send the data to the PHP script
+            fetch('php/send_firetruck_notification.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(notificationData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Notification result:', result);
+                if (!result.success) {
+                    console.error('Failed to send notification:', result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending notification:', error);
+            });
+        }
+        
         // Initialize the fire truck tracking system
         initializeFireTruckTracking();
         
         // Refresh data every 30 seconds
         setInterval(async function() {
-            const fireTrucks = await loadAgencies('fire_truck');
-            displayAgencies(map, fireTrucks, 'fire_truck');
+            const fireTrucks = await loadFireTrucks();
+            displayFireTrucksOnMap(fireTrucks);
         }, 30000);
+        
+        // Profile dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileButton = document.getElementById('profile-menu-button');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            
+            if (profileButton && profileDropdown) {
+                // Toggle dropdown when profile button is clicked
+                profileButton.addEventListener('click', function() {
+                    const expanded = profileButton.getAttribute('aria-expanded') === 'true';
+                    profileButton.setAttribute('aria-expanded', !expanded);
+                    profileDropdown.classList.toggle('hidden');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                        profileButton.setAttribute('aria-expanded', 'false');
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

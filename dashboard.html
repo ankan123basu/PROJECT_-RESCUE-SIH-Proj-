@@ -183,6 +183,19 @@
             width: 100%;
             height: 20rem;
         }
+        
+        /* Map view buttons */
+        .map-view-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .map-view-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-white font-sans min-h-screen">
@@ -205,17 +218,20 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <button class="glossy-btn rounded-full p-1 text-gray-300 hover:text-white focus:outline-none">
-                            <span class="sr-only">View notifications</span>
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                        <button id="profile-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                            <img class="h-8 w-8 rounded-full" src="assets/images/d3c09cde-dcda-4267-a7a0-d6b4668f08e0.jpg" alt="Ankan Basu">
+                            <span>Ankan Basu</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
                         </button>
-                    </div>
-                    <div class="relative">
-                        <button class="glossy-btn flex items-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 p-1 text-white focus:outline-none">
-                            <span class="sr-only">Open user menu</span>
-                            <i class="fas fa-user-circle text-xl"></i>
-                        </button>
+                        
+                        <!-- Profile dropdown menu -->
+                        <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Your Profile</a>
+                            <a href="settings.html" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Settings</a>
+                            <a href="index.html" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -229,10 +245,10 @@
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-3xl font-bold text-white">Emergency Response Dashboard</h1>
                     <div class="flex space-x-3">
-                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
+                        <a href="https://smcs.unosat.org/home" target="_blank" rel="noopener noreferrer" class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
                             <i class="fas fa-plus mr-2"></i> New Incident
-                        </button>
-                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
+                        </a>
+                        <button id="refresh-dashboard" class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
                             <i class="fas fa-sync-alt mr-2"></i> Refresh
                         </button>
                     </div>
@@ -304,64 +320,67 @@
                             <label for="resource-type" class="block text-sm font-medium text-gray-300 mb-1">Resource Type</label>
                             <select id="resource-type" title="Select resource type" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="all">All Resources</option>
-                                <option value="ambulance">Ambulances</option>
-                                <option value="fire-truck">Fire Trucks</option>
-                                <option value="helicopter">Helicopters</option>
-                                <option value="police">Police</option>
+                                <option value="ambulance">Ambulance</option>
+                                <option value="fire-truck">Fire Truck</option>
+                                <option value="helicopter">Helicopter</option>
                             </select>
                         </div>
                         <div>
-                            <label for="emergency-type" class="block text-sm font-medium text-gray-300 mb-1">Emergency Type</label>
-                            <select id="emergency-type" title="Select emergency type" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="all">All Emergencies</option>
-                                <option value="fire">Fire</option>
-                                <option value="medical">Medical</option>
-                                <option value="accident">Accident</option>
-                                <option value="natural">Natural Disaster</option>
-                                <option value="security">Security</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="agency-status" class="block text-sm font-medium text-gray-300 mb-1">Agency Status</label>
-                            <select id="agency-status" title="Select agency status" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <label for="resource-status" class="block text-sm font-medium text-gray-300 mb-1">Resource Status</label>
+                            <select id="resource-status" title="Select resource status" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="all">All Statuses</option>
                                 <option value="available">Available</option>
                                 <option value="responding">Responding</option>
+                                <option value="on call">On Call</option>
                                 <option value="busy">Busy</option>
                             </select>
                         </div>
                         <div>
-                            <label for="time-range" class="block text-sm font-medium text-gray-300 mb-1">Time Range</label>
-                            <select id="time-range" title="Select time range" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="24h">Last 24 Hours</option>
-                                <option value="7d">Last 7 Days</option>
-                                <option value="30d">Last 30 Days</option>
-                                <option value="all">All Time</option>
+                            <label for="resource-location" class="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                            <select id="resource-location" title="Select location" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="all">All Locations</option>
+                                <option value="delhi">Delhi</option>
+                                <option value="mumbai">Mumbai</option>
+                                <option value="kolkata">Kolkata</option>
+                                <option value="chennai">Chennai</option>
+                                <option value="bangalore">Bangalore</option>
+                                <option value="hyderabad">Hyderabad</option>
+                                <option value="ahmedabad">Ahmedabad</option>
+                                <option value="pune">Pune</option>
+                                <option value="jaipur">Jaipur</option>
+                                <option value="lucknow">Lucknow</option>
+                                <option value="chandigarh">Chandigarh</option>
+                                <option value="amritsar">Amritsar</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="response-time" class="block text-sm font-medium text-gray-300 mb-1">Response Time</label>
+                            <select id="response-time" title="Select response time" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="all">All Times</option>
+                                <option value="5">Under 5 min</option>
+                                <option value="10">5-10 min</option>
+                                <option value="15">10-15 min</option>
+                                <option value="more">Over 15 min</option>
                             </select>
                         </div>
                         <div class="flex items-end">
-                            <button class="glossy-btn w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300">
+                            <button id="apply-filters" class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 w-full">
                                 Apply Filters
                             </button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Map Container -->
-                <div class="glass-card dark rounded-xl overflow-hidden shadow-2xl mb-6">
-                    <div class="flex justify-end space-x-2 p-2">
-                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-sm">
-                            <i class="fas fa-cloud-sun mr-1"></i> Weather
-                        </button>
-                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-sm">
-                            <i class="fas fa-road mr-1"></i> Traffic
-                        </button>
-                        <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-700 text-white px-3 py-1 rounded-lg text-sm">
-                            <i class="fas fa-fire mr-1"></i> Hazards
-                        </button>
-                        <button class="glossy-btn bg-gradient-to-r from-purple-500 to-purple-700 text-white px-3 py-1 rounded-lg text-sm">
-                            <i class="fas fa-cube mr-1"></i> 3D View
-                        </button>
+                    <div class="mt-4 flex justify-between items-center">
+                        <div class="flex space-x-2">
+                            <button id="standard-view" class="map-view-btn glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-sm active">
+                                <i class="fas fa-map mr-1"></i> Standard View
+                            </button>
+                            <button id="satellite-view" class="map-view-btn glossy-btn bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-3 py-1 rounded-lg text-sm">
+                                <i class="fas fa-satellite mr-1"></i> Satellite View
+                            </button>
+                            <button id="3d-view" class="map-view-btn glossy-btn bg-gradient-to-r from-purple-500 to-purple-700 text-white px-3 py-1 rounded-lg text-sm">
+                                <i class="fas fa-cube mr-1"></i> 3D View
+                            </button>
+                        </div>
                     </div>
                     <div id="map" class="map-container"></div>
                 </div>
@@ -373,76 +392,356 @@
     <script>
         // Initialize the map
         var map = L.map('map').setView([20.5937, 78.9629], 4);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        
+        // Define tile layers
+        const standardTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
             subdomains: ['a', 'b', 'c']
-        }).addTo(map);
+        });
+        
+        const satelliteTiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+            maxZoom: 19
+        });
+        
+        const terrainTiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+            maxZoom: 18
+        });
+        
+        // Add default tile layer
+        standardTiles.addTo(map);
+        
+        // Current active layer
+        let currentLayer = standardTiles;
 
-        // Sample data for demonstration
-        const resources = [
-            { name: "Ambulance A1", type: "ambulance", status: "available", latitude: 28.6139, longitude: 77.2090 },
-            { name: "Fire Truck F3", type: "fire-truck", status: "responding", latitude: 19.0760, longitude: 72.8777 },
-            { name: "Helicopter H2", type: "helicopter", status: "available", latitude: 12.9716, longitude: 77.5946 },
-            { name: "Ambulance A5", type: "ambulance", status: "busy", latitude: 17.3850, longitude: 78.4867 },
-            { name: "Fire Truck F7", type: "fire-truck", status: "available", latitude: 13.0827, longitude: 80.2707 },
-            { name: "Helicopter H1", type: "helicopter", status: "responding", latitude: 22.5726, longitude: 88.3639 }
-        ];
-
-        // Create custom icons
-        const icons = {
-            ambulance: L.icon({
-                iconUrl: 'assets/icons/ambulance.svg',
-                iconSize: [32, 32],
-                iconAnchor: [16, 16],
-                popupAnchor: [0, -16]
-            }),
-            'fire-truck': L.icon({
-                iconUrl: 'assets/icons/fire-truck.svg',
-                iconSize: [32, 32],
-                iconAnchor: [16, 16],
-                popupAnchor: [0, -16]
-            }),
-            helicopter: L.icon({
-                iconUrl: 'assets/icons/helicopter.svg',
-                iconSize: [32, 32],
-                iconAnchor: [16, 16],
-                popupAnchor: [0, -16]
-            })
+        // Global variables to store resources and markers
+        let allResources = [];
+        let resourceMarkers = [];
+        let selectedFilters = {
+            type: 'all',
+            status: 'all',
+            location: 'all',
+            responseTime: 'all'
         };
 
-        // Function to add markers to the map
-        function addMarkers(resources) {
+        // Sample data for emergency resources
+        const indianCities = [
+            { name: "Delhi", lat: 28.6139, lng: 77.2090 },
+            { name: "Mumbai", lat: 19.0760, lng: 72.8777 },
+            { name: "Kolkata", lat: 22.5726, lng: 88.3639 },
+            { name: "Chennai", lat: 13.0827, lng: 80.2707 },
+            { name: "Bangalore", lat: 12.9716, lng: 77.5946 },
+            { name: "Hyderabad", lat: 17.3850, lng: 78.4867 },
+            { name: "Ahmedabad", lat: 23.0225, lng: 72.5714 },
+            { name: "Pune", lat: 18.5204, lng: 73.8567 },
+            { name: "Jaipur", lat: 26.9124, lng: 75.7873 },
+            { name: "Lucknow", lat: 26.8467, lng: 80.9462 },
+            { name: "Chandigarh", lat: 30.7333, lng: 76.7794 },
+            { name: "Amritsar", lat: 31.6340, lng: 74.8723 },
+            { name: "Varanasi", lat: 25.3176, lng: 82.9739 },
+            { name: "Patna", lat: 25.5941, lng: 85.1376 }
+        ];
+
+        const statuses = ["available", "responding", "on call", "busy"];
+        const ambulanceTypes = ["Type I", "Type II", "Type III", "Type IV"];
+        const fireTruckTypes = ["Pumper", "Ladder", "Rescue", "Tanker"];
+        const helicopterTypes = ["Medevac", "Rescue", "Transport", "Surveillance"];
+        const responseTimes = [2, 4, 6, 8, 10, 12, 15, 18, 20, 25, 30];
+
+        // Function to generate random resources
+        function generateResources() {
+            const resources = [];
+            
+            // Generate resources for each city
+            indianCities.forEach(city => {
+                // Add ambulances
+                for (let i = 0; i < 3; i++) {
+                    resources.push({
+                        id: `AMB-${city.name.substr(0, 3)}-${i+1}`,
+                        name: `Ambulance ${city.name.substr(0, 1)}${i+1}`,
+                        type: "ambulance",
+                        subType: ambulanceTypes[Math.floor(Math.random() * ambulanceTypes.length)],
+                        status: statuses[Math.floor(Math.random() * statuses.length)],
+                        location: city.name,
+                        hospital: `${city.name} General Hospital`,
+                        lat: city.lat + (Math.random() - 0.5) * 0.1,
+                        lng: city.lng + (Math.random() - 0.5) * 0.1,
+                        responseTime: responseTimes[Math.floor(Math.random() * responseTimes.length)],
+                        lastUpdate: new Date().toLocaleTimeString()
+                    });
+                }
+                
+                // Add fire trucks
+                for (let i = 0; i < 2; i++) {
+                    resources.push({
+                        id: `FT-${city.name.substr(0, 3)}-${i+1}`,
+                        name: `Fire Truck ${city.name.substr(0, 1)}${i+1}`,
+                        type: "fire-truck",
+                        subType: fireTruckTypes[Math.floor(Math.random() * fireTruckTypes.length)],
+                        status: statuses[Math.floor(Math.random() * statuses.length)],
+                        location: city.name,
+                        station: `${city.name} Fire Station`,
+                        lat: city.lat + (Math.random() - 0.5) * 0.1,
+                        lng: city.lng + (Math.random() - 0.5) * 0.1,
+                        responseTime: responseTimes[Math.floor(Math.random() * responseTimes.length)],
+                        lastUpdate: new Date().toLocaleTimeString()
+                    });
+                }
+                
+                // Add helicopters
+                if (Math.random() > 0.3) { // Not all cities have helicopters
+                    resources.push({
+                        id: `HC-${city.name.substr(0, 3)}-1`,
+                        name: `Helicopter ${city.name.substr(0, 1)}1`,
+                        type: "helicopter",
+                        subType: helicopterTypes[Math.floor(Math.random() * helicopterTypes.length)],
+                        status: statuses[Math.floor(Math.random() * statuses.length)],
+                        location: city.name,
+                        base: `${city.name} Helipad`,
+                        lat: city.lat + (Math.random() - 0.5) * 0.1,
+                        lng: city.lng + (Math.random() - 0.5) * 0.1,
+                        responseTime: responseTimes[Math.floor(Math.random() * responseTimes.length)],
+                        lastUpdate: new Date().toLocaleTimeString()
+                    });
+                }
+            });
+            
+            return resources;
+        }
+
+        // Load resources and display them on the map
+        function loadAndDisplayResources() {
+            allResources = generateResources();
+            filterAndDisplayResources();
+            updateStats();
+        }
+
+        // Clear all markers from the map
+        function clearMarkers() {
+            resourceMarkers.forEach(marker => map.removeLayer(marker));
+            resourceMarkers = [];
+        }
+
+        // Helper function to get color class based on status
+        function getStatusColor(status) {
+            switch(status) {
+                case 'available': return 'text-green-500';
+                case 'responding': return 'text-yellow-500';
+                case 'on call': return 'text-blue-500';
+                case 'busy': return 'text-red-500';
+                default: return 'text-gray-500';
+            }
+        }
+
+        // Function to filter resources based on selected criteria
+        function filterResources() {
+            let filteredResources = allResources;
+            
+            // Filter by type
+            if (selectedFilters.type !== 'all') {
+                filteredResources = filteredResources.filter(res => res.type === selectedFilters.type);
+            }
+            
+            // Filter by status
+            if (selectedFilters.status !== 'all') {
+                filteredResources = filteredResources.filter(res => res.status === selectedFilters.status);
+            }
+            
+            // Filter by location
+            if (selectedFilters.location !== 'all') {
+                filteredResources = filteredResources.filter(res => res.location.toLowerCase() === selectedFilters.location.toLowerCase());
+            }
+            
+            // Filter by response time
+            if (selectedFilters.responseTime !== 'all') {
+                if (selectedFilters.responseTime === '5') {
+                    filteredResources = filteredResources.filter(res => res.responseTime < 5);
+                } else if (selectedFilters.responseTime === '10') {
+                    filteredResources = filteredResources.filter(res => res.responseTime >= 5 && res.responseTime < 10);
+                } else if (selectedFilters.responseTime === '15') {
+                    filteredResources = filteredResources.filter(res => res.responseTime >= 10 && res.responseTime < 15);
+                } else if (selectedFilters.responseTime === 'more') {
+                    filteredResources = filteredResources.filter(res => res.responseTime >= 15);
+                }
+            }
+            
+            return filteredResources;
+        }
+        
+        // Function to display filtered resources on the map
+        function filterAndDisplayResources() {
+            clearMarkers();
+            const filteredResources = filterResources();
+            displayResourcesOnMap(filteredResources);
+            updateStats(filteredResources);
+        }
+
+        // Function to display resources on the map
+        function displayResourcesOnMap(resources) {
             resources.forEach(resource => {
-                const marker = L.marker([resource.latitude, resource.longitude], {
-                    icon: icons[resource.type]
+                // Create custom icon based on resource type
+                let customIcon;
+                
+                if (resource.type === 'ambulance') {
+                    customIcon = L.icon({
+                        iconUrl: 'assets/images/360_F_224147570_dbcFAwKudSWfP1wmHDbSu3ir5ZGzJAJn.jpg',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 16],
+                        popupAnchor: [0, -16]
+                    });
+                } else if (resource.type === 'fire-truck') {
+                    customIcon = L.icon({
+                        iconUrl: 'assets/images/paw-patrol-ultimate-rescue-fire-truck.webp',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 16],
+                        popupAnchor: [0, -16]
+                    });
+                } else if (resource.type === 'helicopter') {
+                    customIcon = L.icon({
+                        iconUrl: 'assets/images/object-on-white-toy-model-helicopter-B087F2.jpg',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 16],
+                        popupAnchor: [0, -16]
+                    });
+                }
+                
+                // Create marker
+                const marker = L.marker([resource.lat, resource.lng], {
+                    icon: customIcon
                 }).addTo(map);
                 
-                const statusColor = resource.status === 'available' ? 'green' : 
-                                    resource.status === 'responding' ? 'orange' : 'red';
-                
+                // Add popup with resource information
                 marker.bindPopup(`
-                    <div class="p-2">
-                        <h3 class="text-lg font-bold">${resource.name}</h3>
-                        <p class="mb-1">Status: <span class="text-${statusColor}-500 font-medium">${resource.status}</span></p>
-                        <p class="mb-2">Type: ${resource.type}</p>
-                        <div class="flex space-x-2">
-                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Contact</button>
-                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">Dispatch</button>
+                    <div class="p-3 bg-gray-100 rounded-lg text-gray-900 shadow-lg">
+                        <h3 class="font-bold text-blue-800 text-lg">${resource.name}</h3>
+                        <div class="mt-2 text-sm">
+                            <p><strong>ID:</strong> ${resource.id}</p>
+                            <p><strong>Type:</strong> ${resource.subType}</p>
+                            <p><strong>Status:</strong> <span class="font-semibold ${getStatusColor(resource.status)}">${resource.status}</span></p>
+                            <p><strong>Location:</strong> ${resource.location}</p>
+                            <p><strong>Response Time:</strong> ${resource.responseTime} min</p>
+                            <p><strong>Last Update:</strong> ${resource.lastUpdate}</p>
                         </div>
                     </div>
                 `);
+                
+                // Store marker reference
+                resourceMarkers.push(marker);
+                
+                // Simulate movement for real-time effect
+                simulateMovement(marker, resource);
             });
         }
 
-        // Add markers to the map
-        addMarkers(resources);
+        // Function to simulate resource movement
+        function simulateMovement(marker, resource) {
+            // Set an interval to update position every few seconds
+            setInterval(() => {
+                // Generate small random movement
+                const latChange = (Math.random() - 0.5) * 0.01;
+                const lngChange = (Math.random() - 0.5) * 0.01;
+                
+                // Update marker position
+                const newLat = marker.getLatLng().lat + latChange;
+                const newLng = marker.getLatLng().lng + lngChange;
+                
+                // Animate the movement
+                marker.setLatLng([newLat, newLng]);
+            }, 5000 + Math.random() * 5000); // Random interval between 5-10 seconds
+        }
 
-        // Simulate real-time updates
-        setInterval(() => {
-            // In a real application, you would fetch updated data from your server
-            console.log("Updating map data...");
-        }, 30000);
+        // Function to update statistics in KPI cards
+        function updateStats(resources = allResources) {
+            // Update KPI cards with resource statistics
+            const totalResources = resources.length;
+            const availableCount = resources.filter(res => res.status === 'available').length;
+            const respondingCount = resources.filter(res => res.status === 'responding').length;
+            const busyCount = resources.filter(res => res.status === 'busy').length;
+            
+            // You can update your KPI cards here
+            // For example:
+            document.querySelector('.grid-cols-4 .text-3xl').textContent = totalResources;
+        }
+
+        // Set up event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize profile dropdown functionality
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            
+            if (profileMenuButton && profileDropdown) {
+                profileMenuButton.addEventListener('click', () => {
+                    profileDropdown.classList.toggle('hidden');
+                });
+                
+                // Close the dropdown when clicking outside
+                document.addEventListener('click', (event) => {
+                    if (!profileMenuButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // Set up filter event listeners
+            const applyFiltersButton = document.getElementById('apply-filters');
+            if (applyFiltersButton) {
+                applyFiltersButton.addEventListener('click', () => {
+                    // Get selected filter values
+                    selectedFilters.type = document.getElementById('resource-type').value;
+                    selectedFilters.status = document.getElementById('resource-status').value;
+                    selectedFilters.location = document.getElementById('resource-location').value;
+                    selectedFilters.responseTime = document.getElementById('response-time').value;
+                    
+                    // Apply filters
+                    filterAndDisplayResources();
+                });
+            }
+            
+            // Load and display resources initially
+            loadAndDisplayResources();
+            
+            // Refresh data every 60 seconds
+            setInterval(loadAndDisplayResources, 60000);
+            
+            // Map view buttons
+            const standardViewButton = document.getElementById('standard-view');
+            const satelliteViewButton = document.getElementById('satellite-view');
+            const threeDViewButton = document.getElementById('3d-view');
+            
+            if (standardViewButton) {
+                standardViewButton.addEventListener('click', () => {
+                    map.removeLayer(currentLayer);
+                    currentLayer = standardTiles;
+                    standardTiles.addTo(map);
+                    standardViewButton.classList.add('active');
+                    satelliteViewButton.classList.remove('active');
+                    threeDViewButton.classList.remove('active');
+                });
+            }
+            
+            if (satelliteViewButton) {
+                satelliteViewButton.addEventListener('click', () => {
+                    map.removeLayer(currentLayer);
+                    currentLayer = satelliteTiles;
+                    satelliteTiles.addTo(map);
+                    satelliteViewButton.classList.add('active');
+                    standardViewButton.classList.remove('active');
+                    threeDViewButton.classList.remove('active');
+                });
+            }
+            
+            if (threeDViewButton) {
+                threeDViewButton.addEventListener('click', () => {
+                    map.removeLayer(currentLayer);
+                    currentLayer = terrainTiles;
+                    terrainTiles.addTo(map);
+                    threeDViewButton.classList.add('active');
+                    standardViewButton.classList.remove('active');
+                    satelliteViewButton.classList.remove('active');
+                });
+            }
+        });
     </script>
 </body>
 </html>

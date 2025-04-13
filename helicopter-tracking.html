@@ -85,6 +85,12 @@
             transform: translateY(1px);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
+        
+        .custom-helicopter-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 text-white min-h-screen">
@@ -92,19 +98,43 @@
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-8">
                 <a href="dashboard.html" class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Rescue Coordination</a>
-                <a href="ambulance-tracking.html" class="hover:text-purple-200 transition-colors">Ambulance Tracking</a>
-                <a href="helicopter-tracking.html" class="text-purple-200 font-semibold border-b-2 border-purple-400">Helicopter Tracking</a>
-                <a href="fire-truck-tracking.html" class="hover:text-purple-200 transition-colors">Fire Truck Tracking</a>
-                <a href="incidents.html" class="hover:text-purple-200 transition-colors">Incidents</a>
-                <a href="analytics.html" class="hover:text-purple-200 transition-colors">Analytics</a>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="agency-dashboard.html" class="hover:text-purple-300">Dashboard</a></li>
+                        <li><a href="ambulance-tracking.html" class="hover:text-purple-300">Ambulance Tracking</a></li>
+                        <li><a href="helicopter-tracking.html" class="hover:text-purple-300 border-b-2 border-purple-400">Helicopter Tracking</a></li>
+                        <li><a href="emergency-coordination.html" class="hover:text-purple-300">Emergency Coordination</a></li>
+                        <li><a href="analytics.html" class="hover:text-purple-300">Analytics</a></li>
+                    </ul>
+                </nav>
             </div>
-            <div class="flex items-center space-x-4">
-                <button class="notification-btn p-2 rounded-full bg-purple-800 hover:bg-purple-700 transition-colors" title="Notifications" aria-label="View notifications">
-                    <i class="fas fa-bell"></i>
-                </button>
-                <button class="profile-btn p-2 rounded-full bg-purple-800 hover:bg-purple-700 transition-colors" title="Profile" aria-label="View profile">
-                    <i class="fas fa-user"></i>
-                </button>
+            <div class="relative">
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-1 rounded-full hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-800 focus:ring-white">
+                        <span class="sr-only">View notifications</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-purple-900"></span>
+                    </button>
+                    
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2 focus:outline-none" aria-expanded="false" aria-haspopup="true">
+                            <img class="h-8 w-8 rounded-full" src="assets/images/d3c09cde-dcda-4267-a7a0-d6b4668f08e0.jpg" alt="Ankan Basu">
+                            <span>Ankan Basu</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Profile dropdown menu -->
+                        <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-purple-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-purple-700" role="menuitem">Your Profile</a>
+                            <a href="settings.html" class="block px-4 py-2 text-sm text-white hover:bg-purple-700" role="menuitem">Settings</a>
+                            <a href="index.html" class="block px-4 py-2 text-sm text-white hover:bg-purple-700" role="menuitem">Logout</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -114,42 +144,51 @@
             <h1 class="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Helicopter Tracking System</h1>
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div class="col-span-1">
-                    <label for="helicopterType" class="block text-sm mb-2">Helicopter Type</label>
-                    <select id="helicopterType" class="custom-select w-full bg-purple-700 text-white rounded-lg p-2 border border-purple-500/30" title="Select helicopter type">
-                        <option class="bg-purple-600">All Types</option>
-                        <option class="bg-purple-300 text-purple-900">Medical</option>
-                        <option class="bg-purple-300 text-purple-900">Search & Rescue</option>
-                        <option class="bg-purple-300 text-purple-900">Fire Fighting</option>
-                        <option class="bg-purple-300 text-purple-900">Transport</option>
+                    <label class="block text-sm mb-1">Helicopter Type</label>
+                    <select id="helicopterType" class="w-full bg-purple-800 rounded-lg p-2 border border-purple-600" title="Select helicopter type">
+                        <option value="all" class="bg-purple-300 text-purple-900">All Types</option>
+                        <option value="medevac" class="bg-purple-300 text-purple-900">Medevac</option>
+                        <option value="rescue" class="bg-purple-300 text-purple-900">Rescue</option>
+                        <option value="transport" class="bg-purple-300 text-purple-900">Transport</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="status" class="block text-sm mb-2">Status</label>
-                    <select id="status" class="custom-select w-full bg-purple-700 text-white rounded-lg p-2 border border-purple-500/30" title="Select helicopter status">
-                        <option class="bg-purple-600">All Statuses</option>
-                        <option class="bg-purple-300 text-purple-900">Available</option>
-                        <option class="bg-purple-300 text-purple-900">On Mission</option>
-                        <option class="bg-purple-300 text-purple-900">En Route</option>
-                        <option class="bg-purple-300 text-purple-900">Maintenance</option>
+                    <label class="block text-sm mb-1">Status</label>
+                    <select id="status" class="w-full bg-purple-800 rounded-lg p-2 border border-purple-600" title="Select helicopter status">
+                        <option value="all" class="bg-purple-300 text-purple-900">All Status</option>
+                        <option value="available" class="bg-purple-300 text-purple-900">Available</option>
+                        <option value="responding" class="bg-purple-300 text-purple-900">Responding</option>
+                        <option value="on call" class="bg-purple-300 text-purple-900">On Call</option>
+                        <option value="busy" class="bg-purple-300 text-purple-900">Busy</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="base" class="block text-sm mb-2">Base</label>
-                    <select id="base" class="custom-select w-full bg-purple-700 text-white rounded-lg p-2 border border-purple-500/30" title="Select base">
-                        <option class="bg-purple-600">All Bases</option>
-                        <option class="bg-purple-300 text-purple-900">City Heliport</option>
-                        <option class="bg-purple-300 text-purple-900">Regional Airport</option>
-                        <option class="bg-purple-300 text-purple-900">Mountain Base</option>
+                    <label class="block text-sm mb-1">Base</label>
+                    <select id="base" class="w-full bg-purple-800 rounded-lg p-2 border border-purple-600" title="Select helicopter base">
+                        <option value="all" class="bg-purple-300 text-purple-900">All Bases</option>
+                        <option value="delhi" class="bg-purple-300 text-purple-900">Delhi</option>
+                        <option value="mumbai" class="bg-purple-300 text-purple-900">Mumbai</option>
+                        <option value="kolkata" class="bg-purple-300 text-purple-900">Kolkata</option>
+                        <option value="chennai" class="bg-purple-300 text-purple-900">Chennai</option>
+                        <option value="bangalore" class="bg-purple-300 text-purple-900">Bangalore</option>
+                        <option value="hyderabad" class="bg-purple-300 text-purple-900">Hyderabad</option>
+                        <option value="ahmedabad" class="bg-purple-300 text-purple-900">Ahmedabad</option>
+                        <option value="pune" class="bg-purple-300 text-purple-900">Pune</option>
+                        <option value="jaipur" class="bg-purple-300 text-purple-900">Jaipur</option>
+                        <option value="lucknow" class="bg-purple-300 text-purple-900">Lucknow</option>
+                        <option value="chandigarh" class="bg-purple-300 text-purple-900">Chandigarh</option>
+                        <option value="amritsar" class="bg-purple-300 text-purple-900">Amritsar</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="response" class="block text-sm mb-2">Response Time</label>
-                    <select id="response" class="custom-select w-full bg-purple-700 text-white rounded-lg p-2 border border-purple-500/30" title="Select response time">
-                        <option class="bg-purple-600">Any Time</option>
-                        <option class="bg-purple-300 text-purple-900">Under 10 min</option>
-                        <option class="bg-purple-300 text-purple-900">10-20 min</option>
-                        <option class="bg-purple-300 text-purple-900">20-30 min</option>
-                        <option class="bg-purple-300 text-purple-900">Over 30 min</option>
+                    <label class="block text-sm mb-1">Response Time</label>
+                    <select id="response" class="w-full bg-purple-800 rounded-lg p-2 border border-purple-600" title="Select response time">
+                        <option value="all" class="bg-purple-300 text-purple-900">All Times</option>
+                        <option value="0-5" class="bg-purple-300 text-purple-900">Under 5 min</option>
+                        <option value="5-10" class="bg-purple-300 text-purple-900">5-10 min</option>
+                        <option value="10-20" class="bg-purple-300 text-purple-900">10-20 min</option>
+                        <option value="20-30" class="bg-purple-300 text-purple-900">20-30 min</option>
+                        <option value="Over 30" class="bg-purple-300 text-purple-900">Over 30 min</option>
                     </select>
                 </div>
                 <div class="col-span-1 flex items-end space-x-2">
@@ -171,7 +210,10 @@
                         <h3 class="text-2xl font-bold">18</h3>
                     </div>
                     <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-700/50">
-                        <i class="fas fa-helicopter text-2xl" aria-hidden="true"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 16.5c0-1.5 3.5-3 7.5-3s7.5 1.5 7.5 3" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -182,7 +224,9 @@
                         <h3 class="text-2xl font-bold">12</h3>
                     </div>
                     <div class="w-12 h-12 flex items-center justify-center rounded-full bg-green-600/50">
-                        <i class="fas fa-check-circle text-2xl" aria-hidden="true"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -193,7 +237,9 @@
                         <h3 class="text-2xl font-bold">4</h3>
                     </div>
                     <div class="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/50">
-                        <i class="fas fa-clock text-2xl" aria-hidden="true"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -204,7 +250,9 @@
                         <h3 class="text-2xl font-bold">2</h3>
                     </div>
                     <div class="w-12 h-12 flex items-center justify-center rounded-full bg-red-600/50">
-                        <i class="fas fa-exclamation-circle text-2xl" aria-hidden="true"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -233,17 +281,30 @@
     <script>
         // Initialize map
         const map = initMap('map');
+        
+        // Global variables to store helicopter data and markers
+        let allHelicopters = [];
+        let helicopterMarkers = [];
 
         // Load and display helicopters
         async function initializeHelicopterTracking() {
             try {
                 // Load helicopter data
-                const helicopters = await loadAgencies('helicopter');
+                const helicopters = await loadHelicopters();
                 
                 // Display helicopters on the map
-                displayAgencies(map, helicopters, 'helicopter');
+                displayHelicoptersOnMap(helicopters);
+                
+                // Update KPI cards
+                updateKPICards();
+                
+                // Set up filters
+                setupFilters();
                 
                 // Set up button event listeners
+                document.querySelector('button[title="Deploy helicopter"]').addEventListener('click', handleDeploy);
+                document.querySelector('button[title="Report emergency"]').addEventListener('click', handleEmergency);
+                
                 document.querySelector('button[title="Show weather"]').addEventListener('click', function() {
                     // In a real app, this would load weather data from an API
                     alert('Weather data would be loaded from a real-time weather API in a production environment');
@@ -259,56 +320,436 @@
                     alert('3D view would be enabled in a production environment');
                 });
                 
-                // Set up filter listeners
-                const statusFilter = document.getElementById('status-filter');
-                if (statusFilter) {
-                    statusFilter.addEventListener('change', function() {
-                        const selectedStatus = this.value;
-                        if (selectedStatus === 'all') {
-                            displayAgencies(map, helicopters, 'helicopter');
-                        } else {
-                            const filteredHelicopters = helicopters.filter(heli => 
-                                heli.status.toLowerCase() === selectedStatus.toLowerCase());
-                            displayAgencies(map, filteredHelicopters, 'helicopter');
-                        }
-                    });
-                }
-                
-                const responseTimeFilter = document.getElementById('response-time-filter');
-                if (responseTimeFilter) {
-                    responseTimeFilter.addEventListener('change', function() {
-                        // In a real app, this would filter based on estimated response times
-                        alert('Response time filtering would be implemented in a production environment');
-                    });
-                }
-                
-                // Set up deploy button
-                document.querySelector('button[title="Deploy helicopter"]').addEventListener('click', function() {
-                    // In a real app, this would open a deployment interface
-                    alert('Helicopter deployment interface would open in a production environment');
-                });
-                
-                // Set up emergency button
-                document.querySelector('button[title="Report emergency"]').addEventListener('click', function() {
-                    // In a real app, this would open an emergency reporting interface
-                    alert('Emergency reporting interface would open in a production environment');
-                });
-                
-                // Add helipads to the map
-                addFacilities(map, 'helipads');
+                console.log('Helicopter tracking system initialized successfully');
             } catch (error) {
-                console.error('Error initializing helicopter tracking:', error);
+                console.error('Error initializing helicopter tracking system:', error);
             }
         }
-
+        
+        // Function to initialize the map
+        function initMap(containerId) {
+            // Center the map on India (coordinates for central India)
+            const map = L.map(containerId).setView([22.5937, 78.9629], 5);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+            
+            return map;
+        }
+        
+        // Function to load helicopter data
+        async function loadHelicopters() {
+            try {
+                // In a real application, this would be an API call
+                // For demonstration, we'll use mock data for Indian cities with correct coordinates
+                allHelicopters = [
+                    // Delhi
+                    { id: 'H001', name: 'Delhi Air Medical', type: 'medevac', status: 'available', hospital: 'delhi', responseTime: 6, lat: 28.6139, lng: 77.2090, lastUpdate: '3 mins ago' },
+                    // Mumbai
+                    { id: 'H002', name: 'Mumbai Aerial Response', type: 'rescue', status: 'responding', hospital: 'mumbai', responseTime: 8, lat: 19.0760, lng: 72.8777, lastUpdate: '6 mins ago' },
+                    // Kolkata (West Bengal)
+                    { id: 'H003', name: 'Kolkata Air Ambulance', type: 'medevac', status: 'on call', hospital: 'kolkata', responseTime: 10, lat: 22.5726, lng: 88.3639, lastUpdate: '9 mins ago' },
+                    // Chennai
+                    { id: 'H004', name: 'Chennai Medical Airlift', type: 'transport', status: 'busy', hospital: 'chennai', responseTime: 15, lat: 13.0827, lng: 80.2707, lastUpdate: '14 mins ago' },
+                    // Bangalore
+                    { id: 'H005', name: 'Bangalore Air Response', type: 'medevac', status: 'available', hospital: 'bangalore', responseTime: 5, lat: 12.9716, lng: 77.5946, lastUpdate: '4 mins ago' },
+                    // Hyderabad
+                    { id: 'H006', name: 'Hyderabad Air Rescue', type: 'rescue', status: 'available', hospital: 'hyderabad', responseTime: 7, lat: 17.3850, lng: 78.4867, lastUpdate: '5 mins ago' },
+                    // Ahmedabad
+                    { id: 'H007', name: 'Ahmedabad Aerial Medical', type: 'medevac', status: 'responding', hospital: 'ahmedabad', responseTime: 9, lat: 23.0225, lng: 72.5714, lastUpdate: '7 mins ago' },
+                    // Pune
+                    { id: 'H008', name: 'Pune Air Support', type: 'transport', status: 'on call', hospital: 'pune', responseTime: 12, lat: 18.5204, lng: 73.8567, lastUpdate: '11 mins ago' },
+                    // Jaipur
+                    { id: 'H009', name: 'Jaipur Emergency Airlift', type: 'rescue', status: 'available', hospital: 'jaipur', responseTime: 6, lat: 26.9124, lng: 75.7873, lastUpdate: '5 mins ago' },
+                    // Lucknow (UP)
+                    { id: 'H010', name: 'Lucknow Air Support', type: 'rescue', status: 'responding', hospital: 'lucknow', responseTime: 8, lat: 26.8467, lng: 80.9462, lastUpdate: '7 mins ago' },
+                    // Chandigarh (Punjab)
+                    { id: 'H011', name: 'Chandigarh Air Medical', type: 'medevac', status: 'available', hospital: 'chandigarh', responseTime: 5, lat: 30.7333, lng: 76.7794, lastUpdate: '3 mins ago' },
+                    // Amritsar (Punjab)
+                    { id: 'H012', name: 'Amritsar Air Response', type: 'transport', status: 'available', hospital: 'amritsar', responseTime: 7, lat: 31.6340, lng: 74.8723, lastUpdate: '6 mins ago' }
+                ];
+                return allHelicopters;
+            } catch (error) {
+                console.error('Error loading helicopter data:', error);
+                return [];
+            }
+        }
+        
+        // Function to clear all markers from the map
+        function clearMarkers() {
+            helicopterMarkers.forEach(marker => {
+                map.removeLayer(marker);
+            });
+            helicopterMarkers = [];
+        }
+        
+        // Function to display helicopters on the map
+        function displayHelicoptersOnMap(helicopters) {
+            // Clear existing markers
+            clearMarkers();
+            
+            helicopters.forEach(helicopter => {
+                // Create custom HTML icon for the helicopter
+                const customIcon = L.divIcon({
+                    className: 'custom-helicopter-icon',
+                    html: `<img src="assets/images/object-on-white-toy-model-helicopter-B087F2.jpg" alt="Helicopter" style="width:40px; height:40px; border-radius:5px;">`,
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 20],
+                    popupAnchor: [0, -20]
+                });
+                
+                // Create marker with the custom icon
+                const marker = L.marker([helicopter.lat, helicopter.lng], {
+                    icon: customIcon
+                }).addTo(map);
+                
+                // Add popup with helicopter information
+                marker.bindPopup(`
+                    <div class="p-3 bg-purple-100 rounded-lg text-gray-900 shadow-lg">
+                        <h3 class="font-bold text-purple-800 text-lg">${helicopter.name}</h3>
+                        <div class="mt-2 text-sm">
+                            <p><strong>Location:</strong> ${helicopter.hospital}</p>
+                            <p><strong>ID:</strong> ${helicopter.id}</p>
+                            <p><strong>Type:</strong> ${helicopter.type}</p>
+                            <p><strong>Status:</strong> <span class="font-semibold ${getStatusColor(helicopter.status)}">${helicopter.status}</span></p>
+                            <p><strong>Response Time:</strong> ${helicopter.responseTime} min</p>
+                            <p><strong>Last Update:</strong> ${helicopter.lastUpdate}</p>
+                        </div>
+                    </div>
+                `);
+                
+                // Store marker reference
+                helicopterMarkers.push(marker);
+                
+                // Simulate movement for real-time effect
+                simulateMovement(marker, helicopter);
+            });
+        }
+        
+        // Helper function to get color class based on status
+        function getStatusColor(status) {
+            switch(status) {
+                case 'available': return 'text-green-700';
+                case 'responding': return 'text-yellow-700';
+                case 'on call': return 'text-blue-700';
+                case 'busy': return 'text-red-700';
+                default: return 'text-gray-900';
+            }
+        }
+        
+        // Function to simulate helicopter movement
+        function simulateMovement(marker, helicopter) {
+            // Set an interval to update position every few seconds
+            setInterval(() => {
+                // Generate small random movement
+                const latChange = (Math.random() - 0.5) * 0.01;
+                const lngChange = (Math.random() - 0.5) * 0.01;
+                
+                // Update marker position
+                const newLat = marker.getLatLng().lat + latChange;
+                const newLng = marker.getLatLng().lng + lngChange;
+                
+                // Animate the movement
+                marker.setLatLng([newLat, newLng]);
+            }, 5000 + Math.random() * 5000); // Random interval between 5-10 seconds
+        }
+        
+        // Function to update KPI cards
+        function updateKPICards(helicopters = allHelicopters) {
+            // Count helicopters by status
+            const totalHelicopters = helicopters.length;
+            const availableHelicopters = helicopters.filter(heli => heli.status === 'available').length;
+            const respondingHelicopters = helicopters.filter(heli => heli.status === 'responding').length;
+            const busyHelicopters = helicopters.filter(heli => heli.status === 'busy' || heli.status === 'on call').length;
+            
+            // Update card values
+            document.querySelector('.glass-card:nth-child(1) h3').textContent = totalHelicopters;
+            document.querySelector('.glass-card:nth-child(2) h3').textContent = availableHelicopters;
+            document.querySelector('.glass-card:nth-child(3) h3').textContent = respondingHelicopters;
+            document.querySelector('.glass-card:nth-child(4) h3').textContent = busyHelicopters;
+        }
+        
+        // Function to set up filter listeners
+        function setupFilters() {
+            // Get filter elements
+            const helicopterTypeFilter = document.getElementById('helicopterType');
+            const statusFilter = document.getElementById('status');
+            const hospitalFilter = document.getElementById('base');
+            const responseTimeFilter = document.getElementById('response');
+            
+            // Add event listeners
+            helicopterTypeFilter.addEventListener('change', filterHelicopters);
+            statusFilter.addEventListener('change', filterHelicopters);
+            hospitalFilter.addEventListener('change', filterHelicopters);
+            responseTimeFilter.addEventListener('change', filterHelicopters);
+        }
+        
+        // Function to filter helicopters based on selected criteria
+        function filterHelicopters() {
+            const helicopterType = document.getElementById('helicopterType').value;
+            const status = document.getElementById('status').value;
+            const hospital = document.getElementById('base').value;
+            const responseTime = document.getElementById('response').value;
+            
+            // Filter helicopters based on selected criteria
+            let filteredHelicopters = allHelicopters;
+            
+            if (helicopterType !== 'all') {
+                filteredHelicopters = filteredHelicopters.filter(heli => heli.type === helicopterType);
+            }
+            
+            if (status !== 'all') {
+                filteredHelicopters = filteredHelicopters.filter(heli => heli.status === status);
+            }
+            
+            if (hospital !== 'all') {
+                filteredHelicopters = filteredHelicopters.filter(heli => heli.hospital === hospital);
+            }
+            
+            if (responseTime !== 'all') {
+                if (responseTime === '0-5') {
+                    filteredHelicopters = filteredHelicopters.filter(heli => heli.responseTime <= 5);
+                } else if (responseTime === '5-10') {
+                    filteredHelicopters = filteredHelicopters.filter(heli => heli.responseTime > 5 && heli.responseTime <= 10);
+                } else if (responseTime === '10-20') {
+                    filteredHelicopters = filteredHelicopters.filter(heli => heli.responseTime > 10 && heli.responseTime <= 20);
+                } else if (responseTime === '20-30') {
+                    filteredHelicopters = filteredHelicopters.filter(heli => heli.responseTime > 20 && heli.responseTime <= 30);
+                } else if (responseTime === 'Over 30') {
+                    filteredHelicopters = filteredHelicopters.filter(heli => heli.responseTime > 30);
+                }
+            }
+            
+            // Update the map with filtered helicopters
+            displayHelicoptersOnMap(filteredHelicopters);
+            
+            // Update KPI cards
+            updateKPICards(filteredHelicopters);
+        }
+        
+        // Function to handle deploy button click
+        function handleDeploy() {
+            // Create a modal for deploying helicopter
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-purple-900 p-6 rounded-lg shadow-xl max-w-md w-full">
+                    <h2 class="text-xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Deploy Helicopter</h2>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Select Helicopter</label>
+                        <select id="deploy-helicopter" class="w-full bg-purple-800 text-white rounded-lg p-2 border border-purple-600">
+                            ${allHelicopters.filter(heli => heli.status === 'available').map(heli => 
+                                `<option value="${heli.id}" data-name="${heli.name}">${heli.name} (${heli.type})</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Mission Location</label>
+                        <input type="text" id="mission-location" class="w-full bg-purple-800 text-white rounded-lg p-2 border border-purple-600" placeholder="Enter location">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Mission Type</label>
+                        <select id="mission-type" class="w-full bg-purple-800 text-white rounded-lg p-2 border border-purple-600">
+                            <option value="medical">Medical Evacuation</option>
+                            <option value="rescue">Search and Rescue</option>
+                            <option value="firefighting">Firefighting</option>
+                            <option value="disaster">Disaster Response</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button id="cancel-deploy" class="px-4 py-2 bg-purple-700 text-white rounded-lg">Cancel</button>
+                        <button id="confirm-deploy" class="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg">Deploy</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add event listeners for modal buttons
+            document.getElementById('cancel-deploy').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            document.getElementById('confirm-deploy').addEventListener('click', () => {
+                const helicopterSelect = document.getElementById('deploy-helicopter');
+                const helicopterId = helicopterSelect.value;
+                const helicopterName = helicopterSelect.options[helicopterSelect.selectedIndex].dataset.name;
+                const location = document.getElementById('mission-location').value;
+                const missionType = document.getElementById('mission-type').value;
+                
+                // Find the selected helicopter
+                const helicopter = allHelicopters.find(heli => heli.id === helicopterId);
+                
+                if (helicopter) {
+                    // Update helicopter status
+                    helicopter.status = 'responding';
+                    
+                    // Send email notification
+                    sendNotificationEmail('deploy', {
+                        helicopterId: helicopterId,
+                        helicopterName: helicopterName,
+                        location: location,
+                        missionType: missionType
+                    });
+                    
+                    // Show notification
+                    alert(`Helicopter ${helicopter.name} deployed to ${location} for ${missionType} mission.`);
+                    
+                    // Update the map
+                    filterHelicopters();
+                }
+                
+                modal.remove();
+            });
+        }
+        
+        // Function to handle emergency button click
+        function handleEmergency() {
+            // Create a modal for reporting emergency
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-purple-900 p-6 rounded-lg shadow-xl max-w-md w-full">
+                    <h2 class="text-xl font-bold mb-4 text-red-500">Report Air Emergency</h2>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Emergency Type</label>
+                        <select id="emergency-type" class="w-full bg-purple-800 text-white rounded-lg p-2 border border-purple-600">
+                            <option value="medical">Medical Emergency</option>
+                            <option value="rescue">Search and Rescue</option>
+                            <option value="fire">Wildfire</option>
+                            <option value="disaster">Natural Disaster</option>
+                            <option value="evacuation">Urgent Evacuation</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Location</label>
+                        <input type="text" id="emergency-location" class="w-full bg-purple-800 text-white rounded-lg p-2 border border-purple-600" placeholder="Enter location">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Description</label>
+                        <textarea id="emergency-description" class="w-full bg-purple-800 text-white rounded-lg p-2 border border-purple-600" rows="3" placeholder="Describe the emergency"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Severity</label>
+                        <select id="emergency-severity" class="w-full bg-purple-800 text-white rounded-lg p-2 border border-purple-600">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button id="cancel-emergency" class="px-4 py-2 bg-purple-700 text-white rounded-lg">Cancel</button>
+                        <button id="confirm-emergency" class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg">Report Emergency</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add event listeners for modal buttons
+            document.getElementById('cancel-emergency').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            document.getElementById('confirm-emergency').addEventListener('click', () => {
+                const emergencyType = document.getElementById('emergency-type').value;
+                const location = document.getElementById('emergency-location').value;
+                const description = document.getElementById('emergency-description').value;
+                const severity = document.getElementById('emergency-severity').value;
+                
+                // Find nearest available helicopter
+                const availableHelicopters = allHelicopters.filter(heli => heli.status === 'available');
+                
+                // Send email notification
+                sendNotificationEmail('emergency', {
+                    incidentType: emergencyType,
+                    location: location,
+                    description: description,
+                    severity: severity
+                });
+                
+                if (availableHelicopters.length > 0) {
+                    // Select the first available helicopter (in a real app, would select the nearest)
+                    const helicopter = availableHelicopters[0];
+                    
+                    // Update helicopter status
+                    helicopter.status = 'responding';
+                    
+                    // Show notification
+                    alert(`Air emergency reported at ${location}. ${helicopter.name} has been deployed.`);
+                    
+                    // Update the map
+                    filterHelicopters();
+                } else {
+                    alert('No available helicopters. Emergency has been logged and will be addressed as soon as a helicopter becomes available.');
+                }
+                
+                modal.remove();
+            });
+        }
+        
+        // Function to send notification email
+        function sendNotificationEmail(type, data) {
+            // Prepare the data to send
+            const notificationData = {
+                type: type,
+                ...data
+            };
+            
+            // Send the data to the PHP script
+            fetch('php/send_helicopter_notification.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(notificationData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Notification result:', result);
+                if (!result.success) {
+                    console.error('Failed to send notification:', result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending notification:', error);
+            });
+        }
+        
         // Initialize the helicopter tracking system
         initializeHelicopterTracking();
         
         // Refresh data every 30 seconds
         setInterval(async function() {
-            const helicopters = await loadAgencies('helicopter');
-            displayAgencies(map, helicopters, 'helicopter');
+            const helicopters = await loadHelicopters();
+            displayHelicoptersOnMap(helicopters);
         }, 30000);
+        
+        // Profile dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileButton = document.getElementById('profile-menu-button');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            
+            if (profileButton && profileDropdown) {
+                // Toggle dropdown when profile button is clicked
+                profileButton.addEventListener('click', function() {
+                    const expanded = profileButton.getAttribute('aria-expanded') === 'true';
+                    profileButton.setAttribute('aria-expanded', !expanded);
+                    profileDropdown.classList.toggle('hidden');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                        profileButton.setAttribute('aria-expanded', 'false');
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

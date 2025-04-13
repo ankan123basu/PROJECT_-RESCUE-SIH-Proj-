@@ -1,77 +1,146 @@
-# Rescue Agency Coordination System
+# RESCUE - Emergency Response Tracking System
 
-A comprehensive web application for coordinating rescue agencies during natural and man-made calamities. The system provides real-time location tracking, resource management, and incident response coordination.
+A comprehensive web-based platform for tracking and managing emergency resources across multiple Indian cities. The system provides real-time tracking of emergency vehicles, interactive map interfaces, incident reporting, and comprehensive resource management.
 
-## Features
+![RESCUE Logo](assets/images/DeWatermark.ai_1744543533742.png)
 
-- **Real-time Agency Tracking**: View locations of all registered rescue agencies on an interactive map
-- **Resource Management**: Track and manage various rescue resources (ambulances, helicopters, fire trucks, etc.)
-- **Incident Response**: Coordinate emergency response during calamities
-- **Agency Registration**: Easy registration process for rescue agencies
-- **Real-time Updates**: Live updates of agency status and incident reports
-- **Interactive Maps**: Multiple map views for different resource types
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
+## 🚨 Key Features
 
-## Technologies Used
+### Real-time Tracking & Visualization
+- **Multi-vehicle Tracking**: Monitor ambulances, fire trucks, and helicopters in real-time
+- **Interactive Maps**: Dynamic markers with filtering capabilities by type, status, and location
+- **3D & Satellite Views**: Multiple map visualization options
+- **City Coverage**: Full tracking across 14 major Indian cities
 
-- **Frontend**:
-  - HTML5
-  - Tailwind CSS
-  - JavaScript
-  - MapBox GL JS
+### Incident Management
+- **Incident Reporting**: Comprehensive incident creation and reporting system
+- **Email Notifications**: Automated notifications for incident reports and responses
+- **Response Coordination**: Assign and track emergency resources to incidents
+- **Real-time Status Updates**: Live tracking of incident status and resource deployment
 
-- **Backend**:
-  - PHP
-  - MySQL
-  - WebSocket (for real-time updates)
+### Resource Management
+- **Resource Inventory**: Complete inventory of all emergency vehicles and assets
+- **Status Monitoring**: Real-time status tracking (available, responding, busy)
+- **Filtering System**: Advanced filtering by resource type, status, and location
+- **Resource Dispatch**: Streamlined process for dispatching resources to incidents
 
-## Setup Instructions
+### User Interface
+- **Glass Morphism Design**: Modern, visually appealing interface with glass effects
+- **Responsive Framework**: Fully responsive design that works on all device sizes
+- **Dark Theme**: Eye-friendly dark theme with professional color scheme
+- **Accessibility Features**: ARIA-compliant interface elements
+
+### AI Integration
+- **Gemini Flash 2.0 Chatbot**: AI-powered assistant on the landing page
+- **Intelligent Resource Suggestions**: AI-based recommendations for resource allocation
+- **Natural Language Interface**: Interact with the system using natural language
+
+## 🌐 City Coverage
+
+The system currently tracks emergency resources across these 14 Indian cities:
+
+- Delhi
+- Mumbai
+- Kolkata
+- Chennai
+- Bangalore
+- Hyderabad
+- Ahmedabad
+- Pune
+- Jaipur
+- Lucknow
+- Chandigarh
+- Amritsar
+- Varanasi
+- Patna
+
+## 💻 Technologies Used
+
+### Frontend
+- HTML5
+- Tailwind CSS (for responsive design)
+- JavaScript
+- Leaflet.js (for mapping)
+- Font Awesome (for icons)
+
+### Backend
+- PHP for server-side processing
+- JSON-based data handling
+- Email notification scripts
+
+### APIs & External Services
+- Gemini Flash 2.0 API (for AI chatbot)
+- OpenStreetMap and ESRI (for mapping)
+
+## 📄 Main Pages
+
+- **Landing Page**: Introduction to the system with AI chatbot
+- **Dashboard**: Overview of all emergency resources
+- **Incidents**: Incident reporting and management
+- **Resources**: Resource tracking and management
+- **Ambulance Tracking**: Dedicated ambulance monitoring
+- **Fire Truck Map**: Fire truck resource visualization
+- **Helicopter Tracking**: Aerial resource management
+
+## 🔧 Setup Instructions
 
 1. Clone the repository
 2. Set up a local web server (e.g., XAMPP, WAMP)
-3. Create a MySQL database named 'rescue_system'
-4. Update the database credentials in `php/config.php`
-5. Get a MapBox API key and update it in `dashboard.html`
-6. Access the application through your local web server
+3. Place the files in your server's htdocs folder
+4. To use the AI chatbot feature, update the Gemini API key in `landing.html`
+5. Access the application through `http://localhost/PROJECTRESCUE/`
 
-## Database Structure
+## 💡 Current Implementations
 
-The system uses three main tables:
-- `agencies`: Stores rescue agency information
-- `incidents`: Records emergency incidents
-- `resource_assignments`: Tracks resource assignments to incidents
+- **Dashboard**: Real-time vehicle tracking with interactive filtering
+- **Incident System**: Complete incident reporting and response workflow
+- **Email Notifications**: Automated emails for incident reporting and response
+- **Resource Management**: Comprehensive tracking and filtering for all resource types
+- **AI Chatbot**: Gemini-powered assistant for website information
 
-## API Endpoints
+## 🛠️ Technical Details
 
-- `/php/login.php`: Handle user authentication
-- `/php/register.php`: Process agency registration
-- `/php/get_agencies.php`: Retrieve agency locations and details
+### PHP Scripts
+- `report_incident.php`: Handles incident reporting with email notifications
+- `respond_to_incident.php`: Manages incident response workflow
 
-## Contributing
+### JavaScript Components
+- Real-time tracking simulation
+- Dynamic marker placement
+- Interactive filtering system
+- Map view toggling
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+### Data Structure
+The system uses JSON-based data for:
+- Emergency vehicle information
+- Incident details
+- City coordinates
+- Resource statuses
 
-## License
+## 🔒 Security Features
+- Input validation
+- Cross-site scripting prevention
+- Secure email handling
+- Data sanitization
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 📦 Included Assets
+- Vehicle images for ambulances, fire trucks, and helicopters
+- Interface icons and graphics
+- City coordinate data
+- Sample incident scenarios
 
-## Security Considerations
+## 🔜 Planned Enhancements
+- Actual real-time data synchronization
+- Advanced geolocation features
+- Cross-browser compatibility testing
+- Unit and integration tests
+- Performance optimization for large datasets
+- Enhanced error handling mechanisms
 
-- All passwords are hashed before storage
-- API keys should be stored securely
-- Input validation is implemented for all forms
-- CSRF protection is in place
-- SQL injection prevention through prepared statements
+## 📧 Contact Information
+- Primary Email: ankanbasu1234@gmail.com
+- Sender Email: ankanbasu10@gmail.com
 
-## Future Enhancements
+---
 
-- Mobile app integration
-- Advanced analytics dashboard
-- Weather integration
-- Resource optimization algorithms
-- Communication system integration
-- Automated dispatch system
+© 2025 RESCUE Agency Coordination System | All Rights Reserved

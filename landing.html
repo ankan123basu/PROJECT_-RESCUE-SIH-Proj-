@@ -101,6 +101,208 @@
         .animate-pulse {
             animation: pulse 2s infinite;
         }
+        
+        /* Chat widget styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chat-button {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35), 0 0 8px 2px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: pulse-glow 2s infinite ease-in-out, float 3s infinite ease-in-out;
+        }
+        
+        .chat-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+            z-index: 1;
+        }
+        
+        .chat-button::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            z-index: 1;
+        }
+        
+        .chat-button i {
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+            animation: blink 3s infinite;
+            font-size: 1.75rem;
+        }
+        
+        .chat-container {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: rgba(31, 41, 55, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform-origin: bottom right;
+        }
+        
+        .chat-header {
+            padding: 15px 20px;
+            background: rgba(30, 58, 138, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .user-message, .bot-message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            word-break: break-word;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background: #3b82f6;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background: rgba(75, 85, 99, 0.7);
+            color: white;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .bot-typing {
+            display: flex;
+            gap: 4px;
+            padding: 10px 15px;
+            align-self: flex-start;
+            background: rgba(75, 85, 99, 0.7);
+            color: white;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: typingAnimation 1.4s infinite both;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingAnimation {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-input input {
+            flex: 1;
+            background: rgba(55, 65, 81, 0.7);
+            border: 1px solid rgba(75, 85, 99, 0.7);
+            border-radius: 20px;
+            padding: 10px 15px;
+            outline: none;
+            color: white;
+        }
+        
+        .chat-input button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+        
+        .chat-input button:hover {
+            background: #2563eb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .scale-out {
+            transform: scale(0);
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 8px 2px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 12px 4px rgba(59, 130, 246, 0.7); }
+            100% { box-shadow: 0 0 8px 2px rgba(59, 130, 246, 0.5); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
     </style>
 </head>
 <body>
@@ -114,6 +316,7 @@
         <div class="container mx-auto px-6 relative z-10">
             <nav class="flex justify-between items-center py-6">
                 <div class="flex items-center">
+                    <img src="assets/images/DeWatermark.ai_1744543533742.png" alt="RESCUE Logo" class="h-12 mr-2">
                     <span class="text-3xl font-bold text-white">RESCUE</span>
                 </div>
                 <div class="hidden md:flex space-x-10">
@@ -363,6 +566,34 @@
         </div>
     </footer>
 
+    <div class="chat-widget">
+        <button class="chat-button" aria-label="Open chat support" title="Chat with us">
+            <i class="fas fa-robot text-white text-2xl"></i>
+        </button>
+        <div class="chat-container hidden">
+            <div class="chat-header">
+                <div class="flex items-center">
+                    <i class="fas fa-robot text-blue-400 text-xl mr-2"></i>
+                    <h3 class="text-xl font-bold text-white">RESCUE AI Assistant</h3>
+                </div>
+                <button class="text-white hover:text-gray-400 transition-colors" onclick="closeChat()" aria-label="Close chat" title="Close chat">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages">
+                <div class="bot-message">
+                    <p>Hello! I'm your RESCUE assistant, powered by Gemini Flash 2.0. How can I help you learn about our emergency coordination platform?</p>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Type a message...">
+                <button onclick="sendMessage()" aria-label="Send message" title="Send message">
+                    <i class="fas fa-paper-plane text-white"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -421,6 +652,181 @@
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Send Message';
             });
+        });
+
+        // Chat functionality
+        const chatButton = document.querySelector('.chat-button');
+        const chatContainer = document.querySelector('.chat-container');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.querySelector('.chat-messages');
+        
+        // Gemini API configuration
+        const GEMINI_API_KEY = 'AIzaSyBhnwj6QZ4bfb-x5pr9o0aU4myOEs-zVic'; // *** IMPORTANT: Replace with your actual API key here ***
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+        
+        // Define context about our system for the Gemini model
+        const systemContext = `
+            You are an AI assistant for the RESCUE Agency Coordination System, a platform for emergency response 
+            coordination, resource management, and agency networking. Your role is to provide helpful information
+            about the platform's features including:
+            
+            1. Real-time tracking of emergency vehicles (ambulances, helicopters, fire trucks)
+            2. Interactive map interfaces with dynamic markers and filtering capabilities 
+            3. Incident reporting and response mechanisms with email notifications
+            4. Resource management and coordination tools
+            5. Agency networking for collaborative emergency response
+            
+            Provide concise, helpful responses about the platform. If asked about signing up,
+            direct users to the registration page. For emergency assistance, remind them to
+            call their local emergency number instead of using this chat.
+        `;
+        
+        // Chat history to maintain context
+        let chatHistory = [
+            { role: "system", content: systemContext },
+            { role: "model", content: "Hello! I'm your RESCUE assistant, powered by Gemini Flash 2.0. How can I help you learn about our emergency coordination platform?" }
+        ];
+
+        chatButton.addEventListener('click', () => {
+            chatContainer.classList.toggle('hidden');
+        });
+
+        // Function to close chat
+        function closeChat() {
+            chatContainer.classList.add('hidden');
+        }
+        
+        // Function to show typing indicator
+        function showTypingIndicator() {
+            const typingIndicator = document.createElement('div');
+            typingIndicator.classList.add('bot-typing');
+            typingIndicator.id = 'typingIndicator';
+            
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('typing-dot');
+                typingIndicator.appendChild(dot);
+            }
+            
+            chatMessages.appendChild(typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Function to remove typing indicator
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Function to send message to Gemini Flash 2.0 API
+        async function getGeminiResponse(message) {
+            try {
+                // Prepare the request body
+                const requestBody = {
+                    contents: [
+                        {
+                            parts: [
+                                { text: systemContext },
+                                { text: message }
+                            ]
+                        }
+                    ],
+                    generationConfig: {
+                        temperature: 0.7,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 1024,
+                    }
+                };
+                
+                // Make API request
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API error details:', errorData);
+                    throw new Error(`API request failed with status ${response.status}: ${JSON.stringify(errorData)}`);
+                }
+                
+                const data = await response.json();
+                const botResponse = data.candidates[0].content.parts[0].text;
+                
+                return botResponse;
+            } catch (error) {
+                console.error('Error getting response from Gemini API:', error);
+                return "I'm sorry, I'm having trouble connecting to my knowledge base right now. Please try again later.";
+            }
+        }
+
+        // Function to handle sending message
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                // Add user message to UI
+                const userMessage = document.createElement('div');
+                userMessage.classList.add('user-message');
+                userMessage.innerHTML = `<p>${message}</p>`;
+                chatMessages.appendChild(userMessage);
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Add user message to chat history
+                chatHistory.push({ role: "user", content: message });
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                try {
+                    // Get response from Gemini
+                    const botResponse = await getGeminiResponse(message);
+                    
+                    // Remove typing indicator
+                    removeTypingIndicator();
+                    
+                    // Add bot response to UI
+                    const botMessage = document.createElement('div');
+                    botMessage.classList.add('bot-message');
+                    botMessage.innerHTML = `<p>${botResponse}</p>`;
+                    chatMessages.appendChild(botMessage);
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch (error) {
+                    console.error('Error in sendMessage:', error);
+                    
+                    // Remove typing indicator
+                    removeTypingIndicator();
+                    
+                    // Show error message
+                    const errorMessage = document.createElement('div');
+                    errorMessage.classList.add('bot-message');
+                    errorMessage.innerHTML = `<p>I'm sorry, something went wrong. Please try again.</p>`;
+                    chatMessages.appendChild(errorMessage);
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+        }
+        
+        // Handle Enter key in chat input
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
         });
     </script>
 </body>

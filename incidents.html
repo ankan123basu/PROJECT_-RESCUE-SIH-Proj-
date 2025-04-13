@@ -15,31 +15,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Glass morphism effects */
+        /* Glass effect */
         .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-        
-        .glass-effect-dark {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(15, 23, 42, 0.8);
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
         }
         
-        /* Glossy button effects */
+        /* Glossy button effect */
         .glossy-btn {
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
         }
         
-        .glossy-btn::before {
+        .glossy-btn:after {
             content: '';
             position: absolute;
             top: 0;
@@ -55,34 +48,52 @@
             transition: all 0.6s ease;
         }
         
-        .glossy-btn:hover::before {
+        .glossy-btn:hover:after {
             left: 100%;
         }
         
+        .glossy-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Resource badges */
+        .resource-badge {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        
+        /* Incident type options */
+        .incident-type-option {
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .incident-type-option:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .incident-type-option.selected {
+            border-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Map container */
         #map {
+            height: 500px;
             width: 100%;
-            height: 400px;
-            z-index: 1;
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
     </style>
 </head>
@@ -106,17 +117,20 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <button class="glossy-btn rounded-full p-1 text-gray-300 hover:text-white focus:outline-none">
-                            <span class="sr-only">View notifications</span>
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                        <button id="profile-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                            <img class="h-8 w-8 rounded-full" src="assets/images/d3c09cde-dcda-4267-a7a0-d6b4668f08e0.jpg" alt="Ankan Basu">
+                            <span>Ankan Basu</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
                         </button>
-                    </div>
-                    <div class="relative">
-                        <button class="glossy-btn flex items-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 p-1 text-white focus:outline-none">
-                            <span class="sr-only">Open user menu</span>
-                            <i class="fas fa-user-circle text-xl"></i>
-                        </button>
+                        
+                        <!-- Profile dropdown menu -->
+                        <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Your Profile</a>
+                            <a href="settings.html" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Settings</a>
+                            <a href="index.html" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -130,7 +144,7 @@
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-3xl font-bold text-white">Incident Management</h1>
                     <div class="flex space-x-3">
-                        <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
+                        <button id="report-incident-btn" class="glossy-btn bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
                             <i class="fas fa-exclamation-triangle mr-2"></i> Report Incident
                         </button>
                         <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center">
@@ -175,11 +189,11 @@
                             </thead>
                             <tbody class="divide-y divide-gray-700">
                                 <!-- High Priority Incident -->
-                                <tr class="bg-red-900 bg-opacity-20">
+                                <tr class="bg-red-900 bg-opacity-20" data-incident-id="#INC-2023-001">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#INC-2023-001</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Fire
+                                            <i class="fas fa-fire mr-1"></i> Fire
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Delhi, Connaught Place</td>
@@ -198,17 +212,17 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs">View</button>
-                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2">Respond</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs" onclick="viewIncident('#INC-2023-001')">View</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2" onclick="respondToIncident('#INC-2023-001')">Respond</button>
                                     </td>
                                 </tr>
                                 
                                 <!-- Medium Priority Incident -->
-                                <tr class="bg-yellow-900 bg-opacity-20">
+                                <tr class="bg-yellow-900 bg-opacity-20" data-incident-id="#INC-2023-002">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#INC-2023-002</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            Flood
+                                            <i class="fas fa-tint mr-1"></i> Flood
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Mumbai, Dadar</td>
@@ -225,20 +239,20 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs">View</button>
-                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2">Respond</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs" onclick="viewIncident('#INC-2023-002')">View</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2" onclick="respondToIncident('#INC-2023-002')">Respond</button>
                                     </td>
                                 </tr>
                                 
                                 <!-- Low Priority Incident -->
-                                <tr class="bg-blue-900 bg-opacity-20">
+                                <tr class="bg-blue-900 bg-opacity-20" data-incident-id="#INC-2023-003">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#INC-2023-003</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            Medical
+                                            <i class="fas fa-medkit mr-1"></i> Medical
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Bangalore, Indiranagar</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Kolkata, Park Street</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                             Minor
@@ -251,8 +265,8 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs">View</button>
-                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2">Respond</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs" onclick="viewIncident('#INC-2023-003')">View</button>
+                                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2" onclick="respondToIncident('#INC-2023-003')">Respond</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -265,13 +279,191 @@
                             <button class="glossy-btn bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">1</button>
                             <button class="glossy-btn bg-gray-700 text-white px-3 py-1 rounded-lg text-sm">2</button>
                             <button class="glossy-btn bg-gray-700 text-white px-3 py-1 rounded-lg text-sm">3</button>
-                            <button class="glossy-btn bg-gray-700 text-white px-3 py-1 rounded-lg text-sm">Next</button>
+                            <a href="https://sachet.ndma.gov.in/" target="_blank" rel="noopener noreferrer" class="glossy-btn bg-gray-700 text-white px-3 py-1 rounded-lg text-sm">Next</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Incident Report Modal -->
+    <div id="incident-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="glass-effect rounded-xl p-6 max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-white">Report New Incident</h2>
+                <button id="close-modal" class="text-gray-400 hover:text-white" title="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="incident-form" class="space-y-4">
+                <div>
+                    <label for="incident-type" class="block text-sm font-medium text-gray-300 mb-1">Incident Type</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="incident-type-option rounded-lg px-3 py-2 flex items-center justify-center cursor-pointer" data-value="Fire">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                <i class="fas fa-fire mr-1"></i> Fire
+                            </span>
+                        </div>
+                        <div class="incident-type-option rounded-lg px-3 py-2 flex items-center justify-center cursor-pointer" data-value="Medical">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                <i class="fas fa-medkit mr-1"></i> Medical
+                            </span>
+                        </div>
+                        <div class="incident-type-option rounded-lg px-3 py-2 flex items-center justify-center cursor-pointer" data-value="Accident">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">
+                                <i class="fas fa-car-crash mr-1"></i> Accident
+                            </span>
+                        </div>
+                        <div class="incident-type-option rounded-lg px-3 py-2 flex items-center justify-center cursor-pointer" data-value="Flood">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                <i class="fas fa-tint mr-1"></i> Flood
+                            </span>
+                        </div>
+                        <div class="incident-type-option rounded-lg px-3 py-2 flex items-center justify-center cursor-pointer" data-value="Earthquake">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                <i class="fas fa-earthquake mr-1"></i> Earthquake
+                            </span>
+                        </div>
+                        <div class="incident-type-option rounded-lg px-3 py-2 flex items-center justify-center cursor-pointer" data-value="Chemical">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                <i class="fas fa-flask mr-1"></i> Chemical
+                            </span>
+                        </div>
+                        <div class="incident-type-option rounded-lg px-3 py-2 flex items-center justify-center cursor-pointer" data-value="Security">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                <i class="fas fa-shield-alt mr-1"></i> Security
+                            </span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="incident-type" name="incident-type" value="">
+                </div>
+                <div>
+                    <label for="incident-location" class="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                    <input type="text" id="incident-location" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter location details">
+                </div>
+                <div>
+                    <label for="incident-severity" class="block text-sm font-medium text-gray-300 mb-1">Severity</label>
+                    <select id="incident-severity" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select severity level</option>
+                        <option value="Minor">Minor</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="incident-description" class="block text-sm font-medium text-gray-300 mb-1">Description</label>
+                    <textarea id="incident-description" rows="3" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe the incident"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Resources Needed</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="resource-ambulance" name="resources" value="Ambulance" class="mr-2">
+                            <label for="resource-ambulance">Ambulance</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="resource-fire-truck" name="resources" value="Fire Truck" class="mr-2">
+                            <label for="resource-fire-truck">Fire Truck</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="resource-helicopter" name="resources" value="Helicopter" class="mr-2">
+                            <label for="resource-helicopter">Helicopter</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="resource-police" name="resources" value="Police" class="mr-2">
+                            <label for="resource-police">Police</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="resource-hazmat" name="resources" value="Hazmat Team" class="mr-2">
+                            <label for="resource-hazmat">Hazmat Team</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="resource-medical" name="resources" value="Medical Team" class="mr-2">
+                            <label for="resource-medical">Medical Team</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" id="cancel-incident" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-white">Cancel</button>
+                    <button type="submit" class="glossy-btn bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 px-4 py-2 rounded-lg text-white">Submit Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Incident View Modal -->
+    <div id="view-incident-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="glass-effect rounded-xl p-6 max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-white">Incident Details</h2>
+                <button id="close-view-modal" class="text-gray-400 hover:text-white" title="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="incident-details" class="space-y-4">
+                <!-- Incident details will be populated here -->
+            </div>
+            <div class="flex justify-end space-x-3 pt-4">
+                <button id="close-view-details" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-white">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incident Response Modal -->
+    <div id="respond-incident-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="glass-effect rounded-xl p-6 max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-white">Respond to Incident</h2>
+                <button id="close-respond-modal" class="text-gray-400 hover:text-white" title="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="response-form" class="space-y-4">
+                <input type="hidden" id="response-incident-id" name="incidentId">
+                <input type="hidden" id="response-incident-type" name="type">
+                <input type="hidden" id="response-incident-location" name="location">
+                
+                <div>
+                    <label for="response-details" class="block text-sm font-medium text-gray-300 mb-1">Response Details</label>
+                    <textarea id="response-details" name="responseDetails" rows="3" class="w-full rounded-lg bg-gray-800 border-gray-700 text-white px-3 py-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your response plan"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Assign Resources</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="response-ambulance" name="resources" value="Ambulance" class="mr-2">
+                            <label for="response-ambulance">Ambulance</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="response-fire-truck" name="resources" value="Fire Truck" class="mr-2">
+                            <label for="response-fire-truck">Fire Truck</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="response-helicopter" name="resources" value="Helicopter" class="mr-2">
+                            <label for="response-helicopter">Helicopter</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="response-police" name="resources" value="Police" class="mr-2">
+                            <label for="response-police">Police</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="response-hazmat" name="resources" value="Hazmat Team" class="mr-2">
+                            <label for="response-hazmat">Hazmat Team</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="response-medical" name="resources" value="Medical Team" class="mr-2">
+                            <label for="response-medical">Medical Team</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" id="cancel-response" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-white">Cancel</button>
+                    <button type="submit" class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 px-4 py-2 rounded-lg text-white">Send Response</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="js/config.js"></script>
     <script>
@@ -283,69 +475,84 @@
             subdomains: ['a', 'b', 'c']
         }).addTo(map);
 
-        // Sample data for demonstration
+        // Sample incident data
         const incidents = [
-            { id: "INC-2023-001", type: "fire", severity: "critical", latitude: 28.6139, longitude: 77.2090, location: "Delhi, Connaught Place" },
-            { id: "INC-2023-002", type: "flood", severity: "moderate", latitude: 19.0760, longitude: 72.8777, location: "Mumbai, Dadar" },
-            { id: "INC-2023-003", type: "medical", severity: "minor", latitude: 12.9716, longitude: 77.5946, location: "Bangalore, Indiranagar" },
-            { id: "INC-2023-004", type: "earthquake", severity: "critical", latitude: 22.5726, longitude: 88.3639, location: "Kolkata, Park Street" },
-            { id: "INC-2023-005", type: "traffic", severity: "moderate", latitude: 17.3850, longitude: 78.4867, location: "Hyderabad, Banjara Hills" }
+            {
+                id: '#INC-2023-001',
+                type: 'Fire',
+                location: 'Delhi, Connaught Place',
+                severity: 'Critical',
+                reported: '10 mins ago',
+                resources: ['A', 'F', 'H', '+2'],
+                latitude: 28.6139,
+                longitude: 77.2090
+            },
+            {
+                id: '#INC-2023-002',
+                type: 'Flood',
+                location: 'Mumbai, Dadar',
+                severity: 'Moderate',
+                reported: '1 hour ago',
+                resources: ['A', 'F'],
+                latitude: 19.0760,
+                longitude: 72.8777
+            },
+            {
+                id: '#INC-2023-003',
+                type: 'Medical',
+                location: 'Kolkata, Park Street',
+                severity: 'Minor',
+                reported: '3 hours ago',
+                resources: ['A'],
+                latitude: 22.5726,
+                longitude: 88.3639
+            }
         ];
 
-        // Create custom icons
-        const icons = {
-            fire: L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div style="background-color: rgba(239, 68, 68, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);"><i class="fas fa-fire text-white text-xs"></i></div>`,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            }),
-            flood: L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div style="background-color: rgba(59, 130, 246, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);"><i class="fas fa-water text-white text-xs"></i></div>`,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            }),
-            medical: L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div style="background-color: rgba(16, 185, 129, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(16, 185, 129, 0.8);"><i class="fas fa-heartbeat text-white text-xs"></i></div>`,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            }),
-            earthquake: L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div style="background-color: rgba(124, 58, 237, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(124, 58, 237, 0.8);"><i class="fas fa-house-damage text-white text-xs"></i></div>`,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            }),
-            traffic: L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div style="background-color: rgba(245, 158, 11, 0.8); width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);"><i class="fas fa-car-crash text-white text-xs"></i></div>`,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            })
-        };
-
+        // Indian cities coordinates
+        const indianCities = [
+            { name: "Delhi", lat: 28.6139, lng: 77.2090 },
+            { name: "Mumbai", lat: 19.0760, lng: 72.8777 },
+            { name: "Kolkata", lat: 22.5726, lng: 88.3639 },
+            { name: "Chennai", lat: 13.0827, lng: 80.2707 },
+            { name: "Bangalore", lat: 12.9716, lng: 77.5946 },
+            { name: "Hyderabad", lat: 17.3850, lng: 78.4867 },
+            { name: "Ahmedabad", lat: 23.0225, lng: 72.5714 },
+            { name: "Pune", lat: 18.5204, lng: 73.8567 },
+            { name: "Jaipur", lat: 26.9124, lng: 75.7873 },
+            { name: "Lucknow", lat: 26.8467, lng: 80.9462 },
+            { name: "Chandigarh", lat: 30.7333, lng: 76.7794 },
+            { name: "Amritsar", lat: 31.6340, lng: 74.8723 },
+            { name: "Varanasi", lat: 25.3176, lng: 82.9739 },
+            { name: "Patna", lat: 25.5941, lng: 85.1376 }
+        ];
+        
         // Function to add incident markers to the map
         function addIncidentMarkers(incidents) {
             incidents.forEach(incident => {
-                const marker = L.marker([incident.latitude, incident.longitude], {
-                    icon: icons[incident.type]
-                }).addTo(map);
+                const markerColor = incident.severity === 'Critical' ? 'red' : 
+                                    incident.severity === 'Moderate' ? 'orange' : 'blue';
                 
-                const severityColor = incident.severity === 'critical' ? 'red' : 
-                                    incident.severity === 'moderate' ? 'yellow' : 'blue';
+                const incidentIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="background-color: ${markerColor}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+                
+                const marker = L.marker([incident.latitude, incident.longitude], {
+                    icon: incidentIcon
+                }).addTo(map);
                 
                 marker.bindPopup(`
                     <div class="p-2">
                         <h3 class="text-lg font-bold">${incident.id}</h3>
                         <p class="mb-1">Type: ${incident.type}</p>
-                        <p class="mb-1">Severity: <span class="text-${severityColor}-500 font-medium">${incident.severity}</span></p>
-                        <p class="mb-2">Location: ${incident.location}</p>
-                        <div class="flex space-x-2">
-                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Details</button>
-                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">Respond</button>
-                        </div>
+                        <p class="mb-1">Location: ${incident.location}</p>
+                        <p class="mb-1">Severity: ${incident.severity}</p>
+                        <p class="mb-2">Reported: ${incident.reported}</p>
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm" onclick="viewIncident('${incident.id}')">View Details</button>
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm ml-2" onclick="respondToIncident('${incident.id}')">Respond</button>
                     </div>
                 `);
             });
@@ -353,6 +560,360 @@
 
         // Add incident markers to the map
         addIncidentMarkers(incidents);
+
+        // Function to add a new incident to the list and map
+        function addNewIncident(incident) {
+            // Add to incidents array
+            incidents.push(incident);
+            
+            // Add marker to map
+            addIncidentMarkers([incident]);
+            
+            // Create severity class and badge
+            let severityClass = '';
+            let severityBadgeClass = '';
+            
+            if (incident.severity === 'Critical') {
+                severityClass = 'bg-red-900 bg-opacity-20';
+                severityBadgeClass = 'bg-red-100 text-red-800';
+            } else if (incident.severity === 'Moderate') {
+                severityClass = 'bg-yellow-900 bg-opacity-20';
+                severityBadgeClass = 'bg-yellow-100 text-yellow-800';
+            } else {
+                severityClass = 'bg-blue-900 bg-opacity-20';
+                severityBadgeClass = 'bg-blue-100 text-blue-800';
+            }
+            
+            // Create resources HTML
+            let resourcesHtml = '<div class="flex -space-x-1">';
+            incident.resources.forEach(resource => {
+                let resourceColor = 'bg-gray-500';
+                if (resource === 'A') resourceColor = 'bg-blue-500';
+                if (resource === 'F') resourceColor = 'bg-red-500';
+                if (resource === 'H') resourceColor = 'bg-purple-500';
+                
+                resourcesHtml += `<div class="h-6 w-6 rounded-full ${resourceColor} flex items-center justify-center text-xs">${resource}</div>`;
+            });
+            resourcesHtml += '</div>';
+            
+            // Create incident row HTML
+            const incidentRowHtml = `
+                <tr class="${severityClass}" data-incident-id="${incident.id}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${incident.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${incident.type.toLowerCase()}-100 text-${incident.type.toLowerCase()}-800">
+                            ${getIncidentTypeIcon(incident.type)} ${incident.type}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${incident.location}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${severityBadgeClass}">
+                            ${incident.severity}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${incident.reported}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        ${resourcesHtml}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-3 py-1 rounded-lg text-xs" onclick="viewIncident('${incident.id}')">View</button>
+                        <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-1 rounded-lg text-xs ml-2" onclick="respondToIncident('${incident.id}')">Respond</button>
+                    </td>
+                </tr>
+            `;
+            
+            // Add row to table
+            const tableBody = document.querySelector('tbody');
+            tableBody.insertAdjacentHTML('afterbegin', incidentRowHtml);
+        }
+
+        function getIncidentTypeIcon(type) {
+            switch (type) {
+                case 'Fire':
+                    return '<i class="fas fa-fire mr-1"></i>';
+                case 'Flood':
+                    return '<i class="fas fa-tint mr-1"></i>';
+                case 'Medical':
+                    return '<i class="fas fa-medkit mr-1"></i>';
+                case 'Accident':
+                    return '<i class="fas fa-car-crash mr-1"></i>';
+                case 'Earthquake':
+                    return '<i class="fas fa-earthquake mr-1"></i>';
+                case 'Chemical':
+                    return '<i class="fas fa-flask mr-1"></i>';
+                case 'Security':
+                    return '<i class="fas fa-shield-alt mr-1"></i>';
+                default:
+                    return '';
+            }
+        }
+
+        // Report Incident Button
+        document.getElementById('report-incident-btn').addEventListener('click', () => {
+            document.getElementById('incident-modal').classList.remove('hidden');
+        });
+
+        // Close Modal Button
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('incident-modal').classList.add('hidden');
+        });
+
+        // Cancel Incident Button
+        document.getElementById('cancel-incident').addEventListener('click', () => {
+            document.getElementById('incident-modal').classList.add('hidden');
+        });
+
+        // Submit Incident Form
+        document.getElementById('incident-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const incidentType = document.querySelector('.incident-type-option.selected').getAttribute('data-value');
+            const location = document.getElementById('incident-location').value;
+            const severity = document.getElementById('incident-severity').value;
+            const description = document.getElementById('incident-description').value;
+            
+            // Get selected resources
+            const resourceCheckboxes = document.querySelectorAll('input[name="resources"]:checked');
+            const resourcesNeeded = Array.from(resourceCheckboxes).map(cb => cb.value);
+            
+            // Validate form
+            if (!incidentType || !location || !severity || !description) {
+                alert('Please fill out all required fields');
+                return;
+            }
+            
+            // Prepare data for submission
+            const incidentData = {
+                type: incidentType,
+                location: location,
+                severity: severity,
+                description: description,
+                resources: resourcesNeeded
+            };
+            
+            // Send data to PHP script
+            fetch('php/report_incident.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(incidentData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Incident reported successfully! Incident ID: ${data.incidentId}`);
+                    document.getElementById('incident-modal').classList.add('hidden');
+                    document.getElementById('incident-form').reset();
+                    
+                    // Create new incident object
+                    const newIncident = {
+                        id: data.incidentId,
+                        type: incidentType,
+                        location: location,
+                        severity: severity,
+                        reported: 'Just now',
+                        resources: resourcesNeeded.map(r => r.charAt(0)),
+                        latitude: 20.5937 + (Math.random() - 0.5) * 10,
+                        longitude: 78.9629 + (Math.random() - 0.5) * 10
+                    };
+                    
+                    // Add new incident to the list and map
+                    addNewIncident(newIncident);
+                } else {
+                    alert(`Failed to report incident: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                // For testing purposes, create a mock incident ID
+                const mockIncidentId = '#INC-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                
+                // Create new incident object
+                const newIncident = {
+                    id: mockIncidentId,
+                    type: incidentType,
+                    location: location,
+                    severity: severity,
+                    reported: 'Just now',
+                    resources: resourcesNeeded.map(r => r.charAt(0)),
+                    latitude: 20.5937 + (Math.random() - 0.5) * 10,
+                    longitude: 78.9629 + (Math.random() - 0.5) * 10
+                };
+                
+                // Add new incident to the list and map
+                addNewIncident(newIncident);
+                
+                // Close modal and reset form
+                document.getElementById('incident-modal').classList.add('hidden');
+                document.getElementById('incident-form').reset();
+                
+                alert('Incident reported successfully (offline mode)');
+            });
+        });
+
+        // Incident type selection
+        const incidentTypeOptions = document.querySelectorAll('.incident-type-option');
+        incidentTypeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                incidentTypeOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                document.getElementById('incident-type').value = option.getAttribute('data-value');
+            });
+        });
+
+        function viewIncident(incidentId) {
+            console.log(`Viewing incident: ${incidentId}`);
+            // Add logic to view incident details
+            const incidentDetails = incidents.find(incident => incident.id === incidentId);
+            if (incidentDetails) {
+                const incidentDetailsHtml = `
+                    <h2 class="text-lg font-bold">${incidentDetails.id}</h2>
+                    <p class="mb-1">Type: ${incidentDetails.type}</p>
+                    <p class="mb-1">Severity: ${incidentDetails.severity}</p>
+                    <p class="mb-2">Location: ${incidentDetails.location}</p>
+                `;
+                document.getElementById('incident-details').innerHTML = incidentDetailsHtml;
+                document.getElementById('view-incident-modal').classList.remove('hidden');
+            }
+        }
+
+        function respondToIncident(incidentId) {
+            console.log(`Responding to incident: ${incidentId}`);
+            // Add logic to respond to incident
+            const incidentDetails = incidents.find(incident => incident.id === incidentId);
+            if (incidentDetails) {
+                document.getElementById('response-incident-id').value = incidentId;
+                document.getElementById('response-incident-type').value = incidentDetails.type;
+                document.getElementById('response-incident-location').value = incidentDetails.location;
+                document.getElementById('respond-incident-modal').classList.remove('hidden');
+            }
+        }
+
+        // Close View Modal Button
+        document.getElementById('close-view-modal').addEventListener('click', () => {
+            document.getElementById('view-incident-modal').classList.add('hidden');
+        });
+
+        // Close Respond Modal Button
+        document.getElementById('close-respond-modal').addEventListener('click', () => {
+            document.getElementById('respond-incident-modal').classList.add('hidden');
+        });
+
+        // Cancel Response Button
+        document.getElementById('cancel-response').addEventListener('click', () => {
+            document.getElementById('respond-incident-modal').classList.add('hidden');
+        });
+
+        // Close View Details Button
+        document.getElementById('close-view-details').addEventListener('click', () => {
+            document.getElementById('view-incident-modal').classList.add('hidden');
+        });
+
+        // Submit Response Form
+        document.getElementById('response-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const incidentId = document.getElementById('response-incident-id').value;
+            const incidentType = document.getElementById('response-incident-type').value;
+            const location = document.getElementById('response-incident-location').value;
+            const responseDetails = document.getElementById('response-details').value;
+            
+            // Get selected resources
+            const resourceCheckboxes = document.querySelectorAll('#response-form input[name="resources"]:checked');
+            const respondingResources = Array.from(resourceCheckboxes).map(cb => cb.value);
+            
+            // Validate form
+            if (!responseDetails) {
+                alert('Please provide response details');
+                return;
+            }
+            
+            // Prepare data for submission
+            const responseData = {
+                incidentId: incidentId,
+                type: incidentType,
+                location: location,
+                responseDetails: responseDetails,
+                resources: respondingResources
+            };
+            
+            // Send data to PHP script
+            fetch('php/respond_to_incident.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(responseData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Response initiated successfully!');
+                    document.getElementById('respond-incident-modal').classList.add('hidden');
+                    document.getElementById('response-form').reset();
+                    
+                    // Update the incident status in the UI
+                    const incidentRow = document.querySelector(`tr[data-incident-id="${incidentId}"]`);
+                    if (incidentRow) {
+                        const statusCell = incidentRow.querySelector('td:nth-child(4)');
+                        if (statusCell) {
+                            statusCell.innerHTML = `
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Responding
+                                </span>
+                            `;
+                        }
+                    }
+                } else {
+                    alert(`Failed to initiate response: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                // For testing purposes, update the UI even if the PHP request fails
+                const incidentRow = document.querySelector(`tr[data-incident-id="${incidentId}"]`);
+                if (incidentRow) {
+                    const statusCell = incidentRow.querySelector('td:nth-child(4)');
+                    if (statusCell) {
+                        statusCell.innerHTML = `
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Responding
+                            </span>
+                        `;
+                    }
+                }
+                
+                // Send email directly from browser as fallback
+                const emailSubject = `Response to Incident ${incidentId}`;
+                const emailBody = `
+                    Incident ID: ${incidentId}
+                    Type: ${incidentType}
+                    Location: ${location}
+                    Response Details: ${responseDetails}
+                    Resources Assigned: ${respondingResources.join(', ')}
+                `;
+                
+                window.location.href = `mailto:ankanbasu1234@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                
+                document.getElementById('respond-incident-modal').classList.add('hidden');
+                document.getElementById('response-form').reset();
+                
+                alert('Response initiated (offline mode). Opening email client...');
+            });
+        });
+
+        // Refresh button functionality
+        document.getElementById('refresh-incidents-btn').addEventListener('click', () => {
+            // In a real application, this would fetch the latest incidents from the server
+            alert('Refreshing incident data...');
+            // For demo purposes, we'll just reload the page
+            location.reload();
+        });
     </script>
 </body>
 </html>

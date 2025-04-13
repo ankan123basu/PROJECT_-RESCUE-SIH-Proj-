@@ -85,26 +85,77 @@
             transform: translateY(1px);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
+        
+        /* User dropdown menu styles */
+        .user-dropdown {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 0.5rem;
+            width: 12rem;
+            background-color: rgba(17, 24, 39, 0.95);
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 50;
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+        }
+        
+        .user-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        /* Status icon styles */
+        .status-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-900 via-indigo-900 to-blue-900 text-white min-h-screen">
     <nav class="glass-card p-4 mb-4 rounded-none">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-8">
-                <a href="dashboard.html" class="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">Rescue Coordination</a>
+                <a href="dashboard.html" class="text-xl font-bold flex items-center">
+                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                        </svg>
+                    </div>
+                    <span class="bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">Rescue Coordination</span>
+                </a>
                 <a href="ambulance-tracking.html" class="text-blue-200 font-semibold border-b-2 border-blue-400">Ambulance Tracking</a>
                 <a href="helicopter-tracking.html" class="hover:text-blue-200 transition-colors">Helicopter Tracking</a>
-                <a href="fire-truck-tracking.html" class="hover:text-blue-200 transition-colors">Fire Truck Tracking</a>
+                <a href="fire-truck-map.html" class="hover:text-blue-200 transition-colors">Fire Truck Tracking</a>
                 <a href="incidents.html" class="hover:text-blue-200 transition-colors">Incidents</a>
                 <a href="analytics.html" class="hover:text-blue-200 transition-colors">Analytics</a>
             </div>
             <div class="flex items-center space-x-4">
-                <button class="notification-btn p-2 rounded-full bg-blue-800 hover:bg-blue-700 transition-colors" title="Notifications" aria-label="View notifications">
-                    <i class="fas fa-bell"></i>
-                </button>
-                <button class="profile-btn p-2 rounded-full bg-blue-800 hover:bg-blue-700 transition-colors" title="Profile" aria-label="View profile">
-                    <i class="fas fa-user"></i>
-                </button>
+                <!-- User profile -->
+                <div class="relative">
+                    <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none" aria-expanded="false" aria-haspopup="true">
+                        <img class="h-8 w-8 rounded-full" src="assets/images/d3c09cde-dcda-4267-a7a0-d6b4668f08e0.jpg" alt="Ankan Basu">
+                        <span>Ankan Basu</span>
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <!-- User menu dropdown -->
+                    <div id="user-dropdown" class="user-dropdown py-2">
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-all duration-200">Profile Settings</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-all duration-200">Notifications</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-all duration-200">Help Center</a>
+                        <a href="index.html" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-all duration-200">Logout</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -116,47 +167,49 @@
                 <div class="col-span-1">
                     <label for="ambulanceType" class="block text-sm mb-2">Ambulance Type</label>
                     <select id="ambulanceType" class="custom-select w-full bg-blue-600 text-white rounded-lg p-2 border border-blue-500/30" title="Select ambulance type">
-                        <option class="bg-blue-600">All Types</option>
-                        <option class="bg-blue-300 text-blue-900">Basic Life Support</option>
-                        <option class="bg-blue-300 text-blue-900">Advanced Life Support</option>
-                        <option class="bg-blue-300 text-blue-900">Patient Transport</option>
-                        <option class="bg-blue-300 text-blue-900">Mobile ICU</option>
+                        <option class="bg-blue-600" value="all">All Types</option>
+                        <option class="bg-blue-300 text-blue-900" value="basic">Basic Life Support</option>
+                        <option class="bg-blue-300 text-blue-900" value="advanced">Advanced Life Support</option>
+                        <option class="bg-blue-300 text-blue-900" value="transport">Patient Transport</option>
+                        <option class="bg-blue-300 text-blue-900" value="icu">Mobile ICU</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="status" class="block text-sm mb-2">Status</label>
-                    <select id="status" class="custom-select w-full bg-blue-600 text-white rounded-lg p-2 border border-blue-500/30" title="Select ambulance status">
-                        <option class="bg-blue-600">All Statuses</option>
-                        <option class="bg-blue-300 text-blue-900">Available</option>
-                        <option class="bg-blue-300 text-blue-900">On Call</option>
-                        <option class="bg-blue-300 text-blue-900">En Route</option>
-                        <option class="bg-blue-300 text-blue-900">At Hospital</option>
+                    <label for="status-filter" class="block text-sm mb-2">Status</label>
+                    <select id="status-filter" class="custom-select w-full bg-blue-600 text-white rounded-lg p-2 border border-blue-500/30" title="Select ambulance status">
+                        <option class="bg-blue-600" value="all">All Statuses</option>
+                        <option class="bg-blue-300 text-blue-900" value="available">Available</option>
+                        <option class="bg-blue-300 text-blue-900" value="on call">On Call</option>
+                        <option class="bg-blue-300 text-blue-900" value="responding">Responding</option>
+                        <option class="bg-blue-300 text-blue-900" value="busy">Busy</option>
                     </select>
                 </div>
                 <div class="col-span-1">
                     <label for="hospital" class="block text-sm mb-2">Hospital</label>
                     <select id="hospital" class="custom-select w-full bg-blue-600 text-white rounded-lg p-2 border border-blue-500/30" title="Select hospital">
-                        <option class="bg-blue-600">All Hospitals</option>
-                        <option class="bg-blue-300 text-blue-900">City General</option>
-                        <option class="bg-blue-300 text-blue-900">St. Mary's</option>
-                        <option class="bg-blue-300 text-blue-900">Metro Care</option>
+                        <option class="bg-blue-600" value="all">All Hospitals</option>
+                        <option class="bg-blue-300 text-blue-900" value="delhi">Delhi Medical</option>
+                        <option class="bg-blue-300 text-blue-900" value="mumbai">Mumbai General</option>
+                        <option class="bg-blue-300 text-blue-900" value="kolkata">Kolkata Medical</option>
+                        <option class="bg-blue-300 text-blue-900" value="chennai">Chennai Hospital</option>
+                        <option class="bg-blue-300 text-blue-900" value="bangalore">Bangalore Health</option>
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="response" class="block text-sm mb-2">Response Time</label>
-                    <select id="response" class="custom-select w-full bg-blue-600 text-white rounded-lg p-2 border border-blue-500/30" title="Select response time">
-                        <option class="bg-blue-600">Any Time</option>
-                        <option class="bg-blue-300 text-blue-900">Under 5 min</option>
-                        <option class="bg-blue-300 text-blue-900">5-10 min</option>
-                        <option class="bg-blue-300 text-blue-900">10-15 min</option>
-                        <option class="bg-blue-300 text-blue-900">Over 15 min</option>
+                    <label for="response-time-filter" class="block text-sm mb-2">Response Time</label>
+                    <select id="response-time-filter" class="custom-select w-full bg-blue-600 text-white rounded-lg p-2 border border-blue-500/30" title="Select response time">
+                        <option class="bg-blue-600" value="all">Any Time</option>
+                        <option class="bg-blue-300 text-blue-900" value="5">Under 5 min</option>
+                        <option class="bg-blue-300 text-blue-900" value="10">5-10 min</option>
+                        <option class="bg-blue-300 text-blue-900" value="15">10-15 min</option>
+                        <option class="bg-blue-300 text-blue-900" value="more">Over 15 min</option>
                     </select>
                 </div>
                 <div class="col-span-1 flex items-end space-x-2">
-                    <button class="glossy-btn bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 px-4 py-2 rounded-lg flex-1" title="Dispatch ambulance">
+                    <button id="dispatch-btn" class="glossy-btn bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 px-4 py-2 rounded-lg flex-1" title="Dispatch ambulance">
                         Dispatch
                     </button>
-                    <button class="glossy-btn bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-2 rounded-lg flex-1" title="Report emergency">
+                    <button id="emergency-btn" class="glossy-btn bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-2 rounded-lg flex-1" title="Report emergency">
                         Emergency
                     </button>
                 </div>
@@ -171,7 +224,9 @@
                         <h3 class="text-2xl font-bold">48</h3>
                     </div>
                     <div class="w-12 h-12 flex items-center justify-center rounded-full bg-blue-700/50">
-                        <i class="fas fa-ambulance text-2xl" aria-hidden="true"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -181,8 +236,10 @@
                         <p class="text-sm text-green-200">Available</p>
                         <h3 class="text-2xl font-bold">32</h3>
                     </div>
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-green-600/50">
-                        <i class="fas fa-check-circle text-2xl" aria-hidden="true"></i>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-green-700/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -192,8 +249,10 @@
                         <p class="text-sm text-yellow-200">Responding</p>
                         <h3 class="text-2xl font-bold">10</h3>
                     </div>
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-500/50">
-                        <i class="fas fa-clock text-2xl" aria-hidden="true"></i>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-yellow-600/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -203,8 +262,10 @@
                         <p class="text-sm text-red-200">Busy</p>
                         <h3 class="text-2xl font-bold">6</h3>
                     </div>
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-red-600/50">
-                        <i class="fas fa-exclamation-circle text-2xl" aria-hidden="true"></i>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full bg-red-700/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -232,78 +293,459 @@
     <script src="js/config.js"></script>
     <script>
         // Initialize map
-        const map = initMap('map');
+        let map;
         
-        // Load and display ambulances
+        // Initialize the ambulance tracking system
         async function initializeAmbulanceTracking() {
             try {
+                // Initialize map
+                map = initMap('map');
+                
                 // Load ambulance data
                 const ambulances = await loadAgencies('ambulance');
                 
                 // Display ambulances on the map
-                displayAgencies(map, ambulances, 'ambulance');
+                displayAgenciesOnMap(ambulances);
                 
-                // Set up button event listeners
-                document.querySelector('button[title="Show hospitals"]').addEventListener('click', function() {
-                    addFacilities(map, 'hospitals');
-                });
+                // Update KPI cards
+                updateKPICards();
                 
-                document.querySelector('button[title="Show traffic"]').addEventListener('click', function() {
-                    // In a real app, this would load traffic data from an API
-                    alert('Traffic data would be loaded from a real-time traffic API in a production environment');
-                });
-                
-                document.querySelector('button[title="Show incidents"]').addEventListener('click', function() {
-                    addIncidents(map);
-                });
-                
-                // Set up filter listeners
-                const statusFilter = document.getElementById('status-filter');
-                if (statusFilter) {
-                    statusFilter.addEventListener('change', function() {
-                        const selectedStatus = this.value;
-                        if (selectedStatus === 'all') {
-                            displayAgencies(map, ambulances, 'ambulance');
-                        } else {
-                            const filteredAmbulances = ambulances.filter(amb => 
-                                amb.status.toLowerCase() === selectedStatus.toLowerCase());
-                            displayAgencies(map, filteredAmbulances, 'ambulance');
-                        }
-                    });
-                }
-                
-                const responseTimeFilter = document.getElementById('response-time-filter');
-                if (responseTimeFilter) {
-                    responseTimeFilter.addEventListener('change', function() {
-                        // In a real app, this would filter based on estimated response times
-                        alert('Response time filtering would be implemented in a production environment');
-                    });
-                }
-                
-                // Set up dispatch button
-                document.querySelector('button[title="Dispatch ambulance"]').addEventListener('click', function() {
-                    // In a real app, this would open a dispatch interface
-                    alert('Dispatch interface would open in a production environment');
-                });
-                
-                // Set up emergency button
-                document.querySelector('button[title="Report emergency"]').addEventListener('click', function() {
-                    // In a real app, this would open an emergency reporting interface
-                    alert('Emergency reporting interface would open in a production environment');
-                });
+                console.log('Ambulance tracking system initialized successfully');
             } catch (error) {
-                console.error('Error initializing ambulance tracking:', error);
+                console.error('Error initializing ambulance tracking system:', error);
             }
         }
-
-        // Initialize the ambulance tracking system
-        initializeAmbulanceTracking();
         
-        // Refresh data every 30 seconds
-        setInterval(async function() {
-            const ambulances = await loadAgencies('ambulance');
-            displayAgencies(map, ambulances, 'ambulance');
-        }, 30000);
+        // Function to initialize the map
+        function initMap(containerId) {
+            // Center the map on India (coordinates for central India)
+            const map = L.map(containerId).setView([22.5937, 78.9629], 5);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+            
+            return map;
+        }
+        
+        // Global variables to store ambulance data and markers
+        let allAmbulances = [];
+        let ambulanceMarkers = [];
+        
+        // Function to load agencies data
+        async function loadAgencies(type) {
+            try {
+                // In a real application, this would be an API call
+                // For demonstration, we'll use mock data for Indian cities with correct coordinates
+                allAmbulances = [
+                    // Delhi
+                    { id: 'A001', name: 'Delhi Medical Center Ambulance', type: 'advanced', status: 'available', hospital: 'delhi', responseTime: 4, lat: 28.6139, lng: 77.2090, lastUpdate: '2 mins ago' },
+                    // Mumbai
+                    { id: 'A002', name: 'Mumbai Emergency Services', type: 'basic', status: 'responding', hospital: 'mumbai', responseTime: 7, lat: 19.0760, lng: 72.8777, lastUpdate: '5 mins ago' },
+                    // Kolkata (West Bengal)
+                    { id: 'A003', name: 'Kolkata Medical Response', type: 'icu', status: 'on call', hospital: 'kolkata', responseTime: 12, lat: 22.5726, lng: 88.3639, lastUpdate: '10 mins ago' },
+                    // Chennai
+                    { id: 'A004', name: 'Chennai Hospital Services', type: 'transport', status: 'busy', hospital: 'chennai', responseTime: 18, lat: 13.0827, lng: 80.2707, lastUpdate: '15 mins ago' },
+                    // Bangalore
+                    { id: 'A005', name: 'Bangalore Health Response', type: 'advanced', status: 'available', hospital: 'bangalore', responseTime: 3, lat: 12.9716, lng: 77.5946, lastUpdate: '3 mins ago' },
+                    // Hyderabad
+                    { id: 'A006', name: 'Hyderabad Medical Center', type: 'basic', status: 'available', hospital: 'hyderabad', responseTime: 6, lat: 17.3850, lng: 78.4867, lastUpdate: '7 mins ago' },
+                    // Ahmedabad
+                    { id: 'A007', name: 'Ahmedabad Emergency Unit', type: 'icu', status: 'responding', hospital: 'ahmedabad', responseTime: 9, lat: 23.0225, lng: 72.5714, lastUpdate: '8 mins ago' },
+                    // Pune
+                    { id: 'A008', name: 'Pune Health Services', type: 'transport', status: 'on call', hospital: 'pune', responseTime: 14, lat: 18.5204, lng: 73.8567, lastUpdate: '12 mins ago' },
+                    // Jaipur
+                    { id: 'A009', name: 'Jaipur Medical Response', type: 'advanced', status: 'available', hospital: 'jaipur', responseTime: 5, lat: 26.9124, lng: 75.7873, lastUpdate: '4 mins ago' },
+                    // Lucknow (UP)
+                    { id: 'A010', name: 'Lucknow Emergency Services', type: 'basic', status: 'responding', hospital: 'lucknow', responseTime: 8, lat: 26.8467, lng: 80.9462, lastUpdate: '6 mins ago' },
+                    // Chandigarh (Punjab)
+                    { id: 'A011', name: 'Chandigarh Medical Center', type: 'advanced', status: 'available', hospital: 'chandigarh', responseTime: 5, lat: 30.7333, lng: 76.7794, lastUpdate: '3 mins ago' },
+                    // Amritsar (Punjab)
+                    { id: 'A012', name: 'Amritsar Emergency Services', type: 'basic', status: 'available', hospital: 'amritsar', responseTime: 6, lat: 31.6340, lng: 74.8723, lastUpdate: '7 mins ago' },
+                    // Varanasi (UP)
+                    { id: 'A013', name: 'Varanasi Medical Response', type: 'icu', status: 'on call', hospital: 'varanasi', responseTime: 10, lat: 25.3176, lng: 82.9739, lastUpdate: '9 mins ago' },
+                    // Patna (Bihar - near West Bengal)
+                    { id: 'A014', name: 'Patna Health Services', type: 'transport', status: 'responding', hospital: 'patna', responseTime: 11, lat: 25.5941, lng: 85.1376, lastUpdate: '8 mins ago' }
+                ];
+                return allAmbulances;
+            } catch (error) {
+                console.error(`Error loading ${type} data:`, error);
+                return [];
+            }
+        }
+        
+        // Function to clear all markers from the map
+        function clearMarkers() {
+            ambulanceMarkers.forEach(marker => {
+                map.removeLayer(marker);
+            });
+            ambulanceMarkers = [];
+        }
+        
+        // Function to display agencies on the map
+        function displayAgenciesOnMap(agencies) {
+            // Clear existing markers
+            clearMarkers();
+            
+            agencies.forEach(agency => {
+                // Create custom HTML icon for the ambulance
+                const customIcon = L.divIcon({
+                    className: 'custom-ambulance-icon',
+                    html: `<img src="assets/images/360_F_224147570_dbcFAwKudSWfP1wmHDbSu3ir5ZGzJAJn.jpg" alt="Ambulance" style="width:40px; height:40px; border-radius:5px;">`,
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 20],
+                    popupAnchor: [0, -20]
+                });
+                
+                // Create marker with the custom icon
+                const marker = L.marker([agency.lat, agency.lng], {
+                    icon: customIcon
+                }).addTo(map);
+                
+                // Add popup with agency information
+                marker.bindPopup(`
+                    <div class="p-3 bg-blue-100 rounded-lg text-gray-900 shadow-lg">
+                        <h3 class="font-bold text-blue-800 text-lg">${agency.name}</h3>
+                        <div class="mt-2 text-sm">
+                            <p><strong>Location:</strong> ${agency.hospital}</p>
+                            <p><strong>ID:</strong> ${agency.id}</p>
+                            <p><strong>Type:</strong> ${agency.type}</p>
+                            <p><strong>Status:</strong> <span class="font-semibold ${getStatusColor(agency.status)}">${agency.status}</span></p>
+                            <p><strong>Response Time:</strong> ${agency.responseTime} min</p>
+                            <p><strong>Last Update:</strong> ${agency.lastUpdate}</p>
+                        </div>
+                    </div>
+                `);
+                
+                // Store marker reference
+                ambulanceMarkers.push(marker);
+                
+                // Simulate movement for real-time effect
+                simulateMovement(marker, agency);
+            });
+        }
+        
+        // Helper function to get color class based on status
+        function getStatusColor(status) {
+            switch(status) {
+                case 'available': return 'text-green-700';
+                case 'responding': return 'text-yellow-700';
+                case 'on call': return 'text-blue-700';
+                case 'busy': return 'text-red-700';
+                default: return 'text-gray-900';
+            }
+        }
+        
+        // Function to filter ambulances based on selected criteria
+        function filterAmbulances() {
+            const ambulanceType = document.getElementById('ambulanceType').value;
+            const status = document.getElementById('status-filter').value;
+            const hospital = document.getElementById('hospital').value;
+            const responseTime = document.getElementById('response-time-filter').value;
+            
+            // Filter ambulances based on selected criteria
+            let filteredAmbulances = allAmbulances;
+            
+            if (ambulanceType !== 'all') {
+                filteredAmbulances = filteredAmbulances.filter(amb => amb.type === ambulanceType);
+            }
+            
+            if (status !== 'all') {
+                filteredAmbulances = filteredAmbulances.filter(amb => amb.status === status);
+            }
+            
+            if (hospital !== 'all') {
+                filteredAmbulances = filteredAmbulances.filter(amb => amb.hospital === hospital);
+            }
+            
+            if (responseTime !== 'all') {
+                if (responseTime === '5') {
+                    filteredAmbulances = filteredAmbulances.filter(amb => amb.responseTime < 5);
+                } else if (responseTime === '10') {
+                    filteredAmbulances = filteredAmbulances.filter(amb => amb.responseTime >= 5 && amb.responseTime < 10);
+                } else if (responseTime === '15') {
+                    filteredAmbulances = filteredAmbulances.filter(amb => amb.responseTime >= 10 && amb.responseTime < 15);
+                } else if (responseTime === 'more') {
+                    filteredAmbulances = filteredAmbulances.filter(amb => amb.responseTime >= 15);
+                }
+            }
+            
+            // Update the map with filtered ambulances
+            displayAgenciesOnMap(filteredAmbulances);
+            
+            // Update KPI cards
+            updateKPICards(filteredAmbulances);
+        }
+        
+        // Function to simulate ambulance movement
+        function simulateMovement(marker, agency) {
+            // Set an interval to update position every few seconds
+            setInterval(() => {
+                // Generate small random movement
+                const latChange = (Math.random() - 0.5) * 0.01;
+                const lngChange = (Math.random() - 0.5) * 0.01;
+                
+                // Update marker position
+                const newLat = marker.getLatLng().lat + latChange;
+                const newLng = marker.getLatLng().lng + lngChange;
+                
+                // Animate the movement
+                marker.setLatLng([newLat, newLng]);
+            }, 5000 + Math.random() * 5000); // Random interval between 5-10 seconds
+        }
+        
+        // Function to update KPI cards
+        function updateKPICards(ambulances = allAmbulances) {
+            // Count ambulances by status
+            const totalAmbulances = ambulances.length;
+            const availableAmbulances = ambulances.filter(amb => amb.status === 'available').length;
+            const respondingAmbulances = ambulances.filter(amb => amb.status === 'responding').length;
+            const busyAmbulances = ambulances.filter(amb => amb.status === 'busy').length;
+            
+            // Update KPI card values
+            document.querySelector('.glass-card:nth-child(1) h3').textContent = totalAmbulances;
+            document.querySelector('.glass-card:nth-child(2) h3').textContent = availableAmbulances;
+            document.querySelector('.glass-card:nth-child(3) h3').textContent = respondingAmbulances;
+            document.querySelector('.glass-card:nth-child(4) h3').textContent = busyAmbulances;
+        }
+        
+        // Function to handle dispatch button click
+        function handleDispatch() {
+            // Create a modal for dispatching ambulance
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full">
+                    <h2 class="text-xl font-bold mb-4">Dispatch Ambulance</h2>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Select Ambulance</label>
+                        <select id="dispatch-ambulance" class="w-full bg-gray-700 text-white rounded-lg p-2 border border-gray-600">
+                            ${allAmbulances.filter(amb => amb.status === 'available').map(amb => 
+                                `<option value="${amb.id}" data-name="${amb.name}">${amb.name} (${amb.type})</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Incident Location</label>
+                        <input type="text" id="incident-location" class="w-full bg-gray-700 text-white rounded-lg p-2 border border-gray-600" placeholder="Enter location">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Incident Type</label>
+                        <select id="incident-type" class="w-full bg-gray-700 text-white rounded-lg p-2 border border-gray-600">
+                            <option value="medical">Medical Emergency</option>
+                            <option value="trauma">Trauma</option>
+                            <option value="fire">Fire</option>
+                            <option value="accident">Accident</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button id="cancel-dispatch" class="px-4 py-2 bg-gray-600 text-white rounded-lg">Cancel</button>
+                        <button id="confirm-dispatch" class="px-4 py-2 bg-green-600 text-white rounded-lg">Dispatch</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add event listeners for modal buttons
+            document.getElementById('cancel-dispatch').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            document.getElementById('confirm-dispatch').addEventListener('click', () => {
+                const ambulanceSelect = document.getElementById('dispatch-ambulance');
+                const ambulanceId = ambulanceSelect.value;
+                const ambulanceName = ambulanceSelect.options[ambulanceSelect.selectedIndex].dataset.name;
+                const location = document.getElementById('incident-location').value;
+                const incidentType = document.getElementById('incident-type').value;
+                
+                // Find the selected ambulance
+                const ambulance = allAmbulances.find(amb => amb.id === ambulanceId);
+                
+                if (ambulance) {
+                    // Update ambulance status
+                    ambulance.status = 'responding';
+                    
+                    // Send email notification
+                    sendNotificationEmail('dispatch', {
+                        ambulanceId: ambulanceId,
+                        ambulanceName: ambulanceName,
+                        location: location,
+                        incidentType: incidentType
+                    });
+                    
+                    // Show notification
+                    alert(`Ambulance ${ambulance.name} dispatched to ${location} for ${incidentType} incident.`);
+                    
+                    // Update the map
+                    filterAmbulances();
+                }
+                
+                modal.remove();
+            });
+        }
+        
+        // Function to handle emergency button click
+        function handleEmergency() {
+            // Create a modal for reporting emergency
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full">
+                    <h2 class="text-xl font-bold mb-4 text-red-500">Report Emergency</h2>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Emergency Type</label>
+                        <select id="emergency-type" class="w-full bg-gray-700 text-white rounded-lg p-2 border border-gray-600">
+                            <option value="medical">Medical Emergency</option>
+                            <option value="trauma">Trauma</option>
+                            <option value="fire">Fire</option>
+                            <option value="accident">Accident</option>
+                            <option value="disaster">Natural Disaster</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Location</label>
+                        <input type="text" id="emergency-location" class="w-full bg-gray-700 text-white rounded-lg p-2 border border-gray-600" placeholder="Enter location">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Description</label>
+                        <textarea id="emergency-description" class="w-full bg-gray-700 text-white rounded-lg p-2 border border-gray-600" rows="3" placeholder="Describe the emergency"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">Severity</label>
+                        <select id="emergency-severity" class="w-full bg-gray-700 text-white rounded-lg p-2 border border-gray-600">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button id="cancel-emergency" class="px-4 py-2 bg-gray-600 text-white rounded-lg">Cancel</button>
+                        <button id="confirm-emergency" class="px-4 py-2 bg-red-600 text-white rounded-lg">Report Emergency</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add event listeners for modal buttons
+            document.getElementById('cancel-emergency').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            document.getElementById('confirm-emergency').addEventListener('click', () => {
+                const emergencyType = document.getElementById('emergency-type').value;
+                const location = document.getElementById('emergency-location').value;
+                const description = document.getElementById('emergency-description').value;
+                const severity = document.getElementById('emergency-severity').value;
+                
+                // Find nearest available ambulance
+                const availableAmbulances = allAmbulances.filter(amb => amb.status === 'available');
+                
+                // Send email notification
+                sendNotificationEmail('emergency', {
+                    incidentType: emergencyType,
+                    location: location,
+                    description: description,
+                    severity: severity
+                });
+                
+                if (availableAmbulances.length > 0) {
+                    // Select the first available ambulance (in a real app, would select the nearest)
+                    const ambulance = availableAmbulances[0];
+                    
+                    // Update ambulance status
+                    ambulance.status = 'responding';
+                    
+                    // Show notification
+                    alert(`Emergency reported at ${location}. ${ambulance.name} has been dispatched.`);
+                    
+                    // Update the map
+                    filterAmbulances();
+                } else {
+                    alert('No available ambulances. Emergency has been logged and will be addressed as soon as an ambulance becomes available.');
+                }
+                
+                modal.remove();
+            });
+        }
+        
+        // Function to send notification email
+        function sendNotificationEmail(type, data) {
+            // Prepare the data to send
+            const notificationData = {
+                type: type,
+                ...data
+            };
+            
+            // Send the data to the PHP script
+            fetch('php/send_ambulance_notification.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(notificationData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Notification result:', result);
+                if (!result.success) {
+                    console.error('Failed to send notification:', result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending notification:', error);
+            });
+        }
+        
+        // Initialize the ambulance tracking system
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAmbulanceTracking();
+            
+            // User menu dropdown toggle
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userMenuDropdown = document.getElementById('user-dropdown');
+            
+            userMenuButton.addEventListener('click', function() {
+                userMenuDropdown.classList.toggle('active');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!userMenuButton.contains(event.target) && !userMenuDropdown.contains(event.target)) {
+                    userMenuDropdown.classList.remove('active');
+                }
+            });
+            
+            // Refresh data every 30 seconds
+            setInterval(async function() {
+                // Update ambulance positions
+                await updateAmbulancePositions();
+                
+                // Update KPI cards with slight variations
+                updateKPICards();
+            }, 30000);
+            
+            // Add event listeners for filters and dispatch/emergency buttons
+            const ambulanceTypeSelect = document.getElementById('ambulanceType');
+            const statusFilterSelect = document.getElementById('status-filter');
+            const hospitalSelect = document.getElementById('hospital');
+            const responseTimeFilterSelect = document.getElementById('response-time-filter');
+            const dispatchButton = document.getElementById('dispatch-btn');
+            const emergencyButton = document.getElementById('emergency-btn');
+            
+            // Add event listeners for filter changes
+            ambulanceTypeSelect.addEventListener('change', filterAmbulances);
+            statusFilterSelect.addEventListener('change', filterAmbulances);
+            hospitalSelect.addEventListener('change', filterAmbulances);
+            responseTimeFilterSelect.addEventListener('change', filterAmbulances);
+            
+            // Add event listeners for dispatch and emergency buttons
+            dispatchButton.addEventListener('click', handleDispatch);
+            emergencyButton.addEventListener('click', handleEmergency);
+        });
     </script>
 </body>
 </html>
