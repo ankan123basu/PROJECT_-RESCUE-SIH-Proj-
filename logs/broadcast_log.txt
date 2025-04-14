@@ -1,0 +1,20 @@
+2025-04-12 00:20:14 - Attempting to send broadcast alert: Warning
+2025-04-12 00:20:20 - Email sent successfully
+2025-04-12 00:24:48 - Attempting to send broadcast alert: Earthquake
+2025-04-12 00:24:53 - Email sent successfully
+2025-04-12 10:11:23 - Attempting to send broadcast alert: Earthquake
+2025-04-12 10:11:31 - Email sent successfully
+2025-04-12 20:56:51 - Attempting to send broadcast alert: Evacuation
+2025-04-12 20:56:57 - Email sent successfully
+2025-04-12 20:57:13 - Attempting to send broadcast alert: Evacuation
+2025-04-12 20:57:19 - Email sent successfully
+2025-04-12 21:01:54 - Attempting to send broadcast alert: Emergency
+2025-04-12 21:01:59 - Email sent successfully
+2025-04-13 00:16:03 - Attempting to send broadcast alert: Warning
+2025-04-13 00:16:11 - Email sent successfully
+2025-04-14 09:58:19 - Attempting to send broadcast alert: Evacuation
+2025-04-14 09:58:26 - Email sent successfully
+2025-04-14 13:39:37 - Attempting to send broadcast alert: Evacuation
+2025-04-14 13:39:43 - Email sent successfully
+2025-04-14 14:02:28 - Attempting to send broadcast alert: Warning
+2025-04-14 14:02:34 - Email sent successfully

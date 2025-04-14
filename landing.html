@@ -511,7 +511,8 @@
                 </div>
                 <div class="md:w-1/2">
                     <div class="glass-card rounded-xl p-8">
-                        <form id="contactForm" method="post" action="send_email.php">
+                        <form id="contactForm" method="post" action="./php/send_email.php">
+
                             <div class="mb-6">
                                 <label for="name" class="block text-gray-400 mb-2">Name</label>
                                 <input type="text" id="name" name="name" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -582,7 +583,7 @@
             </div>
             <div class="chat-messages">
                 <div class="bot-message">
-                    <p>Hello! I'm your RESCUE assistant, powered by Gemini Flash 2.0. How can I help you learn about our emergency coordination platform?</p>
+                    <p>Hello! I'm your RESCUE assistant, How can I help you learn about our emergency coordination platform?</p>
                 </div>
             </div>
             <div class="chat-input">
@@ -618,7 +619,7 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Sending...';
             
-            fetch('send_email.php', {
+            fetch('./php/send_email.php', {
                 method: 'POST',
                 body: formData
             })

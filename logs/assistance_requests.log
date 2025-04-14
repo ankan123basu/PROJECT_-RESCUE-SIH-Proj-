@@ -30,3 +30,15 @@ Resources Needed: rescue
 Description: bxv
 Resources Needed: medical
 
+[2025-04-14 09:54:10] ASSISTANCE REQUEST - Type: fire, Location: Kolkata, Priority: medium
+Description: heavy rainfall
+Resources Needed: medical, rescue
+
+[2025-04-14 13:36:53] ASSISTANCE REQUEST - Type: fire, Location: Kolkata, Priority: critical
+Description: dxgxgdfgdfx
+Resources Needed: medical, fire
+
+[2025-04-14 20:29:24] ASSISTANCE REQUEST - Type: medical, Location: kolkata, Priority: medium
+Description: dvbfx
+Resources Needed: fire, supplies
+
