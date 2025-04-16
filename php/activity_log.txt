@@ -52,3 +52,9 @@
 2025-04-15 12:52:37 - Successfully queried activities
 2025-04-15 12:52:37 - Found 6 activities
 2025-04-15 12:52:37 - Returning 6 activities
+2025-04-15 23:19:56 - Connected to database successfully
+2025-04-15 23:19:56 - Table check/creation successful
+2025-04-15 23:19:56 - Found 9 existing activities
+2025-04-15 23:19:56 - Successfully queried activities
+2025-04-15 23:19:56 - Found 6 activities
+2025-04-15 23:19:56 - Returning 6 activities
