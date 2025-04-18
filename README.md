@@ -153,6 +153,76 @@ The system uses JSON-based data for:
 - Primary Email: ankanbasu1234@gmail.com
 - Sender Email: ankanbasu10@gmail.com
 
+## 🆕 Recent Enhancements & Libraries
+
+### Frontend
+**Languages & Frameworks:**
+- **HTML5** — Structure of all pages
+- **CSS3 / Tailwind CSS** — Styling (Tailwind via CDN)
+- **JavaScript (ES6+)** — Client-side scripting
+- **jQuery** — For DOM manipulation and animations (via CDN)
+
+**UI Libraries:**
+- **Font Awesome** — Icon library (via CDN)
+- **Google Fonts (Poppins)** — Custom font
+
+**Components/Features:**
+- **Image Gallery** — Custom with jQuery for modal, animation, and navigation
+- **Responsive Design** — Tailwind utility classes
+- **Glassmorphism Effects** — Custom CSS
+- **Chatbot UI** — Custom chat interface
+
+### 🌍 Maps & Geospatial
+**Libraries:**
+- **Leaflet.js** — Interactive maps (via CDN)
+- **OpenStreetMap** — Default map tile provider
+- **ESRI World Imagery** — Satellite map tiles
+- **OpenTopoMap** — Topographic map tiles (used for “3D” view alternative)
+
+**Map Features:**
+- Custom markers for incidents/resources
+- Dynamic layer switching (Standard, Satellite, Topo/3D)
+- Marker popups and clustering
+
+### 🗄️ Backend
+**Languages:**
+- **PHP** — Server-side scripting for all backend logic
+
+**Backend Features:**
+- Incident Reporting — php/report_incident.php
+- Incident Response — php/respond_to_incident.php
+- Agency/Network Management — php/get_agencies.php, php/get_network.php, etc.
+- Contact Form Email — php/send_email.php
+- Session Management — php/check_session.php
+
+**Database:**
+- Likely MySQL/MariaDB (typical for XAMPP stack, though not directly shown in code snippets)
+
+### 📡 APIs & Integrations
+**Map APIs:**
+- OpenStreetMap (tile layer URLs)
+- ESRI ArcGIS World Imagery (tile layer URLs)
+- OpenTopoMap (tile layer URLs)
+
+**Other APIs:**
+- Gemini Flash 2.0 API (AI chatbot integration, as seen in landing.html)
+- Mailto: fallback for email sending in offline mode
+
+### ⚙️ Development Tools
+- XAMPP (local server stack: Apache, MySQL, PHP, Perl)
+- Modern Browser (for ES6, CSS3, and map features)
+
+### 📦 Asset Management
+- Images — Stored in assets/images/ and used throughout gallery, hero, testimonials, etc.
+- Custom JS/CSS — Some in separate files (e.g., js/config.js), some inline
+
+### 🔗 External Services (CDNs)
+- Tailwind CSS — [https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)
+- Font Awesome — [https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)
+- Google Fonts — [https://fonts.googleapis.com/css2?family=Poppins...](https://fonts.googleapis.com/css2?family=Poppins...)
+- jQuery — [https://code.jquery.com/jquery-3.6.0.min.js](https://code.jquery.com/jquery-3.6.0.min.js)
+- Leaflet.js — [https://unpkg.com/leaflet@1.9.4/dist/leaflet.js](https://unpkg.com/leaflet@1.9.4/dist/leaflet.js) and CSS
+
 ---
 
 © 2025 RESCUE Agency Coordination System | All Rights Reserved

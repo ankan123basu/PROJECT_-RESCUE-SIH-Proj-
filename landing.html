@@ -421,7 +421,7 @@
                             <p class="text-gray-400">Agencies Connected</p>
                         </div>
                         <div>
-                            <h4 class="text-2xl font-bold text-blue-400 mb-2">500+</h4>
+                            <h4 class="text-2xl font-bold text-blue-400 mb-2">50+</h4>
                             <p class="text-gray-400">Emergencies Coordinated</p>
                         </div>
                         <div>
@@ -457,10 +457,56 @@
                     </div>
                     <div class="text-left">
                         <h4 class="text-white font-semibold">Ankan Basu</h4>
-                        <p class="text-gray-400">Co-owner, Project Rescue</p>
+                        <p class="text-gray-400">Team Lead, Project Rescue</p>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Image Gallery Section -->
+    <div id="gallery" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-white mb-4">Gallery</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    View our emergency response operations and training activities.
+                </p>
+            </div>
+            
+            <div class="flex gap-4 justify-center items-center flex-wrap gallery-container">
+                <img src="assets/images/Disaster-Management.jpg" alt="Emergency Response" class="w-64 h-48 object-cover rounded-2xl cursor-pointer hover:scale-110 transition gallery-image" data-index="0">
+                <img src="assets/images/flood-story_647_123115045946.avif" alt="Rescue Operation" class="w-64 h-48 object-cover rounded-2xl cursor-pointer hover:scale-110 transition gallery-image" data-index="1">
+                <img src="assets/images/istockphoto-1356651057-612x612.jpg" alt="Medical Team" class="w-64 h-48 object-cover rounded-2xl cursor-pointer hover:scale-110 transition gallery-image" data-index="2">
+                <img src="assets/images/WhatsApp Image 2023-07-16 at 8.05.21 PM.png" alt="Coordination Center" class="w-64 h-48 object-cover rounded-2xl cursor-pointer hover:scale-110 transition gallery-image" data-index="3">
+                <img src="assets/images/20uttarakhand.avif" alt="Safety Symbols" class="w-64 h-48 object-cover rounded-2xl cursor-pointer hover:scale-110 transition gallery-image" data-index="4">
+                <img src="assets/images/Rescue_Uttrakhand_Indian_Army_Troop_ITBP_10.jpg" alt="Rescue Team" class="w-64 h-48 object-cover rounded-2xl cursor-pointer hover:scale-110 transition gallery-image" data-index="5">
+                <img src="assets/images/Wayanad_landslide_1735463122330_1735463122617.jpg" alt="Emergency Response" class="w-64 h-48 object-cover rounded-2xl cursor-pointer hover:scale-110 transition gallery-image" data-index="6">
+                <img src="assets/images/group-firefighters-orange-suits-walk-through-rubble-collapsed-building-searching-survivors_885831-113370.avif" alt="Team Member" class="w-64 h-48 object-cover rounded-2xl cursor-pointer hover:scale-110 transition gallery-image" data-index="7">
+            </div>
+            
+            <div class="mt-8 flex justify-center space-x-4">
+                <button id="slideLeftBtn" class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-chevron-left mr-2"></i> Previous
+                </button>
+                <button id="slideRightBtn" class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg">
+                    Next <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Viewer Modal -->
+    <div class="flex items-center justify-center bg-black/90 hidden fixed inset-0 z-50" id="imageModal">
+        <div class="relative w-full h-full flex items-center justify-center p-4">
+            <img src="" alt="" id="modalImage" class="rounded-xl max-h-[90vh] max-w-[90vw] object-contain">
+            <button class="absolute right-5 top-5 font-bold bg-white rounded-full w-12 h-12 flex items-center justify-center text-xl hover:bg-gray-200 transition-colors" id="closeModalBtn">X</button>
+            <button class="absolute right-5 top-1/2 -translate-y-1/2 font-bold bg-white rounded-full w-12 h-12 flex items-center justify-center text-xl hover:bg-gray-200 transition-colors" id="nextImageBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button class="absolute left-5 top-1/2 -translate-y-1/2 font-bold bg-white rounded-full w-12 h-12 flex items-center justify-center text-xl hover:bg-gray-200 transition-colors" id="prevImageBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
         </div>
     </div>
     
@@ -583,7 +629,7 @@
             </div>
             <div class="chat-messages">
                 <div class="bot-message">
-                    <p>Hello! I'm your RESCUE assistant, How can I help you learn about our emergency coordination platform?</p>
+                    <p>Hello! I'm your RESCUE assistant created by Ankan, How can I help you learn about our emergency coordination platform?</p>
                 </div>
             </div>
             <div class="chat-input">
@@ -595,6 +641,7 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -655,6 +702,133 @@
             });
         });
 
+        // Image Gallery functionality with jQuery
+        $(document).ready(function() {
+            const galleryImages = [
+                "assets/images/20uttarakhand.avif",
+                "assets/images/Disaster-Management.jpg",
+                "assets/images/flood-story_647_123115045946.avif",
+                "assets/images/istockphoto-1356651057-612x612.jpg",
+                "assets/images/rescuer-background-with-accident-safety-symbols-flat-vector-illustration_1284-81632.avif",
+                "assets/images/Wayanad_landslide_1735463122330_1735463122617.jpg",
+                "assets/images/Rescue_Uttrakhand_Indian_Army_Troop_ITBP_10.jpg",
+                "assets/images/WhatsApp Image 2023-07-16 at 8.05.21 PM.png"
+            ];
+            
+            let currentImageIndex = 0;
+            
+            // Click event for gallery images
+            $('.gallery-image').on('click', function() {
+                const index = $(this).data('index');
+                showImage(index);
+            });
+            
+            // Show image in modal
+            function showImage(index) {
+                currentImageIndex = index;
+                
+                // Preload image to get correct dimensions
+                const img = new Image();
+                img.onload = function() {
+                    $('#modalImage').attr('src', galleryImages[currentImageIndex]);
+                    $('#imageModal').fadeIn(300).removeClass('hidden');
+                    $('body').css('overflow', 'hidden');
+                    
+                    // Add entrance animation
+                    $('#modalImage').css({
+                        'transform': 'scale(0.9)',
+                        'opacity': '0'
+                    }).animate({
+                        'transform': 'scale(1)',
+                        'opacity': '1'
+                    }, 300);
+                };
+                img.src = galleryImages[currentImageIndex];
+            }
+            
+            // Next image button
+            $('#nextImageBtn').on('click', function() {
+                currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+                $('#modalImage').fadeOut(150, function() {
+                    $(this).attr('src', galleryImages[currentImageIndex]).fadeIn(150);
+                });
+            });
+            
+            // Previous image button
+            $('#prevImageBtn').on('click', function() {
+                currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+                $('#modalImage').fadeOut(150, function() {
+                    $(this).attr('src', galleryImages[currentImageIndex]).fadeIn(150);
+                });
+            });
+            
+            // Close modal button
+            $('#closeModalBtn').on('click', function() {
+                $('#imageModal').fadeOut(300, function() {
+                    $(this).addClass('hidden');
+                    $('body').css('overflow', 'auto');
+                });
+            });
+            
+            // Close modal when clicking outside the image
+            $('#imageModal').on('click', function(event) {
+                if (event.target === this) {
+                    $('#closeModalBtn').click();
+                }
+            });
+            
+            // Keyboard navigation
+            $(document).on('keydown', function(event) {
+                if ($('#imageModal').hasClass('hidden')) {
+                    return;
+                }
+                
+                if (event.key === "Escape") {
+                    $('#closeModalBtn').click();
+                } else if (event.key === "ArrowRight") {
+                    $('#nextImageBtn').click();
+                } else if (event.key === "ArrowLeft") {
+                    $('#prevImageBtn').click();
+                }
+            });
+            
+            // Gallery slideshow functionality
+            let animating = false;
+            
+            $('#slideLeftBtn').on('click', function() {
+                if (animating) return;
+                animating = true;
+                
+                $('.gallery-container').find('img:last').hide()
+                    .prependTo('.gallery-container')
+                    .slideDown(600, function() {
+                        animating = false;
+                    });
+            });
+            
+            $('#slideRightBtn').on('click', function() {
+                if (animating) return;
+                animating = true;
+                
+                $('.gallery-container').find('img:first')
+                    .slideUp(600, function() {
+                        $(this).appendTo('.gallery-container')
+                            .show();
+                        animating = false;
+                    });
+            });
+            
+            // Add hover animations
+            $('.gallery-image').hover(
+                function() {
+                    $(this).css('transform', 'scale(1.1)');
+                },
+                function() {
+                    $(this).css('transform', 'scale(1)');
+                }
+            );
+        });
+        
         // Chat functionality
         const chatButton = document.querySelector('.chat-button');
         const chatContainer = document.querySelector('.chat-container');

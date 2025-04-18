@@ -58,3 +58,147 @@
 2025-04-15 23:19:56 - Successfully queried activities
 2025-04-15 23:19:56 - Found 6 activities
 2025-04-15 23:19:56 - Returning 6 activities
+2025-04-16 21:35:44 - Connected to database successfully
+2025-04-16 21:35:44 - Table check/creation successful
+2025-04-16 21:35:44 - Found 9 existing activities
+2025-04-16 21:35:44 - Successfully queried activities
+2025-04-16 21:35:44 - Found 6 activities
+2025-04-16 21:35:44 - Returning 6 activities
+2025-04-16 21:37:17 - Connected to database successfully
+2025-04-16 21:37:17 - Table check/creation successful
+2025-04-16 21:37:17 - Found 9 existing activities
+2025-04-16 21:37:17 - Successfully queried activities
+2025-04-16 21:37:17 - Found 6 activities
+2025-04-16 21:37:17 - Returning 6 activities
+2025-04-16 21:37:17 - Connected to database successfully
+2025-04-16 21:37:17 - Table check/creation successful
+2025-04-16 21:37:17 - Found 9 existing activities
+2025-04-16 21:37:17 - Successfully queried activities
+2025-04-16 21:37:17 - Found 6 activities
+2025-04-16 21:37:17 - Returning 6 activities
+2025-04-16 21:37:17 - Connected to database successfully
+2025-04-16 21:37:17 - Table check/creation successful
+2025-04-16 21:37:17 - Found 9 existing activities
+2025-04-16 21:37:17 - Successfully queried activities
+2025-04-16 21:37:17 - Found 6 activities
+2025-04-16 21:37:17 - Returning 6 activities
+2025-04-16 21:37:17 - Connected to database successfully
+2025-04-16 21:37:17 - Table check/creation successful
+2025-04-16 21:37:17 - Found 9 existing activities
+2025-04-16 21:37:17 - Successfully queried activities
+2025-04-16 21:37:17 - Found 6 activities
+2025-04-16 21:37:17 - Returning 6 activities
+2025-04-16 21:37:17 - Connected to database successfully
+2025-04-16 21:37:17 - Table check/creation successful
+2025-04-16 21:37:17 - Found 9 existing activities
+2025-04-16 21:37:17 - Successfully queried activities
+2025-04-16 21:37:17 - Found 6 activities
+2025-04-16 21:37:17 - Returning 6 activities
+2025-04-16 21:37:18 - Connected to database successfully
+2025-04-16 21:37:18 - Table check/creation successful
+2025-04-16 21:37:18 - Found 9 existing activities
+2025-04-16 21:37:18 - Successfully queried activities
+2025-04-16 21:37:18 - Found 6 activities
+2025-04-16 21:37:18 - Returning 6 activities
+2025-04-16 21:37:18 - Connected to database successfully
+2025-04-16 21:37:18 - Table check/creation successful
+2025-04-16 21:37:18 - Found 9 existing activities
+2025-04-16 21:37:18 - Successfully queried activities
+2025-04-16 21:37:18 - Found 6 activities
+2025-04-16 21:37:18 - Returning 6 activities
+2025-04-16 21:37:18 - Connected to database successfully
+2025-04-16 21:37:18 - Table check/creation successful
+2025-04-16 21:37:18 - Found 9 existing activities
+2025-04-16 21:37:18 - Successfully queried activities
+2025-04-16 21:37:18 - Found 6 activities
+2025-04-16 21:37:18 - Returning 6 activities
+2025-04-16 22:04:20 - Connected to database successfully
+2025-04-16 22:04:20 - Table check/creation successful
+2025-04-16 22:04:20 - Found 9 existing activities
+2025-04-16 22:04:20 - Successfully queried activities
+2025-04-16 22:04:20 - Found 6 activities
+2025-04-16 22:04:20 - Returning 6 activities
+2025-04-17 06:37:22 - Connected to database successfully
+2025-04-17 06:37:22 - Table check/creation successful
+2025-04-17 06:37:22 - Found 9 existing activities
+2025-04-17 06:37:22 - Successfully queried activities
+2025-04-17 06:37:22 - Found 6 activities
+2025-04-17 06:37:22 - Returning 6 activities
+2025-04-17 06:40:09 - Connected to database successfully
+2025-04-17 06:40:09 - Table check/creation successful
+2025-04-17 06:40:09 - Found 9 existing activities
+2025-04-17 06:40:09 - Successfully queried activities
+2025-04-17 06:40:09 - Found 6 activities
+2025-04-17 06:40:09 - Returning 6 activities
+2025-04-17 06:40:21 - Connected to database successfully
+2025-04-17 06:40:21 - Table check/creation successful
+2025-04-17 06:40:21 - Found 9 existing activities
+2025-04-17 06:40:21 - Successfully queried activities
+2025-04-17 06:40:21 - Found 6 activities
+2025-04-17 06:40:21 - Returning 6 activities
+2025-04-17 07:39:14 - Connected to database successfully
+2025-04-17 07:39:14 - Table check/creation successful
+2025-04-17 07:39:14 - Found 9 existing activities
+2025-04-17 07:39:14 - Successfully queried activities
+2025-04-17 07:39:14 - Found 6 activities
+2025-04-17 07:39:14 - Returning 6 activities
+2025-04-17 10:09:00 - Connected to database successfully
+2025-04-17 10:09:00 - Table check/creation successful
+2025-04-17 10:09:00 - Found 9 existing activities
+2025-04-17 10:09:00 - Successfully queried activities
+2025-04-17 10:09:00 - Found 6 activities
+2025-04-17 10:09:00 - Returning 6 activities
+2025-04-17 11:40:54 - Connected to database successfully
+2025-04-17 11:40:54 - Table check/creation successful
+2025-04-17 11:40:54 - Found 9 existing activities
+2025-04-17 11:40:54 - Successfully queried activities
+2025-04-17 11:40:54 - Found 6 activities
+2025-04-17 11:40:54 - Returning 6 activities
+2025-04-17 11:52:38 - Connected to database successfully
+2025-04-17 11:52:38 - Table check/creation successful
+2025-04-17 11:52:38 - Found 9 existing activities
+2025-04-17 11:52:38 - Successfully queried activities
+2025-04-17 11:52:38 - Found 6 activities
+2025-04-17 11:52:38 - Returning 6 activities
+2025-04-17 20:00:39 - Connected to database successfully
+2025-04-17 20:00:39 - Table check/creation successful
+2025-04-17 20:00:39 - Found 9 existing activities
+2025-04-17 20:00:39 - Successfully queried activities
+2025-04-17 20:00:39 - Found 6 activities
+2025-04-17 20:00:39 - Returning 6 activities
+2025-04-17 20:32:58 - Connected to database successfully
+2025-04-17 20:32:58 - Table check/creation successful
+2025-04-17 20:32:58 - Found 9 existing activities
+2025-04-17 20:32:58 - Successfully queried activities
+2025-04-17 20:32:58 - Found 6 activities
+2025-04-17 20:32:58 - Returning 6 activities
+2025-04-17 20:33:38 - Connected to database successfully
+2025-04-17 20:33:38 - Table check/creation successful
+2025-04-17 20:33:38 - Found 9 existing activities
+2025-04-17 20:33:38 - Successfully queried activities
+2025-04-17 20:33:38 - Found 6 activities
+2025-04-17 20:33:38 - Returning 6 activities
+2025-04-17 21:00:57 - Connected to database successfully
+2025-04-17 21:00:57 - Table check/creation successful
+2025-04-17 21:00:57 - Found 9 existing activities
+2025-04-17 21:00:57 - Successfully queried activities
+2025-04-17 21:00:57 - Found 6 activities
+2025-04-17 21:00:57 - Returning 6 activities
+2025-04-17 21:02:59 - Connected to database successfully
+2025-04-17 21:02:59 - Table check/creation successful
+2025-04-17 21:02:59 - Found 9 existing activities
+2025-04-17 21:02:59 - Successfully queried activities
+2025-04-17 21:02:59 - Found 6 activities
+2025-04-17 21:02:59 - Returning 6 activities
+2025-04-17 21:03:00 - Connected to database successfully
+2025-04-17 21:03:00 - Table check/creation successful
+2025-04-17 21:03:00 - Found 9 existing activities
+2025-04-17 21:03:00 - Successfully queried activities
+2025-04-17 21:03:00 - Found 6 activities
+2025-04-17 21:03:00 - Returning 6 activities
+2025-04-18 00:52:52 - Connected to database successfully
+2025-04-18 00:52:52 - Table check/creation successful
+2025-04-18 00:52:52 - Found 9 existing activities
+2025-04-18 00:52:52 - Successfully queried activities
+2025-04-18 00:52:52 - Found 6 activities
+2025-04-18 00:52:52 - Returning 6 activities

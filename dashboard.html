@@ -393,28 +393,89 @@
         // Initialize the map
         var map = L.map('map').setView([20.5937, 78.9629], 4);
         
-        // Define tile layers
-        const standardTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-            subdomains: ['a', 'b', 'c']
-        });
-        
-        const satelliteTiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+        // Define tile layers - using reliable, widely available tile services
+        const standardLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 19
         });
         
-        const terrainTiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
-            maxZoom: 18
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            maxZoom: 19
+        });
+        
+        const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+            maxZoom: 17
         });
         
         // Add default tile layer
-        standardTiles.addTo(map);
+        standardLayer.addTo(map);
         
         // Current active layer
-        let currentLayer = standardTiles;
-
+        let currentLayer = standardLayer;
+        
+        // Helper function to update active button styling
+        function updateActiveButton(activeButton) {
+            // Remove active class from all buttons
+            standardViewButton.classList.remove('active');
+            satelliteViewButton.classList.remove('active');
+            threeDViewButton.classList.remove('active');
+            
+            // Add active class to the clicked button
+            activeButton.classList.add('active');
+        }
+        
+        // Map view buttons
+        const standardViewButton = document.getElementById('standard-view');
+        const satelliteViewButton = document.getElementById('satellite-view');
+        const threeDViewButton = document.getElementById('3d-view');
+        
+        // Standard view button
+        standardViewButton.addEventListener('click', function() {
+            // Remove current layer
+            map.removeLayer(currentLayer);
+            
+            // Add standard layer
+            standardLayer.addTo(map);
+            currentLayer = standardLayer;
+            
+            // Update button styling
+            updateActiveButton(standardViewButton);
+            
+            console.log('Standard view activated');
+        });
+        
+        // Satellite view button
+        satelliteViewButton.addEventListener('click', function() {
+            // Remove current layer
+            map.removeLayer(currentLayer);
+            
+            // Add satellite layer
+            satelliteLayer.addTo(map);
+            currentLayer = satelliteLayer;
+            
+            // Update button styling
+            updateActiveButton(satelliteViewButton);
+            
+            console.log('Satellite view activated');
+        });
+        
+        // 3D view button (using topo layer as a visual alternative)
+        threeDViewButton.addEventListener('click', function() {
+            // Remove current layer
+            map.removeLayer(currentLayer);
+            
+            // Add topo layer
+            topoLayer.addTo(map);
+            currentLayer = topoLayer;
+            
+            // Update button styling
+            updateActiveButton(threeDViewButton);
+            
+            console.log('3D view (topo) activated');
+        });
+        
         // Global variables to store resources and markers
         let allResources = [];
         let resourceMarkers = [];
@@ -703,44 +764,6 @@
             
             // Refresh data every 60 seconds
             setInterval(loadAndDisplayResources, 60000);
-            
-            // Map view buttons
-            const standardViewButton = document.getElementById('standard-view');
-            const satelliteViewButton = document.getElementById('satellite-view');
-            const threeDViewButton = document.getElementById('3d-view');
-            
-            if (standardViewButton) {
-                standardViewButton.addEventListener('click', () => {
-                    map.removeLayer(currentLayer);
-                    currentLayer = standardTiles;
-                    standardTiles.addTo(map);
-                    standardViewButton.classList.add('active');
-                    satelliteViewButton.classList.remove('active');
-                    threeDViewButton.classList.remove('active');
-                });
-            }
-            
-            if (satelliteViewButton) {
-                satelliteViewButton.addEventListener('click', () => {
-                    map.removeLayer(currentLayer);
-                    currentLayer = satelliteTiles;
-                    satelliteTiles.addTo(map);
-                    satelliteViewButton.classList.add('active');
-                    standardViewButton.classList.remove('active');
-                    threeDViewButton.classList.remove('active');
-                });
-            }
-            
-            if (threeDViewButton) {
-                threeDViewButton.addEventListener('click', () => {
-                    map.removeLayer(currentLayer);
-                    currentLayer = terrainTiles;
-                    terrainTiles.addTo(map);
-                    threeDViewButton.classList.add('active');
-                    standardViewButton.classList.remove('active');
-                    satelliteViewButton.classList.remove('active');
-                });
-            }
         });
     </script>
 </body>

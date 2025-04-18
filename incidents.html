@@ -715,8 +715,8 @@
                         severity: severity,
                         reported: 'Just now',
                         resources: resourcesNeeded.map(r => r.charAt(0)),
-                        latitude: 20.5937 + (Math.random() - 0.5) * 10,
-                        longitude: 78.9629 + (Math.random() - 0.5) * 10
+                        latitude: findCityCoordinates(location).lat,
+                        longitude: findCityCoordinates(location).lng
                     };
                     
                     // Add new incident to the list and map
@@ -739,8 +739,8 @@
                     severity: severity,
                     reported: 'Just now',
                     resources: resourcesNeeded.map(r => r.charAt(0)),
-                    latitude: 20.5937 + (Math.random() - 0.5) * 10,
-                    longitude: 78.9629 + (Math.random() - 0.5) * 10
+                    latitude: findCityCoordinates(location).lat,
+                    longitude: findCityCoordinates(location).lng
                 };
                 
                 // Add new incident to the list and map
@@ -914,6 +914,23 @@
             // For demo purposes, we'll just reload the page
             location.reload();
         });
+
+        // Function to find coordinates for a city
+        function findCityCoordinates(locationText) {
+            // Default coordinates (center of India) if no match is found
+            const defaultCoordinates = { lat: 20.5937, lng: 78.9629 };
+            
+            // Extract city name from location text (assuming format like "Mumbai, Dadar")
+            const cityPart = locationText.split(',')[0].trim();
+            
+            // Look for the city in the indianCities array
+            const cityMatch = indianCities.find(city => 
+                cityPart.toLowerCase().includes(city.name.toLowerCase()) || 
+                city.name.toLowerCase().includes(cityPart.toLowerCase())
+            );
+            
+            return cityMatch || defaultCoordinates;
+        }
     </script>
 </body>
 </html>

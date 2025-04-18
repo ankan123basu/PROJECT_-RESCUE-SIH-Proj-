@@ -1,0 +1,10 @@
+2025-04-16 22:23:18 - Assigned Agency #1 to Emergency #1
+2025-04-16 22:23:25 - Assigned Agency #7 to Emergency #1
+2025-04-16 22:24:03 - Assigned Agency #1 to Emergency #1
+2025-04-16 22:24:05 - Assigned Agency #2 to Emergency #1
+2025-04-16 22:24:06 - Assigned Agency #6 to Emergency #1
+2025-04-16 22:24:08 - Assigned Agency #7 to Emergency #1
+2025-04-16 22:24:10 - Assigned Agency #8 to Emergency #1
+2025-04-16 22:27:57 - Assigned Agency #1 to Emergency #1
+2025-04-16 22:28:02 - Assigned Agency #2 to Emergency #1
+2025-04-16 22:28:06 - Assigned Agency #6 to Emergency #1
