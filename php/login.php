@@ -61,8 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 mysqli_close($conn);
 
 if (isset($login_err)) {
-    echo json_encode(['error' => $login_err]);
-} else {
-    echo json_encode(['success' => true]);
+    // Show an alert and redirect back to login page
+    echo "<script>alert('" . $login_err . "'); window.location.href='../index.html';</script>";
+    exit;
 }
 ?>

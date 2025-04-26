@@ -14,3 +14,13 @@
 2025-04-16 22:10:46 - Email sent successfully
 2025-04-16 22:25:38 - Attempting to send broadcast alert: Emergency
 2025-04-16 22:25:43 - Email sent successfully
+2025-04-18 14:44:15 - Attempting to send broadcast alert: Evacuation
+2025-04-18 14:44:21 - Email sent successfully
+2025-04-19 11:28:35 - Attempting to send broadcast alert: Evacuation
+2025-04-19 11:28:40 - Email sent successfully
+2025-04-21 19:45:38 - Attempting to send broadcast alert: Emergency
+2025-04-21 19:45:46 - Email sent successfully
+2025-04-22 11:10:24 - Attempting to send broadcast alert: Emergency
+2025-04-22 11:10:30 - Email sent successfully
+2025-04-26 21:42:06 - Attempting to send broadcast alert: Evacuation
+2025-04-26 21:42:12 - Email sent successfully

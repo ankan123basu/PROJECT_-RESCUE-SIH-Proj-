@@ -14,6 +14,7 @@
             background-image: 
                 radial-gradient(at 47% 33%, hsl(162, 77%, 40%, 0.15) 0, transparent 59%), 
                 radial-gradient(at 82% 65%, hsl(218, 39%, 11%, 0.3) 0, transparent 55%);
+            overflow-x: hidden;
         }
         
         .hero-gradient {
@@ -303,6 +304,68 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
+        
+        .testimonial-float {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 1s ease-out forwards, floatY 4s ease-in-out infinite;
+        }
+        .testimonial-float.delay-200 {
+            animation-delay: 0.2s, 0.2s;
+        }
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-18px); }
+        }
+        .testimonial-glow {
+            box-shadow: 0 0 32px 8px rgba(59,130,246,0.3), 0 0 64px 16px rgba(59,130,246,0.13);
+        }
+        .testimonial-blob {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(24px);
+            opacity: 0.6;
+            animation: blobMove 8s ease-in-out infinite alternate;
+        }
+        .testimonial-blob1 {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, #60a5fa 0%, #a5b4fc 100%);
+            top: -30px; left: -30px;
+            animation-delay: 0s;
+        }
+        .testimonial-blob2 {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, #f472b6 0%, #facc15 100%);
+            bottom: -24px; right: -24px;
+            animation-delay: 1.2s;
+        }
+        .testimonial-blob3 {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%);
+            top: 60%; left: 90%;
+            animation-delay: 2.5s;
+        }
+        @keyframes blobMove {
+            0%   { transform: scale(1) translateY(0) translateX(0); }
+            33%  { transform: scale(1.1) translateY(-10px) translateX(8px); }
+            66%  { transform: scale(0.95) translateY(10px) translateX(-8px); }
+            100% { transform: scale(1) translateY(0) translateX(0); }
+        }
+        .testimonial-gradient {
+            background: linear-gradient(135deg, rgba(59,130,246,0.22) 0%, rgba(236,72,153,0.18) 100%);
+        }
+        .testimonial-gradient-text {
+            background: linear-gradient(90deg, #60a5fa, #f472b6, #facc15, #34d399, #38bdf8);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 4s linear infinite alternate;
+        }
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
     </style>
 </head>
 <body>
@@ -457,7 +520,7 @@
                     </div>
                     <div class="text-left">
                         <h4 class="text-white font-semibold">Ankan Basu</h4>
-                        <p class="text-gray-400">Team Lead, Project Rescue</p>
+                        <p class="text-gray-400">Team Member, Project Rescue</p>
                     </div>
                 </div>
             </div>
@@ -492,6 +555,46 @@
                 <button id="slideRightBtn" class="glossy-btn bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg">
                     Next <i class="fas fa-chevron-right ml-2"></i>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div id="testimonials" class="py-20 bg-transparent">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-white mb-4">Testimonials</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-8">See what our faculty say about RESCUE!</p>
+            </div>
+            <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch">
+                <!-- Testimonial 1 -->
+                <div class="relative flex-1 glass-card rounded-2xl p-8 flex flex-col items-center justify-center shadow-xl animate-fade-in testimonial-float testimonial-glow">
+                    <div class="testimonial-blob testimonial-blob1"></div>
+                    <div class="testimonial-blob testimonial-blob2"></div>
+                    <div class="testimonial-blob testimonial-blob3"></div>
+                    <div class="w-20 h-20 rounded-full bg-white/20 border border-white/30 mb-4 overflow-hidden flex items-center justify-center">
+                        <img src="assets/images/Screenshot 2025-04-27 021951.png" alt="Sakshi Takkar" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="text-white font-semibold text-xl mb-1 testimonial-gradient-text">Sakshi Takkar</h4>
+                    <p class="text-blue-200 font-medium mb-2">INT 219 FRONTEND Teacher</p>
+                    <p class="text-gray-200 text-center mb-4">“I am thoroughly impressed by RESCUE's intuitive design and seamless user experience. It’s  fantastic features is solving real life disaster management crisis and it's a real-world application!”</p>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 bg-blue-200/30 rounded-full blur-xl animate-pulse"></div>
+                    <div class="absolute -bottom-2 -left-2 w-10 h-10 bg-blue-400/30 rounded-full blur-xl animate-pulse"></div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="relative flex-1 glass-card rounded-2xl p-8 flex flex-col items-center justify-center shadow-xl animate-fade-in testimonial-float delay-200 testimonial-glow">
+                    <div class="testimonial-blob testimonial-blob1"></div>
+                    <div class="testimonial-blob testimonial-blob2"></div>
+                    <div class="testimonial-blob testimonial-blob3"></div>
+                    <div class="w-20 h-20 rounded-full bg-white/20 border border-white/30 mb-4 overflow-hidden flex items-center justify-center">
+                        <img src="assets/images/Screenshot 2025-04-27 022346.png" alt="Manpreet Kaur Bhullar" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="text-white font-semibold text-xl mb-1 testimonial-gradient-text">Manpreet Kaur Bhullar</h4>
+                    <p class="text-blue-200 font-medium mb-2">INT 220 BACKEND Teacher</p>
+                    <p class="text-gray-200 text-center mb-4">“RESCUE’s backend is robust and secure, making it an excellent platform for demonstrating backend best practices to students.”</p>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 bg-blue-400/30 rounded-full blur-xl animate-pulse"></div>
+                    <div class="absolute -bottom-2 -left-2 w-10 h-10 bg-blue-200/30 rounded-full blur-xl animate-pulse"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -550,6 +653,24 @@
                                 <div>
                                     <h4 class="text-white font-medium mb-1">Phone</h4>
                                     <p class="text-gray-400">6296441903</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-blue-600 rounded-lg p-3 mr-4">
+                                    <i class="fas fa-clock text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium mb-1">Working Hours</h4>
+                                    <p class="text-gray-400">Mon - Fri: 9:00 AM - 5:00 PM</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-blue-600 rounded-lg p-3 mr-4">
+                                    <i class="fas fa-users text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium mb-1">Support Team</h4>
+                                    <p class="text-gray-400">24/7 Dedicated Support</p>
                                 </div>
                             </div>
                         </div>

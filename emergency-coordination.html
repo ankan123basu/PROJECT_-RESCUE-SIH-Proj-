@@ -182,6 +182,10 @@
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes bounce-in { 0% { transform: scale(0.6); opacity: 0; } 60% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+        .animate-bounce-in { animation: bounce-in 0.7s cubic-bezier(.68,-0.55,.27,1.55); }
+    </style>
 </head>
 <body class="min-h-screen text-white">
     <!-- Navigation -->
@@ -563,133 +567,89 @@
         }
 
         // Function to contact agency
-        function contactAgency(agencyId) {
-            // Find the agency card and button
+        async function contactAgency(agencyId) {
             const agencyCard = document.querySelector(`.agency-card[data-id="${agencyId}"]`);
-            const contactBtn = agencyCard.querySelector('.contact-btn');
-            
-            // Store original button text and disable button
-            const originalText = contactBtn.innerText;
-            contactBtn.innerHTML = '<span class="animate-pulse">Contacting...</span>';
-            contactBtn.disabled = true;
-            
-            // Extract agency information from card
-            const agencyName = agencyCard.dataset.name;
-            const agencyType = agencyCard.dataset.type;
-            const agencyPhone = agencyCard.dataset.phone;
-            
-            // Default message based on agency type
-            const defaultMessage = `Urgent: Requesting immediate assistance from ${agencyName}`;
-            
-            // Create form data for the request
-            const formData = new FormData();
-            formData.append('agencyId', agencyId);
-            formData.append('message', defaultMessage);
-            
-            // Send AJAX request to contact agency
-            fetch('php/contact_agency.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Reset button state
-                contactBtn.innerHTML = originalText;
-                contactBtn.disabled = false;
-                
+            const agencyName = agencyCard?.dataset?.name || 'Unknown';
+            const agencyPhone = agencyCard?.dataset?.phone || 'Unknown';
+            await sendAgencyMail('contact', agencyName, agencyPhone);
+            const originalText = agencyCard.querySelector('.contact-btn').innerText;
+            agencyCard.querySelector('.contact-btn').innerHTML = '<span class="animate-pulse">Contacting...</span>';
+            agencyCard.querySelector('.contact-btn').disabled = true;
+            try {
+                const response = await fetch('php/contact_agency.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        agencyId: agencyId,
+                        message: 'Urgent: Requesting immediate assistance from ' + agencyName
+                    })
+                });
+                const data = await response.json();
                 if (data.status === 'success') {
-                    // Show success notification
                     showNotification('success', `${data.message}`, 'Agency contacted successfully');
                     document.getElementById('success-sound').play();
-                    
-                    // Update button to show contacted
-                    contactBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                    contactBtn.classList.add('bg-blue-800', 'hover:bg-blue-900');
+                    agencyCard.querySelector('.contact-btn').classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    agencyCard.querySelector('.contact-btn').classList.add('bg-blue-800', 'hover:bg-blue-900');
                 } else {
-                    // Show error notification
                     showNotification('error', `Failed to contact ${agencyName}`, data.message);
                     document.getElementById('emergency-sound').play();
                 }
-            })
-            .catch(error => {
-                // Reset button state
-                contactBtn.innerHTML = originalText;
-                contactBtn.disabled = false;
-                
-                // Show error notification
+            } catch (error) {
                 console.error('Error contacting agency:', error);
                 showNotification('error', 'Communication Error', 'Failed to contact agency. Please try again.');
                 document.getElementById('emergency-sound').play();
-            });
+            } finally {
+                agencyCard.querySelector('.contact-btn').innerHTML = originalText;
+                agencyCard.querySelector('.contact-btn').disabled = false;
+            }
         }
 
         // Function to assign agency to emergency
-        function assignToEmergency(agencyId) {
-            // Check if there is an active emergency
+        async function assignToEmergency(agencyId) {
             if (!activeEmergency) {
                 showNotification('warning', 'No Active Emergency', 'No active emergency to assign to. Please declare an emergency first.');
                 return;
             }
-            
-            // Find the agency card and button
             const agencyCard = document.querySelector(`.agency-card[data-id="${agencyId}"]`);
-            const assignBtn = agencyCard.querySelector('.assign-btn');
-            
-            // Store original button text and disable button
-            const originalText = assignBtn.innerText;
-            assignBtn.innerHTML = '<span class="animate-pulse">Assigning...</span>';
-            assignBtn.disabled = true;
-            
-            // Extract agency information from card
-            const agencyName = agencyCard.dataset.name;
-            
-            // Create form data for the request
-            const formData = new FormData();
-            formData.append('agencyId', agencyId);
-            formData.append('emergencyId', activeEmergency.id);
-            
-            // Send AJAX request to assign agency
-            fetch('php/assign_agency.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Reset button state
-                assignBtn.innerHTML = originalText;
-                assignBtn.disabled = false;
-                
+            const agencyName = agencyCard?.dataset?.name || 'Unknown';
+            const agencyPhone = agencyCard?.dataset?.phone || 'Unknown';
+            await sendAgencyMail('assign', agencyName, agencyPhone);
+            const originalText = agencyCard.querySelector('.assign-btn').innerText;
+            agencyCard.querySelector('.assign-btn').innerHTML = '<span class="animate-pulse">Assigning...</span>';
+            agencyCard.querySelector('.assign-btn').disabled = true;
+            try {
+                const response = await fetch('php/assign_agency.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        agencyId: agencyId,
+                        emergencyId: activeEmergency.id
+                    })
+                });
+                const data = await response.json();
                 if (data.status === 'success') {
-                    // Show success notification
                     showNotification('success', `${agencyName} Assigned`, `${data.message}`);
                     document.getElementById('success-sound').play();
-                    
-                    // Update button to show assigned
-                    assignBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
-                    assignBtn.classList.add('bg-green-800', 'hover:bg-green-900');
-                    assignBtn.textContent = 'Assigned';
-                    
-                    // Update UI to show assignment
+                    agencyCard.querySelector('.assign-btn').classList.remove('bg-green-600', 'hover:bg-green-700');
+                    agencyCard.querySelector('.assign-btn').classList.add('bg-green-800', 'hover:bg-green-900');
+                    agencyCard.querySelector('.assign-btn').textContent = 'Assigned';
                     agencyCard.classList.add('border-green-500');
-                    
-                    // Refresh agencies list to get updated status
-                    setTimeout(loadAgencies, 1000);
                 } else {
-                    // Show error notification
                     showNotification('error', 'Assignment Failed', data.message);
                     document.getElementById('emergency-sound').play();
                 }
-            })
-            .catch(error => {
-                // Reset button state
-                assignBtn.innerHTML = originalText;
-                assignBtn.disabled = false;
-                
-                // Show error notification
+            } catch (error) {
                 console.error('Error assigning agency:', error);
                 showNotification('error', 'Assignment Error', 'Failed to assign agency to emergency. Please try again.');
                 document.getElementById('emergency-sound').play();
-            });
+            } finally {
+                agencyCard.querySelector('.assign-btn').innerHTML = originalText;
+                agencyCard.querySelector('.assign-btn').disabled = false;
+            }
         }
 
         // Function to show notification toast
@@ -821,6 +781,46 @@
 
         // Refresh data every 30 seconds
         setInterval(loadAgencies, 30000);
+
+        // Helper: Animated Mail Function
+        function showAnimatedMail(action, agencyName, agencyPhone) {
+            const existing = document.getElementById('mail-animation');
+            if (existing) existing.remove();
+
+            const mailDiv = document.createElement('div');
+            mailDiv.id = 'mail-animation';
+            mailDiv.className = 'fixed inset-0 flex items-center justify-center z-[9999]';
+            mailDiv.innerHTML = `
+                <div class="bg-white/90 rounded-2xl shadow-2xl p-8 flex flex-col items-center animate-bounce-in">
+                    <svg class="w-20 h-20 text-blue-500 animate-bounce mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12v4a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h8a2 2 0 012 2v4m0 0l4-4m-4 4l4 4" /></svg>
+                    <div class="text-xl font-bold text-gray-800 mb-2">Sending Mail...</div>
+                    <div class="text-gray-600 text-center mb-1">${action === 'assign' ? 'Assigning' : 'Contacting'} <span class="font-semibold">${agencyName}</span></div>
+                    <div class="text-gray-500 text-sm">Phone: ${agencyPhone}</div>
+                </div>
+            `;
+            document.body.appendChild(mailDiv);
+            setTimeout(() => { mailDiv.classList.add('opacity-0'); setTimeout(()=>mailDiv.remove(), 800); }, 1800);
+        }
+
+        // Send Mail AJAX
+        async function sendAgencyMail(action, agencyName, agencyPhone) {
+            showAnimatedMail(action, agencyName, agencyPhone);
+            try {
+                const res = await fetch('php/send_agency_mail.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `agency_name=${encodeURIComponent(agencyName)}&agency_phone=${encodeURIComponent(agencyPhone)}&action_type=${encodeURIComponent(action)}`
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    showNotification('success', 'Mail Sent', 'Notification email sent to admin.');
+                } else {
+                    showNotification('error', 'Mail Failed', data.message || 'Could not send mail.');
+                }
+            } catch (e) {
+                showNotification('error', 'Mail Failed', 'Could not send mail.');
+            }
+        }
     </script>
 </body>
 </html>

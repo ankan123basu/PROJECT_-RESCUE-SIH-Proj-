@@ -134,13 +134,13 @@
 
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input id="remember-me" name="remember-me" type="checkbox"
+                                <input id="remember-me" name="remember_me" type="checkbox"
                                     class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600">
                                 <label for="remember-me" class="ml-2 block text-sm text-gray-200">Remember me</label>
                             </div>
 
                             <div class="text-sm">
-                                <a href="#" class="font-medium text-blue-400 hover:text-blue-300">Forgot password?</a>
+                                <a href="#" id="forgotPasswordLink" class="font-medium text-blue-400 hover:text-blue-300">Forgot password?</a>
                             </div>
                         </div>
 
@@ -154,6 +154,9 @@
                             </button>
                         </div>
                     </form>
+                    <div class="flex justify-center mt-2">
+                        <button id="clearCredentialsBtn" type="button" class="text-xs text-red-400 hover:text-red-300 underline focus:outline-none">Clear remembered credentials</button>
+                    </div>
                     <div class="text-center">
                         <p class="text-sm text-gray-300 mb-2">Don't have an account?</p>
                         <a href="register.html" class="font-medium text-blue-400 hover:text-blue-300 flex items-center justify-center">
@@ -184,6 +187,57 @@
                     link.classList.remove('text-gray-300');
                 }
             });
+
+            // On page load, check if credentials are stored
+            var storedEmail = localStorage.getItem('rememberedEmail');
+            var storedPassword = localStorage.getItem('rememberedPassword');
+            document.querySelector('input[name="remember_me"]').checked = false; // Always start unchecked
+            if (storedEmail && storedPassword) {
+                document.querySelector('input[name="email"]').value = storedEmail;
+                document.querySelector('input[name="password"]').value = storedPassword;
+                // Do NOT auto-check the box
+            }
+        });
+
+        // On form submit, save or clear credentials based on "Remember me"
+        document.querySelector('form').addEventListener('submit', function() {
+            var email = document.querySelector('input[name="email"]').value;
+            var password = document.querySelector('input[name="password"]').value;
+            var remember = document.querySelector('input[name="remember_me"]').checked;
+            if (remember) {
+                localStorage.setItem('rememberedEmail', email);
+                localStorage.setItem('rememberedPassword', password);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+                localStorage.removeItem('rememberedPassword');
+            }
+        });
+
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            var passkey = prompt("Enter the passkey to get your password:");
+            if (passkey === "12345") {
+                // Send AJAX request to PHP to send the email
+                fetch('php/send_reset_mail.php', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => {
+                    alert("Password sent! Check your email.");
+                })
+                .catch(() => {
+                    alert("Failed to send email. Try again later.");
+                });
+            } else {
+                alert("Incorrect passkey!");
+            }
+        });
+
+        document.getElementById('clearCredentialsBtn').addEventListener('click', function() {
+            localStorage.removeItem('rememberedEmail');
+            localStorage.removeItem('rememberedPassword');
+            document.querySelector('input[name="email"]').value = '';
+            document.querySelector('input[name="password"]').value = '';
+            document.querySelector('input[name="remember_me"]').checked = false;
+            alert('Remembered credentials cleared!');
         });
     </script>
 </body>
