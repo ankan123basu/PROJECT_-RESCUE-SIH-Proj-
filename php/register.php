@@ -40,14 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // 5. Agency type (should not be empty or invalid)
-    $valid_types = ['ambulance', 'fire', 'medical', 'rescue'];
-    if (!in_array(strtolower($type), $valid_types)) {
-        header('Content-Type: application/json');
-        echo json_encode(['error' => 'Invalid agency type selected.']);
-        exit;
-    }
-
+    
     // 6. Address validation
     if (strlen($address) < 5) {
         header('Content-Type: application/json');

@@ -382,3 +382,21 @@
 2025-04-27 00:04:41 - Successfully queried activities
 2025-04-27 00:04:41 - Found 6 activities
 2025-04-27 00:04:41 - Returning 6 activities
+2025-04-27 15:17:41 - Connected to database successfully
+2025-04-27 15:17:41 - Table check/creation successful
+2025-04-27 15:17:41 - Found 9 existing activities
+2025-04-27 15:17:41 - Successfully queried activities
+2025-04-27 15:17:41 - Found 6 activities
+2025-04-27 15:17:41 - Returning 6 activities
+2025-04-27 15:20:13 - Connected to database successfully
+2025-04-27 15:20:13 - Table check/creation successful
+2025-04-27 15:20:13 - Found 9 existing activities
+2025-04-27 15:20:13 - Successfully queried activities
+2025-04-27 15:20:13 - Found 6 activities
+2025-04-27 15:20:13 - Returning 6 activities
+2025-04-27 16:10:56 - Connected to database successfully
+2025-04-27 16:10:56 - Table check/creation successful
+2025-04-27 16:10:56 - Found 9 existing activities
+2025-04-27 16:10:56 - Successfully queried activities
+2025-04-27 16:10:56 - Found 6 activities
+2025-04-27 16:10:56 - Returning 6 activities

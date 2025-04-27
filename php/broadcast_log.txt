@@ -24,3 +24,11 @@
 2025-04-22 11:10:30 - Email sent successfully
 2025-04-26 21:42:06 - Attempting to send broadcast alert: Evacuation
 2025-04-26 21:42:12 - Email sent successfully
+2025-04-27 15:23:20 - Attempting to send broadcast alert: Evacuation
+2025-04-27 15:23:26 - Email sent successfully
+2025-04-27 19:03:05 - Attempting to send broadcast alert: Evacuation
+2025-04-27 19:03:11 - Email sent successfully
+2025-04-27 19:05:54 - Attempting to send broadcast alert: Evacuation
+2025-04-27 19:06:01 - Email sent successfully
+2025-04-27 19:08:04 - Attempting to send broadcast alert: Evacuation
+2025-04-27 19:08:10 - Email sent successfully
