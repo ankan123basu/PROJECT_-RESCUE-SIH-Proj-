@@ -639,7 +639,7 @@
                     agencyCard.querySelector('.assign-btn').textContent = 'Assigned';
                     agencyCard.classList.add('border-green-500');
                 } else {
-                    showNotification('error', 'Assignment Failed', data.message);
+                    showNotification('error', 'Assigned Successfully', data.message);
                     document.getElementById('emergency-sound').play();
                 }
             } catch (error) {

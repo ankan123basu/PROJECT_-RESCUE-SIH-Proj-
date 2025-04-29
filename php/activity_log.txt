@@ -400,3 +400,45 @@
 2025-04-27 16:10:56 - Successfully queried activities
 2025-04-27 16:10:56 - Found 6 activities
 2025-04-27 16:10:56 - Returning 6 activities
+2025-04-28 06:56:17 - Connected to database successfully
+2025-04-28 06:56:17 - Table check/creation successful
+2025-04-28 06:56:17 - Found 9 existing activities
+2025-04-28 06:56:17 - Successfully queried activities
+2025-04-28 06:56:17 - Found 6 activities
+2025-04-28 06:56:17 - Returning 6 activities
+2025-04-28 11:40:27 - Connected to database successfully
+2025-04-28 11:40:27 - Table check/creation successful
+2025-04-28 11:40:27 - Found 9 existing activities
+2025-04-28 11:40:27 - Successfully queried activities
+2025-04-28 11:40:27 - Found 6 activities
+2025-04-28 11:40:27 - Returning 6 activities
+2025-04-29 10:42:38 - Connected to database successfully
+2025-04-29 10:42:38 - Table check/creation successful
+2025-04-29 10:42:38 - Found 9 existing activities
+2025-04-29 10:42:38 - Successfully queried activities
+2025-04-29 10:42:38 - Found 6 activities
+2025-04-29 10:42:38 - Returning 6 activities
+2025-04-29 10:42:46 - Connected to database successfully
+2025-04-29 10:42:46 - Table check/creation successful
+2025-04-29 10:42:46 - Found 9 existing activities
+2025-04-29 10:42:46 - Successfully queried activities
+2025-04-29 10:42:46 - Found 6 activities
+2025-04-29 10:42:46 - Returning 6 activities
+2025-04-29 10:46:37 - Connected to database successfully
+2025-04-29 10:46:37 - Table check/creation successful
+2025-04-29 10:46:37 - Found 9 existing activities
+2025-04-29 10:46:37 - Successfully queried activities
+2025-04-29 10:46:37 - Found 6 activities
+2025-04-29 10:46:37 - Returning 6 activities
+2025-04-29 10:48:34 - Connected to database successfully
+2025-04-29 10:48:34 - Table check/creation successful
+2025-04-29 10:48:34 - Found 9 existing activities
+2025-04-29 10:48:34 - Successfully queried activities
+2025-04-29 10:48:34 - Found 6 activities
+2025-04-29 10:48:34 - Returning 6 activities
+2025-04-29 10:57:04 - Connected to database successfully
+2025-04-29 10:57:04 - Table check/creation successful
+2025-04-29 10:57:04 - Found 9 existing activities
+2025-04-29 10:57:04 - Successfully queried activities
+2025-04-29 10:57:04 - Found 6 activities
+2025-04-29 10:57:04 - Returning 6 activities

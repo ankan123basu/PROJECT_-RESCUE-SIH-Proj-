@@ -19,7 +19,7 @@ $emergencyId = isset($_POST['emergencyId']) ? intval($_POST['emergencyId']) : 0;
 
 // Validate input
 if ($agencyId <= 0) {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid agency ID']);
+    echo json_encode(['status' => 'error', 'message' => 'Agency assigned']);
     exit;
 }
 
